@@ -1,0 +1,38 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+yarn.lock
+
+# generated css files
+src/styles/main.css
+public/i18n/*/translation_old.json
+public/i18n/*/ui.po
+public/i18n/template/translation_old.json
+public/i18n/template/ui.po
+ui.pot
+
+# local env settings
+.env*.local
+public/i18n/*/Including additional component.json
+public/i18n/*/Including additional component_old.json
+.vscode/launch.json
+basket_app-*.zip
+.vscode/settings.json

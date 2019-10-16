@@ -1,0 +1,16 @@
+image: gitlab.easterngraphics.com:5005/docker-registry/cideploy
+
+stages:
+- build_and_deploy
+
+build:ci:
+    stage: build_and_deploy
+    script:
+    - npm ci
+    - npm run build
+    - deploy build
+    variables:
+        GIT_SUBMODULE_STRATEGY: normal
+    environment:
+        name: $CI_BUILD_REF_SLUG
+        url: https://cideploy.tmp.easterngraphics.com/$CI_PROJECT_PATH/$CI_BUILD_REF_SLUG/
