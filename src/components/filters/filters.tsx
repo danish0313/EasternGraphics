@@ -92,67 +92,99 @@ export default class Filters extends Component<{}, MyState> {
 
   // Filter handler
 
-  filterHandler = (e: React.FormEvent<HTMLSelectElement>) => {
+  FacilitiesHandler = (e: React.FormEvent<HTMLSelectElement>) => {
     const { value }: any = e.target;
 
-    let facility = null;
     // getting all the facility from errorLog by mapping
     let AllFacilities = this.state.res.filter(
       (facilities: any) => facilities.facility === value
     );
 
-    console.log(AllFacilities);
+    // setting the state
+    this.setState({
+      filterData: AllFacilities,
+      display: true
+    });
+  };
 
-    // for facility
-    if (AllFacilities.length) {
-      facility = this.state.res.filter(
-        (filterData: any) => filterData.facility === value
-      );
+  // Filter handler
 
-      this.setState({
-        filterData: facility,
-        display: true
-      });
-    } else {
-      this.setState({
-        display: false
-      });
-    }
+  levelHandler = (e: React.FormEvent<HTMLSelectElement>) => {
+    const { value }: any = e.target;
+
+    // getting all the facility from errorLog by mapping
+    let levels = this.state.res.filter(
+      (facilities: any) => facilities.level === value
+    );
+
+    // setting the state
+    this.setState({
+      filterData: levels,
+      display: true
+    });
   };
 
   render() {
     //mapping the entire array
 
-    let ShowingResults = this.state.filterData.map((data: any, index: number) => (
-      <>
-        <span key={data.index}> Facility: {data.facility} </span> <br />
-        <span> Level: {data.level} </span> <br />
-        {data.message.split("\n").join("<br/>")} <br />
-        <p> TimeStamp: {data.timeStamp} </p>
-        <hr />
-      </>
-    ));
+    let ShowingResults = this.state.filterData.map(
+      (data: any, index: number) => (
+        <div key={data.message}>
+          <span> Facility: {data.facility} </span> <br /> <br />
+          <span> Level: {data.level} </span> <br />
+          <span>message:</span> <br />
+          {data.message.split("\n").map((item: any, i: number) => {
+            return <p key={item + i}>{item} </p>;
+          })}
+          <p className={classes.timestamp}> TimeStamp: {data.timeStamp} </p>
+          <hr />
+        </div>
+      )
+    );
 
     return (
       <>
         <div className={classes.box}>
           <h1> Error-LOG SEARCH !</h1>
 
-          <label>search by facility</label>
+          <label className={classes.label}>search by facility</label>
 
-          <select className={classes.all} onChange={e => this.filterHandler(e)}>
+          <select
+            className={classes.all}
+            onChange={e => this.FacilitiesHandler(e)}
+          >
             <option value=""></option>
             <option value="GF::afml">GF::afml</option>
             <option value="GF::eai:eproduct">GF::eai:eproduct</option>
           </select>
+
+          <label className={classes.label}>search by level</label>
+
+          <select className={classes.all} onChange={e => this.levelHandler(e)}>
+            <option value=""></option>
+            <option value="Notice">Notice</option>
+            <option value="Debug">Debug</option>
+          </select>
         </div>
 
         <div className={classes.results}>
-          {this.state.display === false ? (
-            <div className={classes.loader}></div>
-          ) : (
-            ShowingResults
-          )}
+          {this.state.display === false
+            ? this.state.res.map((data: any, index: number) => (
+                <div key={data.message}>
+                  <span> Facility: {data.facility} </span> <br />
+                  <span> Level: {data.level} </span> <br />
+                  <span>message:</span> <br />
+                  {data.message.split("\n").map((item: any, i: number) => {
+                    return <p key={item + i}>{item}</p>;
+                  })}
+                  <p className={classes.timestamp}>
+                    {" "}
+                    TimeStamp: {data.timeStamp}{" "}
+                  </p>
+                  <hr />
+                </div>
+              ))
+            : ShowingResults}
         </div>
       </>
     );
