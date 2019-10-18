@@ -1,6 +1,11 @@
 
 .all {
-    width: 200px;
+    width: 150px;
+    margin-left:10px;
+}
+.label { 
+  margin-left:20px;
+  font-weight: bold;
 }
 
 .box{
@@ -14,14 +19,23 @@ width:90% ;
 
 }
 
+
 .results{
 border:2px dashed black;
 margin: 0 auto;
 width:90% ;
+text-align: center;
  height:100% ;
- text-align: center;
+ 
 padding-top: 50px;
 padding:20px;
+}
+
+
+.timestamp{
+font-weight: bold;
+font-size: 20px;
+text-align: right;
 }
 
 
