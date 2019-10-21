@@ -6,6 +6,10 @@ type MyState = {
   data: any,
   res: any,
   display: boolean,
+  facilityValue: string,
+  uniqueFacilities: any, 
+  uniquelevels  : any,
+  LevelValue: string,
   filterData: any,
   Error: boolean
 };
@@ -17,13 +21,17 @@ export default class Filters extends Component<{}, MyState> {
     this.state = {
       data: [],
       res: [],
+      facilityValue: "",
+      LevelValue: "",
+      uniqueFacilities: [],
+      uniquelevels :[],
       display: false,
       filterData: [],
       Error: false
     };
   }
 
-  componentDidMount = async () => {
+  componentDidMount = async (): Promise<void> => {
     // fetching the error log from public folder
     fetch("./errors/errors.json").then(async (logs: Response) => {
       if (logs.status !== 200) {
@@ -82,12 +90,21 @@ export default class Filters extends Component<{}, MyState> {
       return e.message || e.TimeStamp;
     });
 
+    // getting unique facilities from unique array
+    let AllFacilities : any = unique.map( (facilities : any ) => { return facilities.facility})
+    let uniqueFacilities : any = Array.from(new Set(AllFacilities));
+
+   // getting unique levels from unique array
+   let Alllevels : any = unique.map( (levels : any ) => { return levels.level})
+   let uniquelevels : any = Array.from(new Set(Alllevels));
+
+
     // setting the state
     this.setState({
-      res: unique
+      res: unique  ,
+      uniqueFacilities : uniqueFacilities,
+      uniquelevels  :uniquelevels
     });
-
-    console.log(this.state.res);
   };
 
   // Filter handler
@@ -102,6 +119,7 @@ export default class Filters extends Component<{}, MyState> {
 
     // setting the state
     this.setState({
+      facilityValue: value,
       filterData: AllFacilities,
       display: true
     });
@@ -119,16 +137,20 @@ export default class Filters extends Component<{}, MyState> {
 
     // setting the state
     this.setState({
+      LevelValue: value,
       filterData: levels,
       display: true
     });
   };
 
-  render() {
-    //mapping the entire array
+  // Mapping the entire array for displaying on the UI
 
-    let ShowingResults = this.state.filterData.map(
-      (data: any, index: number) => (
+  ShowingResults = () => {
+    if (
+      this.state.facilityValue.length > 0 ||
+      this.state.LevelValue.length > 0
+    ) {
+      return this.state.filterData.map((data: any, index: number) => (
         <div key={data.message}>
           <span> Facility: {data.facility} </span> <br /> <br />
           <span> Level: {data.level} </span> <br />
@@ -139,53 +161,126 @@ export default class Filters extends Component<{}, MyState> {
           <p className={classes.timestamp}> TimeStamp: {data.timeStamp} </p>
           <hr />
         </div>
-      )
+      ));
+    } else if (
+      this.state.facilityValue === "" ||
+      this.state.LevelValue === ""
+    ) {
+      return this.state.res.map((data: any, index: number) => (
+        <div key={data.message}>
+          <span> Facility: {data.facility} </span> <br /> <br />
+          <span> Level: {data.level} </span> <br />
+          <span>message:</span> <br />
+          {data.message.split("\n").map((item: any, i: number) => {
+            return <p key={item + i}>{item} </p>;
+          })}
+          <p className={classes.timestamp}> TimeStamp: {data.timeStamp} </p>
+          <hr />
+        </div>
+      ));
+    }
+  };
+
+  // for Facility  Select Options
+  FacilityFilterHandler = (): JSX.Element => {
+    return (
+      <>
+        <label className={classes.label}>search by facility</label>
+
+        <select
+          className={classes.all}
+          onChange={e => this.FacilitiesHandler(e)}
+        >
+          <option value="default"></option>
+          <option value="GF::afml">GF::afml</option>
+          <option value="GF::eai:eproduct">GF::eai:eproduct</option>
+        </select>
+      </>
     );
+  };
+
+  // for level  Select Options
+  LevelFilterHandler = (): JSX.Element => {
+    if (this.state.facilityValue === 'GF::afml') {
+      return (
+        <>
+          <label className={classes.label}>search by level</label>
+
+          <select className={classes.all} onChange={e => this.levelHandler(e)}>
+            <option disabled value="">
+              {" "}
+            </option>
+            <option value="Notice" selected>
+              {" "}
+              Notice{" "}
+            </option>
+            <option value="Debug" disabled>
+              Debug
+            </option>
+          </select>
+        </>
+      );
+    } else if (this.state.facilityValue === 'GF::eai:eproduct') {
+      return (
+        <>
+          <label className={classes.label}>search by level</label>
+
+          <select className={classes.all} onChange={e => this.levelHandler(e)}>
+            <option disabled value="">
+              {" "}
+            </option>
+            <option value="Notice" disabled>
+              {" "}
+              Notice{" "}
+            </option>
+            <option value="Debug" selected>
+              Debug
+            </option>
+          </select>
+        </>
+      );
+    } else if (this.state.facilityValue === "") {
+      return (
+        <>
+          <label className={classes.label}>search by level</label>
+
+          <select className={classes.all} onChange={e => this.levelHandler(e)}>
+            <option defaultValue="default"> </option>
+            <option value="Notice"> Notice </option>
+            <option value="Debug">Debug</option>
+          </select>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <label className={classes.label}>search by level</label>
+
+          <select className={classes.all} onChange={e => this.levelHandler(e)}>
+            <option value=""></option>
+            <option value="Notice"> Notice </option>
+            <option value="Debug">Debug</option>
+          </select>
+        </>
+      );
+    }
+  };
+
+  render() {
+    let ShowingResults = this.ShowingResults();
+    let FacilityOptions = this.FacilityFilterHandler();
+    let LevelOptions = this.LevelFilterHandler();
 
     return (
       <>
         <div className={classes.box}>
           <h1> Error-LOG SEARCH !</h1>
 
-          <label className={classes.label}>search by facility</label>
-
-          <select
-            className={classes.all}
-            onChange={e => this.FacilitiesHandler(e)}
-          >
-            <option value=""></option>
-            <option value="GF::afml">GF::afml</option>
-            <option value="GF::eai:eproduct">GF::eai:eproduct</option>
-          </select>
-
-          <label className={classes.label}>search by level</label>
-
-          <select className={classes.all} onChange={e => this.levelHandler(e)}>
-            <option value=""></option>
-            <option value="Notice">Notice</option>
-            <option value="Debug">Debug</option>
-          </select>
+          {FacilityOptions}
+          {LevelOptions}
         </div>
 
-        <div className={classes.results}>
-          {this.state.display === false
-            ? this.state.res.map((data: any, index: number) => (
-                <div key={data.message}>
-                  <span> Facility: {data.facility} </span> <br />
-                  <span> Level: {data.level} </span> <br />
-                  <span>message:</span> <br />
-                  {data.message.split("\n").map((item: any, i: number) => {
-                    return <p key={item + i}>{item}</p>;
-                  })}
-                  <p className={classes.timestamp}>
-                    {" "}
-                    TimeStamp: {data.timeStamp}{" "}
-                  </p>
-                  <hr />
-                </div>
-              ))
-            : ShowingResults}
-        </div>
+        <div className={classes.results}>{ShowingResults}</div>
       </>
     );
   }
