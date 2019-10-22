@@ -98,6 +98,8 @@ export default class Filters extends Component<{}, MyState> {
    let Alllevels : any = unique.map( (levels : any ) => { return levels.level})
    let uniquelevels : any = Array.from(new Set(Alllevels));
 
+  
+  
 
     // setting the state
     this.setState({
@@ -116,13 +118,17 @@ export default class Filters extends Component<{}, MyState> {
     let AllFacilities = this.state.res.filter(
       (facilities: any) => facilities.facility === value
     );
-
+   
     // setting the state
     this.setState({
       facilityValue: value,
       filterData: AllFacilities,
       display: true
     });
+
+
+    
+
   };
 
   // Filter handler
@@ -145,7 +151,7 @@ export default class Filters extends Component<{}, MyState> {
 
   // Mapping the entire array for displaying on the UI
 
-  ShowingResults = () => {
+  ShowingResults = ()  => {
     if (
       this.state.facilityValue.length > 0 ||
       this.state.LevelValue.length > 0
@@ -191,14 +197,17 @@ export default class Filters extends Component<{}, MyState> {
           className={classes.all}
           onChange={e => this.FacilitiesHandler(e)}
         >
-          <option value="default"></option>
-          <option value="GF::afml">GF::afml</option>
-          <option value="GF::eai:eproduct">GF::eai:eproduct</option>
+          <option  value=""> </option>
+         {this.state.uniqueFacilities.map((facility : string ) => {
+          return  <option value={facility}> {facility}</option>
+         })}
         </select>
       </>
     );
   };
 
+
+ 
   // for level  Select Options
   LevelFilterHandler = (): JSX.Element => {
     if (this.state.facilityValue === 'GF::afml') {
@@ -207,16 +216,11 @@ export default class Filters extends Component<{}, MyState> {
           <label className={classes.label}>search by level</label>
 
           <select className={classes.all} onChange={e => this.levelHandler(e)}>
-            <option disabled value="">
-              {" "}
-            </option>
-            <option value="Notice" selected>
-              {" "}
-              Notice{" "}
-            </option>
-            <option value="Debug" disabled>
-              Debug
-            </option>
+            <option disabled value=""></option>
+            {this.state.uniquelevels.map((level : string , i : number ) => {
+          return  <option key={i} disabled= {level.includes('Debug')} value={level}> {level}</option>
+         })}
+           
           </select>
         </>
       );
@@ -229,13 +233,10 @@ export default class Filters extends Component<{}, MyState> {
             <option disabled value="">
               {" "}
             </option>
-            <option value="Notice" disabled>
-              {" "}
-              Notice{" "}
-            </option>
-            <option value="Debug" selected>
-              Debug
-            </option>
+
+            {this.state.uniquelevels.map((level : string , i : number ) => {
+          return  <option key={i} disabled= {level.includes('Notice')} value = {level} > {level}</option>
+         })}
           </select>
         </>
       );
@@ -246,8 +247,9 @@ export default class Filters extends Component<{}, MyState> {
 
           <select className={classes.all} onChange={e => this.levelHandler(e)}>
             <option defaultValue="default"> </option>
-            <option value="Notice"> Notice </option>
-            <option value="Debug">Debug</option>
+                {this.state.uniquelevels.map((level : string , i : number ) => {
+          return  <option key={i}  value = {level} > {level}</option>
+         })}
           </select>
         </>
       );
@@ -258,8 +260,9 @@ export default class Filters extends Component<{}, MyState> {
 
           <select className={classes.all} onChange={e => this.levelHandler(e)}>
             <option value=""></option>
-            <option value="Notice"> Notice </option>
-            <option value="Debug">Debug</option>
+            {this.state.uniquelevels.map((level : string , i : number ) => {
+          return  <option key={i}  value = {level} > {level}</option>
+         })}
           </select>
         </>
       );
