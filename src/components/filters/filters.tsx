@@ -7,10 +7,12 @@ type MyState = {
   res: any,
   display: boolean,
   facilityValue: string,
-  uniqueFacilities: any, 
-  uniquelevels  : any,
+  uniqueFacilities: any,
+  uniquelevels: any,
   LevelValue: string,
   filterData: any,
+  searchvalue: string,
+  results: any,
   Error: boolean
 };
 
@@ -24,9 +26,11 @@ export default class Filters extends Component<{}, MyState> {
       facilityValue: "",
       LevelValue: "",
       uniqueFacilities: [],
-      uniquelevels :[],
+      uniquelevels: [],
       display: false,
       filterData: [],
+      searchvalue: "",
+      results: [],
       Error: false
     };
   }
@@ -91,21 +95,23 @@ export default class Filters extends Component<{}, MyState> {
     });
 
     // getting unique facilities from unique array
-    let AllFacilities : any = unique.map( (facilities : any ) => { return facilities.facility})
-    let uniqueFacilities : any = Array.from(new Set(AllFacilities));
+    let AllFacilities: any = unique.map((facilities: any) => {
+      return facilities.facility;
+    });
+    let uniqueFacilities: any = Array.from(new Set(AllFacilities));
 
-   // getting unique levels from unique array
-   let Alllevels : any = unique.map( (levels : any ) => { return levels.level})
-   let uniquelevels : any = Array.from(new Set(Alllevels));
-
-  
-  
+    // getting unique levels from unique array
+    let Alllevels: any = unique.map((levels: any) => {
+      return levels.level;
+    });
+    let uniquelevels: any = Array.from(new Set(Alllevels));
 
     // setting the state
     this.setState({
-      res: unique  ,
-      uniqueFacilities : uniqueFacilities,
-      uniquelevels  :uniquelevels
+      res: unique,
+      results: unique,
+      uniqueFacilities: uniqueFacilities,
+      uniquelevels: uniquelevels
     });
   };
 
@@ -118,17 +124,13 @@ export default class Filters extends Component<{}, MyState> {
     let AllFacilities = this.state.res.filter(
       (facilities: any) => facilities.facility === value
     );
-   
+
     // setting the state
     this.setState({
       facilityValue: value,
       filterData: AllFacilities,
       display: true
     });
-
-
-    
-
   };
 
   // Filter handler
@@ -149,9 +151,39 @@ export default class Filters extends Component<{}, MyState> {
     });
   };
 
+  // search Filter
+  SearchFilter = (e: React.FormEvent<HTMLInputElement>) => {
+    const { value }: any = e.target;
+
+    setTimeout(() => {
+      // filter the messages based on user inputs
+      let search = this.state.res.filter(
+        (search: any) =>
+          search.message.toLowerCase().indexOf(value.toLowerCase()) >= 0 ||
+          search.level.toLowerCase().indexOf(value.toLowerCase()) >= 0 ||
+          search.facility.toLowerCase().indexOf(value.toLowerCase()) >= 0
+      );
+      if (value.length > 0) {
+        // setting the state
+        this.setState({
+          searchvalue: value,
+          res: search,
+          display: true
+        });
+      
+      } else {
+        // setting the state
+        this.setState({
+          res: this.state.results,
+          display: true
+        });
+      }
+    }, 1200);
+  };
+
   // Mapping the entire array for displaying on the UI
 
-  ShowingResults = ()  => {
+  ShowingResults = () => {
     if (
       this.state.facilityValue.length > 0 ||
       this.state.LevelValue.length > 0
@@ -197,46 +229,45 @@ export default class Filters extends Component<{}, MyState> {
           className={classes.all}
           onChange={e => this.FacilitiesHandler(e)}
         >
-          <option  value=""> </option>
-         {this.state.uniqueFacilities.map((facility : string ) => {
-          return  <option value={facility}> {facility}</option>
-         })}
+          <option value=""> </option>
+          {this.state.uniqueFacilities.map((facility: string, i: number) => {
+            return (
+              <option key={facility + i} value={facility}>
+                {" "}
+                {facility}
+              </option>
+            );
+          })}
         </select>
       </>
     );
   };
 
-
- 
   // for level  Select Options
   LevelFilterHandler = (): JSX.Element => {
-    if (this.state.facilityValue === 'GF::afml') {
+    let facility = this.state.uniqueFacilities.filter((facility: string) => {
+      return facility === this.state.facilityValue;
+    });
+
+    if (facility.includes(this.state.facilityValue)) {
       return (
         <>
           <label className={classes.label}>search by level</label>
 
           <select className={classes.all} onChange={e => this.levelHandler(e)}>
             <option disabled value=""></option>
-            {this.state.uniquelevels.map((level : string , i : number ) => {
-          return  <option key={i} disabled= {level.includes('Debug')} value={level}> {level}</option>
-         })}
-           
-          </select>
-        </>
-      );
-    } else if (this.state.facilityValue === 'GF::eai:eproduct') {
-      return (
-        <>
-          <label className={classes.label}>search by level</label>
-
-          <select className={classes.all} onChange={e => this.levelHandler(e)}>
-            <option disabled value="">
-              {" "}
-            </option>
-
-            {this.state.uniquelevels.map((level : string , i : number ) => {
-          return  <option key={i} disabled= {level.includes('Notice')} value = {level} > {level}</option>
-         })}
+            {this.state.uniquelevels.map((level: string, i: number) => {
+              return (
+                <option
+                  key={level + i}
+                  disabled={level.includes("Debug")}
+                  value={level}
+                >
+                  {" "}
+                  {level}
+                </option>
+              );
+            })}
           </select>
         </>
       );
@@ -247,9 +278,14 @@ export default class Filters extends Component<{}, MyState> {
 
           <select className={classes.all} onChange={e => this.levelHandler(e)}>
             <option defaultValue="default"> </option>
-                {this.state.uniquelevels.map((level : string , i : number ) => {
-          return  <option key={i}  value = {level} > {level}</option>
-         })}
+            {this.state.uniquelevels.map((level: string, i: number) => {
+              return (
+                <option key={level + i} value={level}>
+                  {" "}
+                  {level}
+                </option>
+              );
+            })}
           </select>
         </>
       );
@@ -260,27 +296,51 @@ export default class Filters extends Component<{}, MyState> {
 
           <select className={classes.all} onChange={e => this.levelHandler(e)}>
             <option value=""></option>
-            {this.state.uniquelevels.map((level : string , i : number ) => {
-          return  <option key={i}  value = {level} > {level}</option>
-         })}
+            {this.state.uniquelevels.map((level: string, i: number) => {
+              return (
+                <option key={level + i} value={level}>
+                  {" "}
+                  {level}
+                </option>
+              );
+            })}
           </select>
         </>
       );
     }
   };
 
+  // search bar for searching messages
+
+  SearchbarHandler = (): JSX.Element => {
+    return (
+      <div className={classes.searchbox}>
+        <label className={classes.label}>SEARCH YOUR MESSAGES:</label>
+        <input
+          className={classes.search}
+          onChange={e => this.SearchFilter(e)}
+          type="search"
+          id="site-search"
+          aria-label="Search through messages"
+        />
+      </div>
+    );
+  };
+
   render() {
     let ShowingResults = this.ShowingResults();
     let FacilityOptions = this.FacilityFilterHandler();
     let LevelOptions = this.LevelFilterHandler();
-
+    let SearchbarOptions = this.SearchbarHandler();
     return (
       <>
         <div className={classes.box}>
           <h1> Error-LOG SEARCH !</h1>
-
-          {FacilityOptions}
-          {LevelOptions}
+          <div>
+            {FacilityOptions}
+            {LevelOptions} <br />
+            {SearchbarOptions}
+          </div>
         </div>
 
         <div className={classes.results}>{ShowingResults}</div>
