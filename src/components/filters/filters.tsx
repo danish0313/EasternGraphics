@@ -106,12 +106,15 @@ export default class Filters extends Component<{}, MyState> {
     });
     let uniquelevels: any = Array.from(new Set(Alllevels));
 
+
+
     // setting the state
     this.setState({
       res: unique,
       results: unique,
       uniqueFacilities: uniqueFacilities,
-      uniquelevels: uniquelevels
+      uniquelevels: uniquelevels,
+
     });
   };
 
@@ -125,12 +128,14 @@ export default class Filters extends Component<{}, MyState> {
       (facilities: any) => facilities.facility === value
     );
 
+
     // setting the state
     this.setState({
       facilityValue: value,
       filterData: AllFacilities,
       display: true
     });
+    
   };
 
   // Filter handler
@@ -175,7 +180,6 @@ export default class Filters extends Component<{}, MyState> {
         // setting the state
         this.setState({
           res: this.state.results,
-          display: true
         });
       }
     }, 1200);
@@ -183,7 +187,7 @@ export default class Filters extends Component<{}, MyState> {
 
   // Mapping the entire array for displaying on the UI
 
-  ShowingResults = () => {
+  ShowingResults = ()  => {
     if (
       this.state.facilityValue.length > 0 ||
       this.state.LevelValue.length > 0
@@ -221,6 +225,7 @@ export default class Filters extends Component<{}, MyState> {
 
   // for Facility  Select Options
   FacilityFilterHandler = (): JSX.Element => {
+  
     return (
       <>
         <label className={classes.label}>search by facility</label>
@@ -243,12 +248,21 @@ export default class Filters extends Component<{}, MyState> {
     );
   };
 
+
+
+  // for disabling some options
+  disablingOption =() : number => {
+ return   _.indexOf(this.state.uniqueFacilities, this.state.facilityValue);
+  }
+
+
   // for level  Select Options
   LevelFilterHandler = (): JSX.Element => {
     let facility = this.state.uniqueFacilities.filter((facility: string) => {
       return facility === this.state.facilityValue;
     });
 
+   
     if (facility.includes(this.state.facilityValue)) {
       return (
         <>
@@ -260,7 +274,8 @@ export default class Filters extends Component<{}, MyState> {
               return (
                 <option
                   key={level + i}
-                  disabled={level.includes("Debug")}
+                  selected={ _.indexOf(this.state.uniquelevels, level) ===  this.disablingOption() }
+                  disabled={ _.indexOf(this.state.uniquelevels, level) !==  this.disablingOption() }
                   value={level}
                 >
                   {" "}
