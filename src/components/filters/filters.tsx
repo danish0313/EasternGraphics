@@ -7,16 +7,16 @@ import Searchbar from "./options/searchbar/searchbar";
 import _ from "lodash";
 
 type MyState = {
-  data: any,
-  res: any,
+  data: any[],
+  res: string[],
   display: boolean,
   facilityValue: string,
-  uniqueFacilities: any,
-  uniquelevels: any,
+  uniqueFacilities: string[],
+  uniquelevels: string[],
   LevelValue: string,
-  filterData: any,
+  filterData: string[],
   searchvalue: string,
-  results: any,
+  results: string[],
   Error: boolean
 };
 
@@ -62,12 +62,12 @@ export default class Filters extends Component<{}, MyState> {
 
   ArrayChangeHandler = async () => {
     let ErrorLog = this.state.data;
-    let results: any = [];
+    let results : any = [];
 
     // Loop Through the ErrorLog
     for (let i = 0; i < ErrorLog.length; i++) {
       // similar indexes returned to be pushed in Results Array
-      let index = await GetIndexIfLogExists(ErrorLog[i], results);
+      let index = await GetIndexIfLogExists(ErrorLog[i] , results);
 
       if (index >= 0) {
         results[index].message += "\n" + ErrorLog[i].message;
@@ -94,21 +94,21 @@ export default class Filters extends Component<{}, MyState> {
     }
 
     //removing duplications from results array using lodash
-    let unique = _.uniqBy(results, function(e: any) {
+    let unique = _.uniqBy(results, function(e:any) {
       return e.message || e.TimeStamp;
     });
 
     // getting unique facilities from unique array
-    let AllFacilities: any = unique.map((facilities: any) => {
+    let AllFacilities: string[] = unique.map((facilities: any) => {
       return facilities.facility;
     });
-    let uniqueFacilities: any = Array.from(new Set(AllFacilities));
+    let uniqueFacilities: string[] = Array.from(new Set(AllFacilities));
 
     // getting unique levels from unique array
-    let Alllevels: any = unique.map((levels: any) => {
+    let Alllevels: string[] = unique.map((levels: any) => {
       return levels.level;
     });
-    let uniquelevels: any = Array.from(new Set(Alllevels));
+    let uniquelevels: string[] = Array.from(new Set(Alllevels));
 
     // setting the state
     this.setState({

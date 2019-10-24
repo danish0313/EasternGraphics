@@ -2,7 +2,7 @@
  import classes from './FilterData.module.css';
 
  type MyProps = {
-    filterdata: any,
+    filterdata: string[],
  }
  export default class FilterData extends Component<MyProps> {
      render() {

@@ -3,7 +3,7 @@ import classes from './facility.module.css'
 
 
 type MyProps = {
-    uniquefacilities: any,
+    uniquefacilities: string[],
     FacilitiesHandler: any 
         
     }
