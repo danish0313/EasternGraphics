@@ -5,6 +5,7 @@ import Results from "./res/res";
 import Facility from "./options/facility/facility";
 import Searchbar from "./options/searchbar/searchbar";
 import _ from "lodash";
+import { threadId } from "worker_threads";
 
 type MyState = {
   data: any[],
@@ -182,7 +183,7 @@ export default class Filters extends Component<{}, MyState> {
         // setting the state
         this.setState({
           res: this.state.results,
-          filterData : this.state.AllFacilities
+          filterData : this.state.results
         });
       }
     }, 1200);
@@ -210,13 +211,23 @@ export default class Filters extends Component<{}, MyState> {
       <Facility
         uniquefacilities={this.state.uniqueFacilities}
         FacilitiesHandler={this.FacilitiesHandler}
+        disablingfacility = {this.disablingfacility}
+        levelvalue = {this.state.LevelValue}
+
+
       />
     );
   };
 
-  // for disabling some options
+  // for disabling  options of level
   disablingOption = (): number => {
     return _.indexOf(this.state.uniqueFacilities, this.state.facilityValue);
+  };
+
+
+  // for disabling  options of facility
+  disablingfacility = (): number => {
+    return _.indexOf(this.state.uniquelevels, this.state.LevelValue);
   };
 
   // for level  Select Options
@@ -231,7 +242,7 @@ export default class Filters extends Component<{}, MyState> {
           <label className={classes.label}>search by level</label>
 
           <select className={classes.all} onChange={e => this.levelHandler(e)}>
-            <option disabled value=""></option>
+            <option value=""></option>
             {this.state.uniquelevels.map((level: string, i: number) => {
               return (
                 <option
