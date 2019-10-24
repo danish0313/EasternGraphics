@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import classes from "./filters.module.css";
+import Filterdata from "./filterData/FilterData";
+import Results from "./res/res";
+import Facility from "./options/facility/facility";
+import Searchbar from "./options/searchbar/searchbar";
 import _ from "lodash";
 
 type MyState = {
@@ -106,15 +110,12 @@ export default class Filters extends Component<{}, MyState> {
     });
     let uniquelevels: any = Array.from(new Set(Alllevels));
 
-
-
     // setting the state
     this.setState({
       res: unique,
       results: unique,
       uniqueFacilities: uniqueFacilities,
-      uniquelevels: uniquelevels,
-
+      uniquelevels: uniquelevels
     });
   };
 
@@ -128,14 +129,12 @@ export default class Filters extends Component<{}, MyState> {
       (facilities: any) => facilities.facility === value
     );
 
-
     // setting the state
     this.setState({
       facilityValue: value,
       filterData: AllFacilities,
       display: true
     });
-    
   };
 
   // Filter handler
@@ -175,11 +174,10 @@ export default class Filters extends Component<{}, MyState> {
           res: search,
           display: true
         });
-      
       } else {
         // setting the state
         this.setState({
-          res: this.state.results,
+          res: this.state.results
         });
       }
     }, 1200);
@@ -187,74 +185,34 @@ export default class Filters extends Component<{}, MyState> {
 
   // Mapping the entire array for displaying on the UI
 
-  ShowingResults = ()  => {
+  ShowingResults = () => {
     if (
       this.state.facilityValue.length > 0 ||
       this.state.LevelValue.length > 0
     ) {
-      return this.state.filterData.map((data: any, index: number) => (
-        <div key={data.message}>
-          <span> Facility: {data.facility} </span> <br /> <br />
-          <span> Level: {data.level} </span> <br />
-          <span>message:</span> <br />
-          {data.message.split("\n").map((item: any, i: number) => {
-            return <p key={item + i}>{item} </p>;
-          })}
-          <p className={classes.timestamp}> TimeStamp: {data.timeStamp} </p>
-          <hr />
-        </div>
-      ));
+      return <Filterdata filterdata={this.state.filterData} />;
     } else if (
       this.state.facilityValue === "" ||
       this.state.LevelValue === ""
     ) {
-      return this.state.res.map((data: any, index: number) => (
-        <div key={data.message}>
-          <span> Facility: {data.facility} </span> <br /> <br />
-          <span> Level: {data.level} </span> <br />
-          <span>message:</span> <br />
-          {data.message.split("\n").map((item: any, i: number) => {
-            return <p key={item + i}>{item} </p>;
-          })}
-          <p className={classes.timestamp}> TimeStamp: {data.timeStamp} </p>
-          <hr />
-        </div>
-      ));
+      return <Results res={this.state.res} />;
     }
   };
 
   // for Facility  Select Options
   FacilityFilterHandler = (): JSX.Element => {
-  
     return (
-      <>
-        <label className={classes.label}>search by facility</label>
-
-        <select
-          className={classes.all}
-          onChange={e => this.FacilitiesHandler(e)}
-        >
-          <option value=""> </option>
-          {this.state.uniqueFacilities.map((facility: string, i: number) => {
-            return (
-              <option key={facility + i} value={facility}>
-                {" "}
-                {facility}
-              </option>
-            );
-          })}
-        </select>
-      </>
+      <Facility
+        uniquefacilities={this.state.uniqueFacilities}
+        FacilitiesHandler={this.FacilitiesHandler}
+      />
     );
   };
 
-
-
   // for disabling some options
-  disablingOption =() : number => {
- return   _.indexOf(this.state.uniqueFacilities, this.state.facilityValue);
-  }
-
+  disablingOption = (): number => {
+    return _.indexOf(this.state.uniqueFacilities, this.state.facilityValue);
+  };
 
   // for level  Select Options
   LevelFilterHandler = (): JSX.Element => {
@@ -262,7 +220,6 @@ export default class Filters extends Component<{}, MyState> {
       return facility === this.state.facilityValue;
     });
 
-   
     if (facility.includes(this.state.facilityValue)) {
       return (
         <>
@@ -274,8 +231,14 @@ export default class Filters extends Component<{}, MyState> {
               return (
                 <option
                   key={level + i}
-                  selected={ _.indexOf(this.state.uniquelevels, level) ===  this.disablingOption() }
-                  disabled={ _.indexOf(this.state.uniquelevels, level) !==  this.disablingOption() }
+                  selected={
+                    _.indexOf(this.state.uniquelevels, level) ===
+                    this.disablingOption()
+                  }
+                  disabled={
+                    _.indexOf(this.state.uniquelevels, level) !==
+                    this.disablingOption()
+                  }
                   value={level}
                 >
                   {" "}
@@ -328,18 +291,7 @@ export default class Filters extends Component<{}, MyState> {
   // search bar for searching messages
 
   SearchbarHandler = (): JSX.Element => {
-    return (
-      <div className={classes.searchbox}>
-        <label className={classes.label}>SEARCH YOUR MESSAGES:</label>
-        <input
-          className={classes.search}
-          onChange={e => this.SearchFilter(e)}
-          type="search"
-          id="site-search"
-          aria-label="Search through messages"
-        />
-      </div>
-    );
+    return <Searchbar searchfilter={this.SearchFilter} />;
   };
 
   render() {
