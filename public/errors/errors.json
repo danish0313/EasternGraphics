@@ -4,7 +4,8 @@
 		"facility": "GF::afml",
 		"level": "Notice",
 		"timeStamp": "2019-01-05T20:51:54.685Z"
-	}, {
+	},
+	 {
 		"message": "---------------------------------------- \nFor this NETBOX is a starter- or connection cable required.  \nPlease select it in the area NETLINE!",
 		"facility": "GF::afml",
 		"level": "Notice",

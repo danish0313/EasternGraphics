@@ -17,6 +17,7 @@ type MyState = {
   filterData: string[],
   searchvalue: string,
   results: string[],
+  AllFacilities : string[],
   Error: boolean
 };
 
@@ -35,6 +36,7 @@ export default class Filters extends Component<{}, MyState> {
       filterData: [],
       searchvalue: "",
       results: [],
+      AllFacilities:[],
       Error: false
     };
   }
@@ -133,6 +135,7 @@ export default class Filters extends Component<{}, MyState> {
     this.setState({
       facilityValue: value,
       filterData: AllFacilities,
+      AllFacilities: AllFacilities,
       display: true
     });
   };
@@ -172,12 +175,14 @@ export default class Filters extends Component<{}, MyState> {
         this.setState({
           searchvalue: value,
           res: search,
+          filterData :search,
           display: true
         });
       } else {
         // setting the state
         this.setState({
-          res: this.state.results
+          res: this.state.results,
+          filterData : this.state.AllFacilities
         });
       }
     }, 1200);
