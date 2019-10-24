@@ -5,7 +5,7 @@ import Results from "./res/res";
 import Facility from "./options/facility/facility";
 import Searchbar from "./options/searchbar/searchbar";
 import _ from "lodash";
-import { threadId } from "worker_threads";
+
 
 type MyState = {
   data: any[],
