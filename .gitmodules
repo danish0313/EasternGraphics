@@ -1,0 +1,4 @@
+[submodule "scripts/ts-lint-rules"]
+	path = scripts/ts-lint-rules
+	url = ../../web/ts-lint-rules
+	branch = develop

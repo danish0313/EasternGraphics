@@ -11,13 +11,15 @@
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-scripts": "3.2.0",
+    "tslint": "^5.20.0",
     "typescript": "3.6.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "./node_modules/.bin/tslint --project tsconfig.json -c tslint.json 'src/**/*.ts*'"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -35,6 +37,7 @@
     ]
   },
   "devDependencies": {
-    "@types/lodash": "4.14.144"
+    "@types/lodash": "4.14.144",
+    "@egr/ts-lint-rules": "file:scripts/ts-lint-rules"
   }
 }
