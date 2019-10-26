@@ -20,7 +20,6 @@ type MyState = {
   results: string[],
   AllFacilities : string[],
   Error: boolean,
-  danish : ''
 };
 
 export default class Filters extends Component<{}, MyState> {
@@ -28,7 +27,6 @@ export default class Filters extends Component<{}, MyState> {
     super(props);
 
     this.state = {
-      danish:'',
       data: [],
       res: [],
       facilityValue: "",
