@@ -1,0 +1,8 @@
+.all {
+    width: 150px;
+    margin-left:10px;
+}
+.label { 
+  margin-left:20px;
+  font-weight: bold;
+}
