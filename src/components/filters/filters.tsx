@@ -3,23 +3,20 @@ import classes from "./filters.module.css";
 import Filterdata from "./filterData/FilterData";
 import Results from "./res/res";
 import Facility from "./options/facility/facility";
+import Level from "./options/level/level";
 import Searchbar from "./options/searchbar/searchbar";
 import _ from "lodash";
-
 
 type MyState = {
   data: any[],
   res: string[],
-  display: boolean,
   facilityValue: string,
   uniqueFacilities: string[],
   uniquelevels: string[],
   LevelValue: string,
-  filterData: string[],
-  searchvalue: string,
-  results: string[],
-  AllFacilities : string[],
-  Error: boolean,
+  SearchValue: string,
+
+  Error: boolean
 };
 
 export default class Filters extends Component<{}, MyState> {
@@ -31,19 +28,14 @@ export default class Filters extends Component<{}, MyState> {
       res: [],
       facilityValue: "",
       LevelValue: "",
+      SearchValue: "",
       uniqueFacilities: [],
       uniquelevels: [],
-      display: false,
-      filterData: [],
-      searchvalue: "",
-      results: [],
-      AllFacilities:[],
-      Error: false,
-      
+      Error: false
     };
   }
 
-  componentDidMount = async (): Promise<void> => {
+  componentDidMount = async () => {
     // fetching the error log from public folder
     fetch("./errors/errors.json").then(async (logs: Response) => {
       if (logs.status !== 200) {
@@ -66,12 +58,12 @@ export default class Filters extends Component<{}, MyState> {
 
   ArrayChangeHandler = async () => {
     let ErrorLog = this.state.data;
-    let results : any = [];
+    let results: any = [];
 
     // Loop Through the ErrorLog
     for (let i = 0; i < ErrorLog.length; i++) {
       // similar indexes returned to be pushed in Results Array
-      let index = await GetIndexIfLogExists(ErrorLog[i] , results);
+      let index = await GetIndexIfLogExists(ErrorLog[i], results);
 
       if (index >= 0) {
         results[index].message += "\n" + ErrorLog[i].message;
@@ -98,15 +90,15 @@ export default class Filters extends Component<{}, MyState> {
     }
 
     //removing duplications from results array using lodash
-    let unique = _.uniqBy(results, function(e:any) {
+    let unique = _.uniqBy(results, function(e: any) {
       return e.message || e.TimeStamp;
     });
 
     // getting unique facilities from unique array
-    let AllFacilities: string[] = unique.map((facilities: any) => {
+    let AllFacility: string[] = unique.map((facilities: any) => {
       return facilities.facility;
     });
-    let uniqueFacilities: string[] = Array.from(new Set(AllFacilities));
+    let uniqueFacilities: string[] = Array.from(new Set(AllFacility));
 
     // getting unique levels from unique array
     let Alllevels: string[] = unique.map((levels: any) => {
@@ -117,77 +109,79 @@ export default class Filters extends Component<{}, MyState> {
     // setting the state
     this.setState({
       res: unique,
-      results: unique,
       uniqueFacilities: uniqueFacilities,
       uniquelevels: uniquelevels
     });
   };
 
-  // Filter handler
+  // Filter handler for facility
 
   FacilitiesHandler = (e: React.FormEvent<HTMLSelectElement>) => {
     const { value }: any = e.target;
 
-    // getting all the facility from errorLog by mapping
-    let AllFacilities = this.state.res.filter(
-      (facilities: any) => facilities.facility === value
-    );
-
-    // setting the state
+    // storing the facility value in state
     this.setState({
-      facilityValue: value,
-      filterData: AllFacilities,
-      AllFacilities: AllFacilities,
-      display: true
+      facilityValue: value
     });
   };
 
-  // Filter handler
+  // Filter handler for level
 
   levelHandler = (e: React.FormEvent<HTMLSelectElement>) => {
     const { value }: any = e.target;
-
-    // getting all the facility from errorLog by mapping
-    let levels = this.state.res.filter(
-      (facilities: any) => facilities.level === value
-    );
-
-    // setting the state
+    // storing the level value in state
     this.setState({
-      LevelValue: value,
-      filterData: levels,
-      display: true
+      LevelValue: value
     });
   };
 
-  // search Filter
-  SearchFilter = (e: React.FormEvent<HTMLInputElement>) => {
-    const { value }: any = e.target;
-
-    setTimeout(() => {
-      // filter the messages based on user inputs
-      let search = this.state.res.filter(
-        (search: any) =>
-          search.message.toLowerCase().indexOf(value.toLowerCase()) >= 0 ||
-          search.level.toLowerCase().indexOf(value.toLowerCase()) >= 0 ||
-          search.facility.toLowerCase().indexOf(value.toLowerCase()) >= 0
+  FacilityLevelFilter = () => {
+    if (this.state.facilityValue.length > 0) {
+      // getting all the facility from errorLog by mapping
+      let Facilities = this.state.res.filter(
+        (facilities: any) => facilities.facility === this.state.facilityValue
       );
-      if (value.length > 0) {
-        // setting the state
-        this.setState({
-          searchvalue: value,
-          res: search,
-          filterData :search,
-          display: true
-        });
-      } else {
-        // setting the state
-        this.setState({
-          res: this.state.results,
-          filterData : this.state.results
-        });
-      }
-    }, 1200);
+
+      return Facilities;
+    } else if (this.state.LevelValue.length > 0) {
+      // getting all the facility from errorLog by mapping
+      let levels = this.state.res.filter(
+        (facilities: any) => facilities.level === this.state.LevelValue
+      );
+      return levels;
+    }
+  };
+
+  // search Handler
+  SearchHandler = (e: React.FormEvent<HTMLInputElement>) => {
+    const { value }: any = e.target;
+    // storing the search value in to the state
+    this.setState({
+      SearchValue: value
+    });
+  };
+
+  // Search Filter
+
+  SearchFilter = () => {
+    // filter the messages based on user inputs
+    let search = this.state.res.filter(
+      (search: any) =>
+        search.message
+          .toLowerCase()
+          .indexOf(this.state.SearchValue.toLowerCase()) >= 0 ||
+        search.level
+          .toLowerCase()
+          .indexOf(this.state.SearchValue.toLowerCase()) >= 0 ||
+        search.facility
+          .toLowerCase()
+          .indexOf(this.state.SearchValue.toLowerCase()) >= 0
+    );
+    if (this.state.SearchValue.length > 0) {
+      return search;
+    } else {
+      return;
+    }
   };
 
   // Mapping the entire array for displaying on the UI
@@ -195,12 +189,20 @@ export default class Filters extends Component<{}, MyState> {
   ShowingResults = () => {
     if (
       this.state.facilityValue.length > 0 ||
-      this.state.LevelValue.length > 0
+      this.state.LevelValue.length > 0 ||
+      this.state.SearchValue.length > 0
     ) {
-      return <Filterdata filterdata={this.state.filterData} />;
+      return (
+        <Filterdata
+          FacilityLevelFilter={this.FacilityLevelFilter}
+          SearchValue={this.state.SearchValue}
+          SearchFilter={this.SearchFilter}
+        />
+      );
     } else if (
       this.state.facilityValue === "" ||
-      this.state.LevelValue === ""
+      this.state.LevelValue === "" ||
+      this.state.SearchValue === ""
     ) {
       return <Results res={this.state.res} />;
     }
@@ -212,10 +214,8 @@ export default class Filters extends Component<{}, MyState> {
       <Facility
         uniquefacilities={this.state.uniqueFacilities}
         FacilitiesHandler={this.FacilitiesHandler}
-        disablingfacility = {this.disablingfacility}
-        levelvalue = {this.state.LevelValue}
-
-
+        disablingfacility={this.disablingfacility}
+        levelvalue={this.state.LevelValue}
       />
     );
   };
@@ -225,7 +225,6 @@ export default class Filters extends Component<{}, MyState> {
     return _.indexOf(this.state.uniqueFacilities, this.state.facilityValue);
   };
 
-
   // for disabling  options of facility
   disablingfacility = (): number => {
     return _.indexOf(this.state.uniquelevels, this.state.LevelValue);
@@ -233,82 +232,20 @@ export default class Filters extends Component<{}, MyState> {
 
   // for level  Select Options
   LevelFilterHandler = (): JSX.Element => {
-    let facility = this.state.uniqueFacilities.filter((facility: string) => {
-      return facility === this.state.facilityValue;
-    });
-
-    if (facility.includes(this.state.facilityValue)) {
-      return (
-        <>
-          <label className={classes.label}>search by level</label>
-
-          <select className={classes.all} onChange={e => this.levelHandler(e)}>
-            <option value=""></option>
-            {this.state.uniquelevels.map((level: string, i: number) => {
-              return (
-                <option
-                  key={level + i}
-                  selected={
-                    _.indexOf(this.state.uniquelevels, level) ===
-                    this.disablingOption()
-                  }
-                  disabled={
-                    _.indexOf(this.state.uniquelevels, level) !==
-                    this.disablingOption()
-                  }
-                  value={level}
-                >
-                  {" "}
-                  {level}
-                </option>
-              );
-            })}
-          </select>
-        </>
-      );
-    } else if (this.state.facilityValue === "") {
-      return (
-        <>
-          <label className={classes.label}>search by level</label>
-
-          <select className={classes.all} onChange={e => this.levelHandler(e)}>
-            <option defaultValue="default"> </option>
-            {this.state.uniquelevels.map((level: string, i: number) => {
-              return (
-                <option key={level + i} value={level}>
-                  {" "}
-                  {level}
-                </option>
-              );
-            })}
-          </select>
-        </>
-      );
-    } else {
-      return (
-        <>
-          <label className={classes.label}>search by level</label>
-
-          <select className={classes.all} onChange={e => this.levelHandler(e)}>
-            <option value=""></option>
-            {this.state.uniquelevels.map((level: string, i: number) => {
-              return (
-                <option key={level + i} value={level}>
-                  {" "}
-                  {level}
-                </option>
-              );
-            })}
-          </select>
-        </>
-      );
-    }
+    return (
+      <Level
+        uniquelevels={this.state.uniquelevels}
+        levelHandler={this.levelHandler}
+        disablinglevel={this.disablingOption}
+        facilityvalue={this.state.facilityValue}
+      />
+    );
   };
 
   // search bar for searching messages
 
   SearchbarHandler = (): JSX.Element => {
-    return <Searchbar searchfilter={this.SearchFilter} />;
+    return <Searchbar searchHandler={this.SearchHandler} />;
   };
 
   render() {
