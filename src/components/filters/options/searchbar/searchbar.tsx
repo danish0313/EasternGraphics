@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import classes from './searchbar.module.css'
 type MyProps = {
-    searchfilter : any
+    searchHandler : any
 }
 
 export default class searchbar extends Component<MyProps> {
@@ -12,7 +12,7 @@ export default class searchbar extends Component<MyProps> {
                   <label className={classes.label}>SEARCH YOUR MESSAGES:</label>
                   <input
                     className={classes.search}
-                    onChange={e => this.props.searchfilter(e)}
+                    onChange={e => this.props.searchHandler(e)}
                     type="search"
                     id="site-search"
                     aria-label="Search through messages"

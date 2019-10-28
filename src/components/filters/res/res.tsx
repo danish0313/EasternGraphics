@@ -4,7 +4,7 @@ import classes from './res.module.css';
 type MyProps = {
    res: any,
 }
-export default class FilterData extends Component<MyProps> {
+export default class Data extends Component<MyProps> {
     render() {
         return (
             <div>
