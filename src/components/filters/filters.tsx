@@ -1,48 +1,54 @@
-import React, { Component } from "react";
-import classes from "./filters.module.css";
-import Filterdata from "./filterData/FilterData";
-import Results from "./res/res";
-import Facility from "./options/facility/facility";
-import Level from "./options/level/level";
-import Searchbar from "./options/searchbar/searchbar";
-import _ from "lodash";
+import React, { Component } from 'react';
+import classes from './filters.module.css';
+import Filterdata from './filterData/FilterData';
+import Results from './res/res';
+import Facility from './options/facility/facility';
+import Level from './options/level/level';
+import Searchbar from './options/searchbar/searchbar';
+import _ from 'lodash';
 
-type MyState = {
-  data: any[],
-  res: string[],
-  facilityValue: string,
-  uniqueFacilities: string[],
-  uniquelevels: string[],
-  LevelValue: string,
-  SearchValue: string,
-
-  Error: boolean
+interface MyState  {
+  data: Array<Values>;
+  res: string[];
+  facilityValue: string;
+  uniqueFacilities: string[];
+  uniquelevels: string[];
+  LevelValue: string;
+  SearchValue: string;
+  Error: boolean;
 };
+
+interface Values {
+  message: string ;
+  facility: string;
+  level: string;
+  timeStamp: string;
+  }
 
 export default class Filters extends Component<{}, MyState> {
   constructor(props: any) {
     super(props);
 
     this.state = {
-      data: [],
+      data : [],
       res: [],
-      facilityValue: "",
-      LevelValue: "",
-      SearchValue: "",
+      facilityValue: '',
+      LevelValue: '',
+      SearchValue: '',
       uniqueFacilities: [],
       uniquelevels: [],
       Error: false
     };
   }
 
-  componentDidMount = async () => {
+ public componentDidMount = async () :Promise<void> => {
     // fetching the error log from public folder
-    fetch("./errors/errors.json").then(async (logs: Response) => {
+    fetch('./errors/errors.json').then(async (logs: Response) => {
       if (logs.status !== 200) {
         this.setState({ Error: true });
         return;
       }
-      await logs.json().then(data => {
+      await logs.json().then((data) => {
         this.setState(
           {
             Error: false,
@@ -56,9 +62,9 @@ export default class Filters extends Component<{}, MyState> {
 
   // for refracting the api json data
 
-  ArrayChangeHandler = async () => {
-    let ErrorLog = this.state.data;
-    let results: any = [];
+  public ArrayChangeHandler = async () => {
+    let ErrorLog  = this.state.data;
+    let results = [];
 
     // Loop Through the ErrorLog
     for (let i = 0; i < ErrorLog.length; i++) {
