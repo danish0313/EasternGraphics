@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import classes from './searchbar.module.css'
 type MyProps = {
     searchHandler : any
 }
 
-export default class searchbar extends Component<MyProps> {
+export default class searchbar extends PureComponent<MyProps> {
     render() {
       
             return (

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import classes from "./level.module.css";
 import _ from "lodash";
 
@@ -9,7 +9,7 @@ type MyProps = {
   facilityvalue: string
 };
 
-export default class facility extends Component<MyProps> {
+export default class facility extends PureComponent<MyProps> {
   render() {
     return (
       <>

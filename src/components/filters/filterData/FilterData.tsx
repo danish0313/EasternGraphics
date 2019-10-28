@@ -1,4 +1,4 @@
- import React, { Component } from 'react'
+ import React, { PureComponent } from 'react'
  import classes from './FilterData.module.css';
 
  type MyProps = {
@@ -6,7 +6,7 @@
   SearchFilter : any ,
   SearchValue : string
  }
- export default class FilterData extends Component<MyProps> {
+ export default class FilterData extends PureComponent<MyProps> {
      render() {
  let filteredData = null;
 if(this.props.SearchValue.length > 0) {

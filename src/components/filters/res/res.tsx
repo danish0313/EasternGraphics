@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import classes from './res.module.css';
 
 type MyProps = {
    res: any,
 }
-export default class Data extends Component<MyProps> {
+export default class Data extends PureComponent<MyProps> {
     render() {
         return (
             <div>
