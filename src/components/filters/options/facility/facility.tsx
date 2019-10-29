@@ -2,12 +2,27 @@ import React, { PureComponent } from "react";
 import classes from "./facility.module.css";
 import _ from "lodash";
 
-type MyProps = {
-  uniquefacilities: string[],
+interface MyProps{
+  uniquefacilities: any,
   FacilitiesHandler: any,
   disablingfacility: any,
   levelvalue: string
 };
+
+
+interface UniqueFacility {
+  facility: string;
+
+  }
+
+
+interface UniqueLevel {
+  level: string;
+  }
+
+
+
+
 
 export default class facility extends PureComponent<MyProps> {
   render() {

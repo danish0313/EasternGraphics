@@ -3,7 +3,7 @@ import classes from "./level.module.css";
 import _ from "lodash";
 
 type MyProps = {
-  uniquelevels: string[],
+  uniquelevels: any,
   levelHandler: any,
   disablinglevel: any,
   facilityvalue: string

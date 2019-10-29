@@ -9,27 +9,37 @@ import _ from 'lodash';
 
 interface MyState  {
   data: Array<Values>;
-  res: string[];
-  facilityValue: string;
-  uniqueFacilities: string[];
-  uniquelevels: string[];
-  LevelValue: string;
+  res: Array<Values>;
+  facilityValue: any;
+  uniqueFacilities: Array<UniqueFacility>;
+  uniquelevels: Array<UniqueLevel> ;
+  LevelValue: any;
   SearchValue: string;
   Error: boolean;
-};
+}
 
 interface Values {
   message: string ;
   facility: string;
   level: string;
   timeStamp: string;
-  }
+}
 
+interface UniqueFacility {
+    facility: string;
+  
+}
+
+interface UniqueLevel {
+ level: string;
+}
+
+
+  
 export default class Filters extends Component<{}, MyState> {
   constructor(props: any) {
-    super(props);
-
-    this.state = {
+ super(props);
+ this.state = {
       data : [],
       res: [],
       facilityValue: '',
@@ -38,15 +48,16 @@ export default class Filters extends Component<{}, MyState> {
       uniqueFacilities: [],
       uniquelevels: [],
       Error: false
-    };
-  }
+};
+}
 
- public componentDidMount = async () :Promise<void> => {
+ public componentDidMount = async () => {
     // fetching the error log from public folder
     fetch('./errors/errors.json').then(async (logs: Response) => {
       if (logs.status !== 200) {
         this.setState({ Error: true });
         return;
+
       }
       await logs.json().then((data) => {
         this.setState(
@@ -55,16 +66,16 @@ export default class Filters extends Component<{}, MyState> {
             data: data.data
           },
           this.ArrayChangeHandler
-        ); // callback function
-      });
-    });
-  };
+); // callback function
+});
+});
+};
 
   // for refracting the api json data
 
   public ArrayChangeHandler = async () => {
-    let ErrorLog  = this.state.data;
-    let results = [];
+    let ErrorLog : Array<Values>   = this.state.data;
+    let results : Array<Values> = [];
 
     // Loop Through the ErrorLog
     for (let i = 0; i < ErrorLog.length; i++) {
@@ -75,12 +86,12 @@ export default class Filters extends Component<{}, MyState> {
         results[index].message += "\n" + ErrorLog[i].message;
       } else {
         results.push(ErrorLog[i]);
-      }
-    }
+}
+}
 
     // returning only those indexes which has same facility , level  and timeStamp
 
-    function GetIndexIfLogExists(value: any, arr: any) {
+    function GetIndexIfLogExists(value: Values, arr: Array<Values>) {
       let index = -1;
       for (let i = 0; i < arr.length; i++) {
         if (
@@ -96,21 +107,21 @@ export default class Filters extends Component<{}, MyState> {
     }
 
     //removing duplications from results array using lodash
-    let unique = _.uniqBy(results, function(e: any) {
+    let unique : Array<Values>  = _.uniqBy(results, function(e: any) {
       return e.message || e.TimeStamp;
     });
 
     // getting unique facilities from unique array
-    let AllFacility: string[] = unique.map((facilities: any) => {
+    let AllFacility: Array<UniqueFacility>  = unique.map((facilities: any) => {
       return facilities.facility;
     });
-    let uniqueFacilities: string[] = Array.from(new Set(AllFacility));
+    let uniqueFacilities: Array<UniqueFacility> = Array.from(new Set(AllFacility));
 
     // getting unique levels from unique array
-    let Alllevels: string[] = unique.map((levels: any) => {
+    let Alllevels: Array<UniqueLevel> = unique.map((levels: any) => {
       return levels.level;
     });
-    let uniquelevels: string[] = Array.from(new Set(Alllevels));
+    let uniquelevels: Array<UniqueLevel>  = Array.from(new Set(Alllevels));
 
     // setting the state
     this.setState({
@@ -123,7 +134,7 @@ export default class Filters extends Component<{}, MyState> {
   // Filter handler for facility
 
   FacilitiesHandler = (e: React.FormEvent<HTMLSelectElement>) => {
-    const { value }: any = e.target;
+    const { value} : any = e.target;
 
     // storing the facility value in state
     this.setState({
