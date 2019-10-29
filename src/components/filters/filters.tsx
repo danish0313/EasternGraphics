@@ -107,12 +107,12 @@ export default class Filters extends Component<{}, MyState> {
     }
 
     //removing duplications from results array using lodash
-    let unique : Array<Values>  = _.uniqBy(results, function(e: any) {
-      return e.message || e.TimeStamp;
+    let unique : Array<Values>  = _.uniqBy(results, function(e: Values) {
+      return e.message || e.timeStamp;
     });
 
     // getting unique facilities from unique array
-    let AllFacility: Array<UniqueFacility>  = unique.map((facilities: any) => {
+    let AllFacility: Array<UniqueFacility>  = unique.map((facilities: any ) => {
       return facilities.facility;
     });
     let uniqueFacilities: Array<UniqueFacility> = Array.from(new Set(AllFacility));
@@ -133,9 +133,9 @@ export default class Filters extends Component<{}, MyState> {
 
   // Filter handler for facility
 
-  FacilitiesHandler = (e: React.FormEvent<HTMLSelectElement>) => {
-    const { value} : any = e.target;
-
+  FacilitiesHandler = (e:React.ChangeEvent<HTMLSelectElement>) => {
+   const value : string = (e.target as HTMLSelectElement).value
+    
     // storing the facility value in state
     this.setState({
       facilityValue: value
@@ -144,8 +144,8 @@ export default class Filters extends Component<{}, MyState> {
 
   // Filter handler for level
 
-  levelHandler = (e: React.FormEvent<HTMLSelectElement>) => {
-    const { value }: any = e.target;
+  levelHandler = (e:React.ChangeEvent<HTMLSelectElement>) => {
+    const value : string = (e.target as HTMLSelectElement).value
     // storing the level value in state
     this.setState({
       LevelValue: value
@@ -156,14 +156,14 @@ export default class Filters extends Component<{}, MyState> {
     if (this.state.facilityValue.length > 0) {
       // getting all the facility from errorLog by mapping
       let Facilities = this.state.res.filter(
-        (facilities: any) => facilities.facility === this.state.facilityValue
+        (facilities: Values) => facilities.facility === this.state.facilityValue
       );
 
       return Facilities;
     } else if (this.state.LevelValue.length > 0) {
-      // getting all the facility from errorLog by mapping
+      // getting all the levels from errorLog by mapping
       let levels = this.state.res.filter(
-        (facilities: any) => facilities.level === this.state.LevelValue
+        (levels: Values) => levels.level === this.state.LevelValue
       );
       return levels;
     }
@@ -171,7 +171,7 @@ export default class Filters extends Component<{}, MyState> {
 
   // search Handler
   SearchHandler = (e: React.FormEvent<HTMLInputElement>) => {
-    const { value }: any = e.target;
+    const value : string = (e.target as HTMLInputElement).value
     // storing the search value in to the state
     this.setState({
       SearchValue: value
@@ -183,7 +183,7 @@ export default class Filters extends Component<{}, MyState> {
   SearchFilter = () => {
     // filter the messages based on user inputs
     let search = this.state.res.filter(
-      (search: any) =>
+      (search: Values) : boolean =>
         search.message
           .toLowerCase()
           .indexOf(this.state.SearchValue.toLowerCase()) >= 0 ||
