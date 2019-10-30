@@ -6,6 +6,7 @@ import Facility from './options/facility/facility';
 import Level from './options/level/level';
 import Searchbar from './options/searchbar/searchbar';
 import _ from 'lodash';
+import { number } from 'prop-types';
 
 interface MyState  {
   data: Array<Values>;
@@ -27,17 +28,14 @@ interface Values {
 
 interface UniqueFacility {
     facility: string;
-  
 }
 
 interface UniqueLevel {
  level: string;
 }
 
-
-  
 export default class Filters extends Component<{}, MyState> {
-  constructor(props: any) {
+  constructor(props: {}) {
  super(props);
  this.state = {
       data : [],
@@ -51,7 +49,7 @@ export default class Filters extends Component<{}, MyState> {
 };
 }
 
- public componentDidMount = async () => {
+ public componentDidMount =  () => {
     // fetching the error log from public folder
     fetch('./errors/errors.json').then(async (logs: Response) => {
       if (logs.status !== 200) {
@@ -68,32 +66,32 @@ export default class Filters extends Component<{}, MyState> {
           this.ArrayChangeHandler
 ); // callback function
 });
-});
+}).catch(() => 'obligatory catch');
 };
 
   // for refracting the api json data
 
-  public ArrayChangeHandler = async () => {
-    let ErrorLog : Array<Values>   = this.state.data;
-    let results : Array<Values> = [];
+  public ArrayChangeHandler = () => {
+    const errorLog: Array<Values>   = this.state.data;
+    const results: Array<Values> = [];
 
     // Loop Through the ErrorLog
-    for (let i = 0; i < ErrorLog.length; i++) {
+    for (const i in errorLog) {
       // similar indexes returned to be pushed in Results Array
-      let index = await GetIndexIfLogExists(ErrorLog[i], results);
+      const index: number = getIndexIfLogExists({ value: errorLog[i], arr: results });
 
       if (index >= 0) {
-        results[index].message += "\n" + ErrorLog[i].message;
+        results[index].message += '\n' + errorLog[i].message;
       } else {
-        results.push(ErrorLog[i]);
+        results.push(errorLog[i]);
 }
 }
 
     // returning only those indexes which has same facility , level  and timeStamp
 
-    function GetIndexIfLogExists(value: Values, arr: Array<Values>) {
-      let index = -1;
-      for (let i = 0; i < arr.length; i++) {
+   function getIndexIfLogExists({ value, arr }: { value: Values; arr: Array<Values>; }): number {
+      let index: any = -1;
+      for (const i in arr) {
         if (
           arr[i].facility === value.facility &&
           arr[i].level === value.level &&
@@ -106,24 +104,28 @@ export default class Filters extends Component<{}, MyState> {
       return index;
     }
 
-    //removing duplications from results array using lodash
-    let unique : Array<Values>  = _.uniqBy(results, function(e: Values) {
+    // removing duplications from results array using lodash
+
+  const unique: Array<Values>  = _.uniqBy(results, (e: Values): string =>  {
       return e.message || e.timeStamp;
     });
 
     // getting unique facilities from unique array
-    let AllFacility: Array<UniqueFacility>  = unique.map((facilities: any ) => {
+
+    const allFacility: Array<UniqueFacility>  = unique.map((facilities: any ) => {
       return facilities.facility;
     });
-    let uniqueFacilities: Array<UniqueFacility> = Array.from(new Set(AllFacility));
+    const uniqueFacilities: Array<UniqueFacility> = Array.from(new Set(allFacility));
 
     // getting unique levels from unique array
-    let Alllevels: Array<UniqueLevel> = unique.map((levels: any) => {
+
+    const allLevels: Array<UniqueLevel> = unique.map((levels: any) => {
       return levels.level;
     });
-    let uniquelevels: Array<UniqueLevel>  = Array.from(new Set(Alllevels));
+    const uniquelevels: Array<UniqueLevel>  = Array.from(new Set(allLevels));
 
     // setting the state
+
     this.setState({
       res: unique,
       uniqueFacilities: uniqueFacilities,
@@ -133,106 +135,123 @@ export default class Filters extends Component<{}, MyState> {
 
   // Filter handler for facility
 
-  FacilitiesHandler = (e:React.ChangeEvent<HTMLSelectElement>) => {
-   const value : string = (e.target as HTMLSelectElement).value
-    
+  public FacilitiesHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+   const value: string = (e.target as HTMLSelectElement).value;
     // storing the facility value in state
-    this.setState({
-      facilityValue: value
-    });
+
+  this.setState({
+    facilityValue: value
+  });
   };
 
   // Filter handler for level
 
-  levelHandler = (e:React.ChangeEvent<HTMLSelectElement>) => {
-    const value : string = (e.target as HTMLSelectElement).value
+ public levelHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value: string = (e.target as HTMLSelectElement).value;
     // storing the level value in state
+
     this.setState({
-      LevelValue: value
-    });
+    LevelValue: value
+  });
   };
 
-  FacilityLevelFilter = () => {
+ public FacilityLevelFilter = () => {
     if (this.state.facilityValue.length > 0) {
       // getting all the facility from errorLog by mapping
-      let Facilities = this.state.res.filter(
-        (facilities: Values) => facilities.facility === this.state.facilityValue
+
+      const facilities: object = this.state.res.filter(
+      (fac: Values): boolean => fac.facility === this.state.facilityValue
       );
 
-      return Facilities;
-    } else if (this.state.LevelValue.length > 0) {
+      return facilities;
+
+    } if (this.state.LevelValue.length > 0) {
       // getting all the levels from errorLog by mapping
-      let levels = this.state.res.filter(
-        (levels: Values) => levels.level === this.state.LevelValue
+
+     const  levels: object = this.state.res.filter(
+      (lev: Values): boolean => lev.level === this.state.LevelValue
       );
       return levels;
-    }
+
+  }
   };
 
   // search Handler
-  SearchHandler = (e: React.FormEvent<HTMLInputElement>) => {
-    const value : string = (e.target as HTMLInputElement).value
+ public SearchHandler = (e: React.FormEvent<HTMLInputElement>) => {
+    const value: string = (e.target as HTMLInputElement).value;
     // storing the search value in to the state
+
     this.setState({
       SearchValue: value
-    });
-  };
+ });
+};
 
   // Search Filter
 
-  SearchFilter = () => {
+ public SearchFilter = () => {
 
-    let search= null;
+    let search: object = [{}];
 
     // filter the messages based on user inputs
-   if(this.state.SearchValue.length > 0 && this.state.facilityValue.length > 0) {
-    let search  = this.state.res.filter(
-      (facilities: Values) => facilities.facility === this.state.facilityValue
+
+   if(this.state.SearchValue.length > 0 && this.state.facilityValue.length > 0 ) {
+     search  = this.state.res.filter(
+   (facilities: Values) => {
+         return facilities.facility === this.state.facilityValue;
+       }
     ).filter(
-      (search: Values) : boolean =>
-        search.message.toLowerCase().indexOf(this.state.SearchValue.toLowerCase())>= 0 ||
-        search.level
-          .toLowerCase()
-          .indexOf(this.state.SearchValue.toLowerCase()) >= 0 ||
-        search.facility
-          .toLowerCase()
-          .indexOf(this.state.SearchValue.toLowerCase()) >= 0
+      (search: Values): boolean =>
+        {
+          return search.message.toLocaleLowerCase().indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
+            search.level
+              .toLocaleLowerCase()
+              .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
+            search.facility
+              .toLocaleLowerCase()
+              .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0;
+        }
     );
-   return search
-    }else if( this.state.SearchValue.length > 0 && this.state.LevelValue.length > 0 ) {
+    return search;
+    } if( this.state.SearchValue.length > 0 && this.state.LevelValue.length > 0 ) {
 
       search  = this.state.res.filter(
-        (levels: Values) => levels.level === this.state.LevelValue
+        (levels: Values) => {
+          return levels.level === this.state.LevelValue;
+        }
       ).filter(
-        (search: Values) : boolean =>
-          search.message.toLowerCase().indexOf(this.state.SearchValue.toLowerCase())>= 0 ||
-          search.level
-            .toLowerCase()
-            .indexOf(this.state.SearchValue.toLowerCase()) >= 0 ||
-          search.facility
-            .toLowerCase()
-            .indexOf(this.state.SearchValue.toLowerCase()) >= 0
+        (searched: Values): boolean =>
+          {
+            return searched.message.toLocaleLowerCase().indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
+              searched.level
+                .toLocaleLowerCase()
+                .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
+              searched.facility
+                .toLocaleLowerCase()
+                .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0;
+          }
       );
       return search;
     } else {
 
       search  =this.state.res.filter(
-        (search: Values) : boolean =>
-          search.message.toLowerCase().indexOf(this.state.SearchValue.toLowerCase())>= 0 ||
-          search.level
-            .toLowerCase()
-            .indexOf(this.state.SearchValue.toLowerCase()) >= 0 ||
-          search.facility
-            .toLowerCase()
-            .indexOf(this.state.SearchValue.toLowerCase()) >= 0
+        (search: Values): boolean =>
+          {
+            return search.message.toLocaleLowerCase().indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
+              search.level
+                .toLocaleLowerCase()
+                .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
+              search.facility
+                .toLocaleLowerCase()
+                .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0;
+          }
       );
-return search;
+    return search;
     }
   };
 
   // Mapping the entire array for displaying on the UI
 
-  ShowingResults = () => {
+  public ShowingResults = () => {
     if (
       this.state.facilityValue.length > 0 ||
       this.state.LevelValue.length > 0 ||
@@ -242,21 +261,21 @@ return search;
         <Filterdata
           FacilityLevelFilter={this.FacilityLevelFilter}
           SearchValue={this.state.SearchValue}
-          SearchFilter={this.SearchFilter}
-      
+          SearchFilter={this.SearchFilter}      
         />
       );
-    } else if (
-      this.state.facilityValue === "" ||
-      this.state.LevelValue === "" ||
-      this.state.SearchValue === ""
+  } if (
+      this.state.facilityValue === '' ||
+      this.state.LevelValue === '' ||
+      this.state.SearchValue === ''
     ) {
       return <Results res={this.state.res} />;
     }
-  };
+};
 
   // for Facility  Select Options
-  FacilityFilterHandler = (): JSX.Element => {
+
+ public FacilityFilterHandler = (): JSX.Element => {
     return (
       <Facility
         uniquefacilities={this.state.uniqueFacilities}
@@ -268,17 +287,20 @@ return search;
   };
 
   // for disabling  options of level
-  disablingOption = (): number => {
+
+ public disablingOption = (): number => {
     return _.indexOf(this.state.uniqueFacilities, this.state.facilityValue);
   };
 
   // for disabling  options of facility
-  disablingfacility = (): number => {
+
+ public disablingfacility = (): number => {
     return _.indexOf(this.state.uniquelevels, this.state.LevelValue);
   };
 
   // for level  Select Options
-  LevelFilterHandler = (): JSX.Element => {
+
+  public LevelFilterHandler = (): JSX.Element => {
     return (
       <Level
         uniquelevels={this.state.uniquelevels}
@@ -288,30 +310,26 @@ return search;
       />
     );
   };
-
   // search bar for searching messages
 
-  SearchbarHandler = (): JSX.Element => {
+ public SearchbarHandler = (): JSX.Element => {
     return <Searchbar searchHandler={this.SearchHandler} />;
   };
 
-  render() {
-    let ShowingResults = this.ShowingResults();
-    let FacilityOptions = this.FacilityFilterHandler();
-    let LevelOptions = this.LevelFilterHandler();
-    let SearchbarOptions = this.SearchbarHandler();
+public  render(): JSX.Element {
+  
     return (
       <>
         <div className={classes.box}>
           <h1> Error-LOG SEARCH !</h1>
           <div>
-            {FacilityOptions}
-            {LevelOptions} <br />
-            {SearchbarOptions}
+            {this.FacilityFilterHandler()}
+            {this.LevelFilterHandler()} <br />
+            {this.SearchbarHandler()}
           </div>
         </div>
 
-        <div className={classes.results}>{ShowingResults}</div>
+        <div className={classes.results}>{this.ShowingResults()}</div>
       </>
     );
   }

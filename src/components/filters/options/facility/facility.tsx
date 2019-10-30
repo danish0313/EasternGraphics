@@ -25,7 +25,7 @@ interface UniqueLevel {
 
 
 export default class facility extends Component<MyProps> {
-  render() {
+  render(): JSX.Element {
     return (
       <>
         {this.props.levelvalue.length ? (

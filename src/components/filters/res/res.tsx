@@ -5,7 +5,7 @@ type MyProps = {
    res: any,
 }
 export default class Data extends PureComponent<MyProps> {
-    render() {
+    render(): JSX.Element {
         return (
             <div>
                 {this.props.res.map((data: any, index: number) => (

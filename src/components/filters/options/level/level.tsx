@@ -10,7 +10,7 @@ type MyProps = {
 };
 
 export default class facility extends Component<MyProps> {
-  render() {
+  render(): JSX.Element {
     return (
       <>
         {this.props.facilityvalue.length ? (
