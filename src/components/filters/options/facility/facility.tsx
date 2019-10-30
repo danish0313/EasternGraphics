@@ -1,31 +1,22 @@
-import React, { Component } from "react";
-import classes from "./facility.module.css";
-import _ from "lodash";
+import React, { Component } from 'react';
+import classes from './facility.module.css';
+import _ from 'lodash';
 
-interface MyProps{
-  uniquefacilities: any,
-  FacilitiesHandler: any,
-  disablingfacility: any,
-  levelvalue: string
-};
-
-
+interface MyProps {
+  uniquefacilities: any;
+  FacilitiesHandler: any;
+  disablingfacility: any;
+  levelvalue: string;
+}
 interface UniqueFacility {
-  facility: string;
+facility: string;
 
   }
-
-
 interface UniqueLevel {
   level: string;
   }
-
-
-
-
-
 export default class facility extends Component<MyProps> {
-  render(): JSX.Element {
+ public render(): JSX.Element {
     return (
       <>
         {this.props.levelvalue.length ? (
@@ -34,26 +25,28 @@ export default class facility extends Component<MyProps> {
 
             <select
               className={classes.all}
-              onChange={e => this.props.FacilitiesHandler(e)}
+              onChange={e => {
+                return this.props.FacilitiesHandler(e);
+              }}
             >
-              <option value=""> </option>
+              <option value=''> </option>
               {this.props.uniquefacilities.map(
-                (facility: string, i: number) => {
+                (facilities: string, i: number) => {
                   return (
                     <option
-                      key={facility + i}
+                      key={facilities + i}
                       disabled={
-                        _.indexOf(this.props.uniquefacilities, facility) !==
+                        _.indexOf(this.props.uniquefacilities,facilities) !==
                         this.props.disablingfacility()
                       }
                       selected={
-                        _.indexOf(this.props.uniquefacilities, facility) ===
+                        _.indexOf(this.props.uniquefacilities,facilities) ===
                         this.props.disablingfacility()
                       }
-                      value={facility}
+                      value={facilities}
                     >
-                      {" "}
-                      {facility}
+                      {''}
+                      {facilities}
                     </option>
                   );
                 }
@@ -68,13 +61,13 @@ export default class facility extends Component<MyProps> {
               className={classes.all}
               onChange={e => this.props.FacilitiesHandler(e)}
             >
-              <option value=""> </option>
+              <option value=''> </option>
               {this.props.uniquefacilities.map(
-                (facility: string, i: number) => {
+                (facilities: string, i: number) => {
                   return (
-                    <option key={facility + i} value={facility}>
-                      {" "}
-                      {facility}
+                    <option key={facilities + i} value={facilities}>
+                      {''}
+                      {facilities}
                     </option>
                   );
                 }

@@ -6,7 +6,6 @@ import Facility from './options/facility/facility';
 import Level from './options/level/level';
 import Searchbar from './options/searchbar/searchbar';
 import _ from 'lodash';
-import { number } from 'prop-types';
 
 interface MyState  {
   data: Array<Values>;
@@ -185,7 +184,6 @@ export default class Filters extends Component<{}, MyState> {
       SearchValue: value
  });
 };
-
   // Search Filter
 
  public SearchFilter = () => {
@@ -201,23 +199,19 @@ export default class Filters extends Component<{}, MyState> {
        }
     ).filter(
       (search: Values): boolean =>
-        {
-          return search.message.toLocaleLowerCase().indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
-            search.level
-              .toLocaleLowerCase()
-              .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
-            search.facility
-              .toLocaleLowerCase()
-              .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0;
-        }
+        search.message.toLocaleLowerCase().indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
+      search.level
+        .toLocaleLowerCase()
+        .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
+      search.facility
+        .toLocaleLowerCase()
+        .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0
     );
     return search;
     } if( this.state.SearchValue.length > 0 && this.state.LevelValue.length > 0 ) {
 
-      search  = this.state.res.filter(
-        (levels: Values) => {
-          return levels.level === this.state.LevelValue;
-        }
+    search  = this.state.res.filter(
+        (levels: Values) => levels.level === this.state.LevelValue
       ).filter(
         (searched: Values): boolean =>
           {
@@ -235,19 +229,17 @@ export default class Filters extends Component<{}, MyState> {
 
       search  =this.state.res.filter(
         (search: Values): boolean =>
-          {
-            return search.message.toLocaleLowerCase().indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
-              search.level
-                .toLocaleLowerCase()
-                .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
-              search.facility
-                .toLocaleLowerCase()
-                .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0;
-          }
+          search.message.toLocaleLowerCase().indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
+        search.level
+          .toLocaleLowerCase()
+          .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
+        search.facility
+          .toLocaleLowerCase()
+          .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0
       );
     return search;
     }
-  };
+};
 
   // Mapping the entire array for displaying on the UI
 
@@ -261,7 +253,7 @@ export default class Filters extends Component<{}, MyState> {
         <Filterdata
           FacilityLevelFilter={this.FacilityLevelFilter}
           SearchValue={this.state.SearchValue}
-          SearchFilter={this.SearchFilter}      
+          SearchFilter={this.SearchFilter}  
         />
       );
   } if (
@@ -269,9 +261,9 @@ export default class Filters extends Component<{}, MyState> {
       this.state.LevelValue === '' ||
       this.state.SearchValue === ''
     ) {
-      return <Results res={this.state.res} />;
+      return <Results res={this.state.res}/>;
     }
-};
+ };
 
   // for Facility  Select Options
 
@@ -316,15 +308,14 @@ export default class Filters extends Component<{}, MyState> {
     return <Searchbar searchHandler={this.SearchHandler} />;
   };
 
-public  render(): JSX.Element {
-  
+public  render(): JSX.Element {  
     return (
       <>
         <div className={classes.box}>
           <h1> Error-LOG SEARCH !</h1>
           <div>
             {this.FacilityFilterHandler()}
-            {this.LevelFilterHandler()} <br />
+            {this.LevelFilterHandler()} <br/>
             {this.SearchbarHandler()}
           </div>
         </div>

@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import classes from "./level.module.css";
-import _ from "lodash";
+import React, { Component } from 'react';
+import classes from './level.module.css';
+import _ from 'lodash';
 
-type MyProps = {
-  uniquelevels: any,
-  levelHandler: any,
-  disablinglevel: any,
-  facilityvalue: string
-};
+interface MyProps  {
+  uniquelevels: any;
+  levelHandler: any;
+  disablinglevel: any;
+  facilityvalue: string;
+}
 
 export default class facility extends Component<MyProps> {
-  render(): JSX.Element {
+  public render(): JSX.Element {
     return (
       <>
         {this.props.facilityvalue.length ? (
@@ -19,9 +19,11 @@ export default class facility extends Component<MyProps> {
 
             <select
               className={classes.all}
-              onChange={e => this.props.levelHandler(e)}
+              onChange={e => {
+                return this.props.levelHandler(e);
+              }}
             >
-              <option value=""> </option>
+              <option value=''> </option>
               {this.props.uniquelevels.map(
                 (level: string, i: number) => {
                   return (
@@ -37,7 +39,7 @@ export default class facility extends Component<MyProps> {
                       }
                       value={level}
                     >
-                      {" "}
+                      {''}
                       {level}
                     </option>
                   );
@@ -51,14 +53,16 @@ export default class facility extends Component<MyProps> {
 
             <select
               className={classes.all}
-              onChange={e => this.props.levelHandler(e)}
+              onChange={e => {
+                return this.props.levelHandler(e);
+              }}
             >
-              <option value=""> </option>
+              <option value=''> </option>
               {this.props.uniquelevels.map(
                 (level: string, i: number) => {
                   return (
                     <option key={level + i} value={level}>
-                      {" "}
+                      {''}
                       {level}
                     </option>
                   );
