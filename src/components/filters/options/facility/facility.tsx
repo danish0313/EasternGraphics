@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { Component } from "react";
 import classes from "./facility.module.css";
 import _ from "lodash";
 
@@ -24,7 +24,7 @@ interface UniqueLevel {
 
 
 
-export default class facility extends PureComponent<MyProps> {
+export default class facility extends Component<MyProps> {
   render() {
     return (
       <>

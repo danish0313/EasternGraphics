@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import classes from './FilterData.module.css';
 
 interface MyProps {
@@ -14,7 +14,7 @@ level: string;
 timeStamp: string;
 }
 
-export default class FilterData extends PureComponent<MyProps> {
+export default class FilterData extends Component<MyProps> {
  public render(): JSX.Element {
     let filteredData: string = '';
     if (this.props.SearchValue.length > 0) {
