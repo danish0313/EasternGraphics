@@ -181,12 +181,16 @@ export default class Filters extends Component<{}, MyState> {
   // Search Filter
 
   SearchFilter = () => {
+
+    let search= null;
+
     // filter the messages based on user inputs
-    let search = this.state.res.filter(
+   if(this.state.SearchValue.length > 0 && this.state.facilityValue.length > 0) {
+    let search  = this.state.res.filter(
+      (facilities: Values) => facilities.facility === this.state.facilityValue
+    ).filter(
       (search: Values) : boolean =>
-        search.message
-          .toLowerCase()
-          .indexOf(this.state.SearchValue.toLowerCase()) >= 0 ||
+        search.message.toLowerCase().indexOf(this.state.SearchValue.toLowerCase())>= 0 ||
         search.level
           .toLowerCase()
           .indexOf(this.state.SearchValue.toLowerCase()) >= 0 ||
@@ -194,10 +198,35 @@ export default class Filters extends Component<{}, MyState> {
           .toLowerCase()
           .indexOf(this.state.SearchValue.toLowerCase()) >= 0
     );
-    if (this.state.SearchValue.length > 0) {
+   return search
+    }else if( this.state.SearchValue.length > 0 && this.state.LevelValue.length > 0 ) {
+
+      search  = this.state.res.filter(
+        (levels: Values) => levels.level === this.state.LevelValue
+      ).filter(
+        (search: Values) : boolean =>
+          search.message.toLowerCase().indexOf(this.state.SearchValue.toLowerCase())>= 0 ||
+          search.level
+            .toLowerCase()
+            .indexOf(this.state.SearchValue.toLowerCase()) >= 0 ||
+          search.facility
+            .toLowerCase()
+            .indexOf(this.state.SearchValue.toLowerCase()) >= 0
+      );
       return search;
     } else {
-      return;
+
+      search  =this.state.res.filter(
+        (search: Values) : boolean =>
+          search.message.toLowerCase().indexOf(this.state.SearchValue.toLowerCase())>= 0 ||
+          search.level
+            .toLowerCase()
+            .indexOf(this.state.SearchValue.toLowerCase()) >= 0 ||
+          search.facility
+            .toLowerCase()
+            .indexOf(this.state.SearchValue.toLowerCase()) >= 0
+      );
+return search;
     }
   };
 
@@ -214,6 +243,7 @@ export default class Filters extends Component<{}, MyState> {
           FacilityLevelFilter={this.FacilityLevelFilter}
           SearchValue={this.state.SearchValue}
           SearchFilter={this.SearchFilter}
+      
         />
       );
     } else if (
