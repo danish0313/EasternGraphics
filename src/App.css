@@ -5,3 +5,10 @@ h1{
 span{
   font-weight: bold; 
 }
+
+hr{
+
+border-top: 3px dashed grey;
+
+
+}
