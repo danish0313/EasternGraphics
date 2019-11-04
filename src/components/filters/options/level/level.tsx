@@ -4,12 +4,12 @@ import _ from 'lodash';
 
 interface MyProps  {
   uniquelevels: any;
-  levelHandler: any;
-  disablinglevel: any;
+  levelHandler: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  disablinglevel:  () => {};
   facilityvalue: string;
 }
 
-export default class facility extends Component<MyProps> {
+export default class Level extends Component<MyProps> {
   public render(): JSX.Element {
     return (
       <>
@@ -19,11 +19,11 @@ export default class facility extends Component<MyProps> {
 
             <select
               className={classes.all}
-              onChange={e => {
+              onChange={(e) => {
                 return this.props.levelHandler(e);
               }}
             >
-              <option value=''> </option>
+              <option value=""/>
               {this.props.uniquelevels.map(
                 (level: string, i: number) => {
                   return (
@@ -53,11 +53,11 @@ export default class facility extends Component<MyProps> {
 
             <select
               className={classes.all}
-              onChange={e => {
+              onChange={(e) => {
                 return this.props.levelHandler(e);
               }}
             >
-              <option value=''> </option>
+              <option value=""/>
               {this.props.uniquelevels.map(
                 (level: string, i: number) => {
                   return (

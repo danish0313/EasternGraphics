@@ -76,7 +76,9 @@ export default class Filters extends Component<{}, MyState> {
 
     // Loop Through the ErrorLog
     for (const i in errorLog) {
-      // similar indexes returned to be pushed in Results Array
+     if ( errorLog.hasOwnProperty(i)) {
+
+   // similar indexes returned to be pushed in Results Array
       const index: number = getIndexIfLogExists({ value: errorLog[i], arr: results });
 
       if (index >= 0) {
@@ -85,11 +87,12 @@ export default class Filters extends Component<{}, MyState> {
         results.push(errorLog[i]);
 }
 }
+}
 
     // returning only those indexes which has same facility , level  and timeStamp
 
-   function getIndexIfLogExists({ value, arr }: { value: Values; arr: Array<Values>; }): number {
-      let index: any = -1;
+    function getIndexIfLogExists({ value, arr }: { value: Values; arr: Array<Values>; }): number {
+      let index: number | any = -1;
       for (const i in arr) {
         if (
           arr[i].facility === value.facility &&
@@ -105,20 +108,20 @@ export default class Filters extends Component<{}, MyState> {
 
     // removing duplications from results array using lodash
 
-  const unique: Array<Values>  = _.uniqBy(results, (e: Values): string =>  {
+    const unique: Array<Values>  = _.uniqBy(results, (e: Values): string =>  {
       return e.message || e.timeStamp;
     });
 
     // getting unique facilities from unique array
 
-    const allFacility: Array<UniqueFacility>  = unique.map((facilities: any ) => {
+    const allFacility: Array<UniqueFacility>  = unique.map((facilities: any ): UniqueFacility   => {
       return facilities.facility;
     });
     const uniqueFacilities: Array<UniqueFacility> = Array.from(new Set(allFacility));
 
     // getting unique levels from unique array
 
-    const allLevels: Array<UniqueLevel> = unique.map((levels: any) => {
+    const allLevels: Array<UniqueLevel> = unique.map((levels: any ): UniqueLevel  => {
       return levels.level;
     });
     const uniquelevels: Array<UniqueLevel>  = Array.from(new Set(allLevels));
@@ -138,7 +141,7 @@ export default class Filters extends Component<{}, MyState> {
    const value: string = (e.target as HTMLSelectElement).value;
     // storing the facility value in state
 
-  this.setState({
+   this.setState({
     facilityValue: value
   });
   };
@@ -155,23 +158,19 @@ export default class Filters extends Component<{}, MyState> {
   };
 
  public FacilityLevelFilter = () => {
-    if (this.state.facilityValue.length > 0) {
-      // getting all the facility from errorLog by mapping
+  if (this.state.facilityValue.length > 0) {
+    // getting all the facility from errorLog by mapping
 
-      const facilities: object = this.state.res.filter(
+    return this.state.res.filter(
       (fac: Values): boolean => fac.facility === this.state.facilityValue
-      );
+    );
+  }
+  if (this.state.LevelValue.length > 0) {
+    // getting all the levels from errorLog by mapping
 
-      return facilities;
-
-    } if (this.state.LevelValue.length > 0) {
-      // getting all the levels from errorLog by mapping
-
-     const  levels: object = this.state.res.filter(
+    return this.state.res.filter(
       (lev: Values): boolean => lev.level === this.state.LevelValue
-      );
-      return levels;
-
+    );
   }
   };
 
@@ -188,57 +187,61 @@ export default class Filters extends Component<{}, MyState> {
 
  public SearchFilter = () => {
 
-    let search: object = [{}];
+  let searchable: object = [{}];
 
-    // filter the messages based on user inputs
+  // filter the messages based on user inputs
 
-   if(this.state.SearchValue.length > 0 && this.state.facilityValue.length > 0 ) {
-     search  = this.state.res.filter(
-   (facilities: Values) => {
-         return facilities.facility === this.state.facilityValue;
-       }
-    ).filter(
-      (search: Values): boolean =>
-        search.message.toLocaleLowerCase().indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
+  if (this.state.SearchValue.length > 0 && this.state.facilityValue.length > 0) {
+    searchable = this.state.res
+      .filter((facilities: Values) => {
+        return facilities.facility === this.state.facilityValue;
+      })
+      .filter(
+        (search: Values): boolean =>
+          search.message
+            .toLocaleLowerCase()
+            .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
+          search.level
+            .toLocaleLowerCase()
+            .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
+          search.facility
+            .toLocaleLowerCase()
+            .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0
+      );
+    return searchable;
+  }
+  if (this.state.SearchValue.length > 0 && this.state.LevelValue.length > 0) {
+    searchable = this.state.res
+      .filter((levels: Values) => levels.level === this.state.LevelValue)
+      .filter((searched: Values): boolean => {
+        return (
+          searched.message
+            .toLocaleLowerCase()
+            .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
+          searched.level
+            .toLocaleLowerCase()
+            .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
+          searched.facility
+            .toLocaleLowerCase()
+            .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0
+        );
+      });
+    return searchable;
+  }
+  searchable = this.state.res.filter(
+    (search: Values): boolean =>
+      search.message
+        .toLocaleLowerCase()
+        .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
       search.level
         .toLocaleLowerCase()
         .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
       search.facility
         .toLocaleLowerCase()
         .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0
-    );
-    return search;
-    } if( this.state.SearchValue.length > 0 && this.state.LevelValue.length > 0 ) {
+  );
+  return searchable;
 
-    search  = this.state.res.filter(
-        (levels: Values) => levels.level === this.state.LevelValue
-      ).filter(
-        (searched: Values): boolean =>
-          {
-            return searched.message.toLocaleLowerCase().indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
-              searched.level
-                .toLocaleLowerCase()
-                .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
-              searched.facility
-                .toLocaleLowerCase()
-                .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0;
-          }
-      );
-      return search;
-    } else {
-
-      search  =this.state.res.filter(
-        (search: Values): boolean =>
-          search.message.toLocaleLowerCase().indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
-        search.level
-          .toLocaleLowerCase()
-          .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
-        search.facility
-          .toLocaleLowerCase()
-          .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0
-      );
-    return search;
-    }
 };
 
   // Mapping the entire array for displaying on the UI
@@ -253,7 +256,7 @@ export default class Filters extends Component<{}, MyState> {
         <Filterdata
           FacilityLevelFilter={this.FacilityLevelFilter}
           SearchValue={this.state.SearchValue}
-          SearchFilter={this.SearchFilter}  
+          SearchFilter={this.SearchFilter}
         />
       );
   } if (
@@ -308,7 +311,7 @@ export default class Filters extends Component<{}, MyState> {
     return <Searchbar searchHandler={this.SearchHandler} />;
   };
 
-public  render(): JSX.Element {  
+public  render(): JSX.Element {
     return (
       <>
         <div className={classes.box}>

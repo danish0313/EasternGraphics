@@ -4,18 +4,13 @@ import _ from 'lodash';
 
 interface MyProps {
   uniquefacilities: any;
-  FacilitiesHandler: any;
-  disablingfacility: any;
+  FacilitiesHandler: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  disablingfacility: () => {};
   levelvalue: string;
 }
-interface UniqueFacility {
-facility: string;
 
-  }
-interface UniqueLevel {
-  level: string;
-  }
-export default class facility extends Component<MyProps> {
+export default class Facility extends Component<MyProps> {
+
  public render(): JSX.Element {
     return (
       <>
@@ -25,22 +20,22 @@ export default class facility extends Component<MyProps> {
 
             <select
               className={classes.all}
-              onChange={e => {
+              onChange={(e) => {
                 return this.props.FacilitiesHandler(e);
               }}
             >
-              <option value=''> </option>
+              <option value=""/>
               {this.props.uniquefacilities.map(
                 (facilities: string, i: number) => {
                   return (
                     <option
                       key={facilities + i}
                       disabled={
-                        _.indexOf(this.props.uniquefacilities,facilities) !==
+                        _.indexOf(this.props.uniquefacilities, facilities) !==
                         this.props.disablingfacility()
                       }
                       selected={
-                        _.indexOf(this.props.uniquefacilities,facilities) ===
+                        _.indexOf(this.props.uniquefacilities, facilities) ===
                         this.props.disablingfacility()
                       }
                       value={facilities}
@@ -59,9 +54,9 @@ export default class facility extends Component<MyProps> {
 
             <select
               className={classes.all}
-              onChange={e => this.props.FacilitiesHandler(e)}
+              onChange={(e) => this.props.FacilitiesHandler(e)}
             >
-              <option value=''> </option>
+              <option value=""/>
               {this.props.uniquefacilities.map(
                 (facilities: string, i: number) => {
                   return (

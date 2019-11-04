@@ -1,23 +1,23 @@
 import React, { PureComponent } from 'react';
 import classes from './searchbar.module.css';
 interface MyProps  {
-searchHandler: any;
+searchHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
-export default class searchbar extends PureComponent<MyProps> {
+export default class Searchbar extends PureComponent<MyProps> {
   public  render(): JSX.Element {
   return (
                 <div className={classes.searchbox}>
                   <label className={classes.label}>SEARCH YOUR MESSAGES:</label>
                   <input
                     className={classes.search}
-                    onChange={e => {
-                      return this.props.searchHandler(e);
+                    onChange={(event) => {
+                      return this.props.searchHandler(event);
                     }}
                     type="search"
                     id="site search"
                     aria-label="Search through messages"
                   />
                 </div>
-              );       
+              );
     }
 }
