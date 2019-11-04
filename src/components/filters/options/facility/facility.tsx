@@ -3,7 +3,7 @@ import classes from './facility.module.css';
 import _ from 'lodash';
 
 interface MyProps {
-  uniquefacilities: any;
+  uniquefacilities: Array<string>;
   FacilitiesHandler: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   disablingfacility: () => {};
   levelvalue: string;

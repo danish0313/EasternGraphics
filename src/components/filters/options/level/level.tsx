@@ -3,7 +3,7 @@ import classes from './level.module.css';
 import _ from 'lodash';
 
 interface MyProps  {
-  uniquelevels: any;
+  uniquelevels: Array<string>;
   levelHandler: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   disablinglevel:  () => {};
   facilityvalue: string;

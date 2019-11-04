@@ -8,8 +8,8 @@ import Searchbar from './options/searchbar/searchbar';
 import _ from 'lodash';
 
 interface MyState  {
-  facilityValue: any;
-  LevelValue: any;
+  facilityValue: string;
+  LevelValue: string;
   SearchValue: string;
 }
 
@@ -20,18 +20,10 @@ interface Values {
   timeStamp: string;
 }
 
-interface UniqueFacility {
-    facility: string;
-}
-
-interface UniqueLevel {
- level: string;
-}
-
 interface MyProps  {
   res: Array<Values>;
-  uniqueFacilities: Array<UniqueFacility>;
-  uniquelevels: Array<UniqueLevel> ;
+  uniqueFacilities: Array<string>;
+  uniquelevels: Array<string> ;
 
 }
 
@@ -44,7 +36,7 @@ export default class Filters extends Component<MyProps, MyState> {
       SearchValue: '',
 };
 }
-// Filter handler for facility  
+// Filter handler for facility
 public FacilitiesHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
   const value: string = (e.target as HTMLSelectElement).value;
    // storing the facility value in state
@@ -52,7 +44,7 @@ public FacilitiesHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
   this.setState({
    facilityValue: value
  });
- }; 
+ };
   // Filter handler for level
 
  public levelHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {

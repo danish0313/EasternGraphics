@@ -6,8 +6,8 @@ import _ from 'lodash';
 interface MyState  {
   data: Array<Values>;
   res: Array<Values>;
-  uniqueFacilities: Array<UniqueFacility>;
-  uniquelevels: Array<UniqueLevel> ;
+  uniqueFacilities: Array<string>;
+  uniquelevels: Array<string> ;
   Error: boolean;
 }
 interface Values {
@@ -16,12 +16,7 @@ interface Values {
   level: string;
   timeStamp: string;
 }
-interface UniqueFacility {
-  facility: string;
-}
-interface UniqueLevel {
-  level: string;
-}
+
 class App extends Component<{}, MyState> {
 
   constructor(props: {}) {
@@ -79,7 +74,7 @@ class App extends Component<{}, MyState> {
       // returning only those indexes which has same facility , level  and timeStamp
 
       function getIndexIfLogExists({ value, arr }: { value: Values; arr: Array<Values>; }): number {
-        let index: number | any = -1;
+        let index: any  = -1;
         for (const i in arr) {
           if (
             arr[i].facility === value.facility &&
@@ -101,17 +96,17 @@ class App extends Component<{}, MyState> {
 
       // getting unique facilities from unique array
 
-      const allFacility: Array<UniqueFacility>  = unique.map((facilities: any ): UniqueFacility   => {
+      const allFacility: Array<string>  = unique.map((facilities: Values ): string   => {
         return facilities.facility;
       });
-      const uniqueFacilities: Array<UniqueFacility> = Array.from(new Set(allFacility));
+      const uniqueFacilities: Array<string> = Array.from(new Set(allFacility));
 
       // getting unique levels from unique array
 
-      const allLevels: Array<UniqueLevel> = unique.map((levels: any ): UniqueLevel  => {
+      const allLevels: Array<string> = unique.map((levels: Values ): string  => {
         return levels.level;
       });
-      const uniquelevels: Array<UniqueLevel>  = Array.from(new Set(allLevels));
+      const uniquelevels: Array<string>  = Array.from(new Set(allLevels));
 
       // setting the state
 
