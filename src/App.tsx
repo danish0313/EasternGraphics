@@ -126,7 +126,7 @@ class App extends Component<{}, MyState> {
 
     return (
    <div className="App">
-   <Filters res={this.state.res} uniqueFacilities={this.state.uniqueFacilities}  uniquelevels={this.state. uniquelevels}/>
+   <Filters res={this.state.res} uniqueFacilities={this.state.uniqueFacilities} uniquelevels={this.state.uniquelevels}/>
    </div>
 
     );
