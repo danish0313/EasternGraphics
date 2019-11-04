@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import './App.css';
 import Filters from './components/filters/filters';
 import _ from 'lodash';
@@ -22,7 +22,7 @@ interface UniqueFacility {
 interface UniqueLevel {
   level: string;
 }
-class App extends Component<{},MyState> {
+class App extends Component<{}, MyState> {
 
   constructor(props: {}) {
     super(props);
@@ -32,17 +32,16 @@ class App extends Component<{},MyState> {
          uniqueFacilities: [],
          uniquelevels: [],
          Error : false
-      
    };
    }
- 
+
     public componentDidMount =  () => {
       // fetching the error log from public folder
       fetch('./errors/errors.json').then(async (logs: Response) => {
         if (logs.status !== 200) {
           this.setState({ Error: true });
           return;
-  
+
         }
         await logs.json().then((data) => {
           this.setState(
@@ -55,20 +54,20 @@ class App extends Component<{},MyState> {
   });
   }).catch(() => 'obligatory catch');
   };
-  
+
     // for refracting the api json data
-  
+
     public ArrayChangeHandler = () => {
       const errorLog: Array<Values>   = this.state.data;
       const results: Array<Values> = [];
-  
+
       // Loop Through the ErrorLog
       for (const i in errorLog) {
        if ( errorLog.hasOwnProperty(i)) {
-  
+
      // similar indexes returned to be pushed in Results Array
         const index: number = getIndexIfLogExists({ value: errorLog[i], arr: results });
-  
+
         if (index >= 0) {
           results[index].message += '\n' + errorLog[i].message;
         } else {
@@ -76,9 +75,9 @@ class App extends Component<{},MyState> {
   }
   }
   }
-  
+
       // returning only those indexes which has same facility , level  and timeStamp
-  
+
       function getIndexIfLogExists({ value, arr }: { value: Values; arr: Array<Values>; }): number {
         let index: number | any = -1;
         for (const i in arr) {
@@ -93,45 +92,44 @@ class App extends Component<{},MyState> {
         }
         return index;
       }
-  
+
       // removing duplications from results array using lodash
-  
+
       const unique: Array<Values>  = _.uniqBy(results, (e: Values): string =>  {
         return e.message || e.timeStamp;
       });
-  
+
       // getting unique facilities from unique array
-  
+
       const allFacility: Array<UniqueFacility>  = unique.map((facilities: any ): UniqueFacility   => {
         return facilities.facility;
       });
       const uniqueFacilities: Array<UniqueFacility> = Array.from(new Set(allFacility));
-  
+
       // getting unique levels from unique array
-  
+
       const allLevels: Array<UniqueLevel> = unique.map((levels: any ): UniqueLevel  => {
         return levels.level;
       });
       const uniquelevels: Array<UniqueLevel>  = Array.from(new Set(allLevels));
-  
+
       // setting the state
-  
+
       this.setState({
         res: unique,
         uniqueFacilities: uniqueFacilities,
         uniquelevels: uniquelevels
       });
     };
-  
-    render() {
+
+  public render(): JSX.Element {
 
     return (
-  
    <div className="App">
-   <Filters res = {this.state.res} uniqueFacilities = {this.state.uniqueFacilities}  uniquelevels ={this.state. uniquelevels}/>
+   <Filters res={this.state.res} uniqueFacilities={this.state.uniqueFacilities}  uniquelevels={this.state. uniquelevels}/>
    </div>
-   
-    )
+
+    );
   }
 }
 

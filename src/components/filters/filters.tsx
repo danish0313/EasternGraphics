@@ -32,7 +32,7 @@ interface MyProps  {
   res: Array<Values>;
   uniqueFacilities: Array<UniqueFacility>;
   uniquelevels: Array<UniqueLevel> ;
- 
+
 }
 
 export default class Filters extends Component<MyProps, MyState> {
@@ -44,9 +44,7 @@ export default class Filters extends Component<MyProps, MyState> {
       SearchValue: '',
 };
 }
-
-// Filter handler for facility
-  
+// Filter handler for facility  
 public FacilitiesHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
   const value: string = (e.target as HTMLSelectElement).value;
    // storing the facility value in state
@@ -54,8 +52,7 @@ public FacilitiesHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
   this.setState({
    facilityValue: value
  });
- };
- 
+ }; 
   // Filter handler for level
 
  public levelHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
