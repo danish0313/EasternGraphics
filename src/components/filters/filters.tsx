@@ -32,7 +32,7 @@ export default class Filters extends Component<MyProps, MyState> {
 		};
 	}
 
-	public FacilitiesHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+	public filterFacilitiesHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const value: string = (e.target as HTMLSelectElement).value;
 
 
@@ -42,7 +42,7 @@ export default class Filters extends Component<MyProps, MyState> {
 	};
 
 
-	public levelHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+	public filterLevelHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const value: string = (e.target as HTMLSelectElement).value;
 
 
@@ -69,7 +69,7 @@ export default class Filters extends Component<MyProps, MyState> {
 	};
 
 
-	public SearchHandler = (e: React.FormEvent<HTMLInputElement>) => {
+	public filterSearchHandler = (e: React.FormEvent<HTMLInputElement>) => {
 		const value: string = (e.target as HTMLInputElement).value;
 
 		this.setState({
@@ -164,16 +164,13 @@ export default class Filters extends Component<MyProps, MyState> {
 	};
 
 
-
-
-
 	public disablingOption = (): number => {
 		return _.indexOf(this.props.uniqueFacilities, this.state.facilityValue);
 	};
 
 
 
-	public disablingfacility = (): number => {
+	public disablingFacility = (): number => {
 		return _.indexOf(this.props.uniqueLevels, this.state.LevelValue);
 	};
 
@@ -185,18 +182,18 @@ export default class Filters extends Component<MyProps, MyState> {
 					<h1> Error-LOG SEARCH !</h1>
 					<div>
 						<Facility
-							uniquefacilities={this.props.uniqueFacilities}
-							FacilitiesHandler={this.FacilitiesHandler}
-							disablingfacility={this.disablingfacility}
-							levelvalue={this.state.LevelValue}
+							uniqueFacilities={this.props.uniqueFacilities}
+							FacilitiesHandler={this.filterFacilitiesHandler}
+							disablingFacility={this.disablingFacility}
+							levelValue={this.state.LevelValue}
 						/>
 						<Level
-							uniquelevels={this.props.uniqueLevels}
-							levelHandler={this.levelHandler}
-							disablinglevel={this.disablingOption}
-							facilityvalue={this.state.facilityValue}
+							uniqueLevels={this.props.uniqueLevels}
+							levelHandler={this.filterLevelHandler}
+							disablingLevel={this.disablingOption}
+							facilityValue={this.state.facilityValue}
 						/> <br />
-						<SearchBar searchHandler={this.SearchHandler} />
+						<SearchBar searchHandler={this.filterSearchHandler} />
 					</div>
 				</div>
 

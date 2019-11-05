@@ -15,7 +15,7 @@ export interface Values {
     facility: string;
     level: string;
     timeStamp: string;
-    
+
 }
 
 class App extends Component<{}, MyState> {
@@ -108,8 +108,6 @@ class App extends Component<{}, MyState> {
             return levels.level;
         });
         const uniqueLevels: Array<string> = Array.from(new Set(allLevels));
-
-        // setting the state
 
         this.setState({
             results: unique,
