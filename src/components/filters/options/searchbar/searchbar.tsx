@@ -3,7 +3,7 @@ import classes from './searchbar.module.css';
 interface MyProps {
   searchHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
-export default class Searchbar extends PureComponent<MyProps> {
+export default class SearchBar extends PureComponent<MyProps> {
   public render(): JSX.Element {
     return (
       <div className={classes.searchbox}>

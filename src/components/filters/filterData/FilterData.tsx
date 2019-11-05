@@ -1,17 +1,10 @@
 import React, { Component } from 'react';
-import classes from './FilterData.module.css';
-
+import classes from './filterdata.module.css';
+import { Values } from '../../../App';
 interface MyProps {
   FacilityLevelFilter: any;
   SearchFilter: any;
   SearchValue: string;
-}
-
-interface Values {
-  message: string;
-  facility: string;
-  level: string;
-  timeStamp: string;
 }
 
 export default class FilterData extends Component<MyProps> {
@@ -35,7 +28,8 @@ export default class FilterData extends Component<MyProps> {
             <hr />
           </div>
         ));
-    } else {
+    } 
+    else {
       filteredData = this.props
         .FacilityLevelFilter()
         .map((data: Values, index: number) => (

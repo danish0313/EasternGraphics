@@ -15,7 +15,7 @@ export default class Level extends Component<MyProps> {
       <>
         {this.props.facilityvalue.length ? (
           <>
-            <label className={classes.label}>search by facility</label>
+            <label className={classes.label}>search by Level</label>
 
             <select
               className={classes.all}

@@ -1,21 +1,15 @@
 import React, { PureComponent } from 'react';
 import classes from './res.module.css';
-
+import { Values } from '../../../App';
 interface MyProps {
-  res: Array<Values>;
+  results: Array<Values>;
 }
 
-interface Values {
-  message: string;
-  facility: string;
-  level: string;
-  timeStamp: string;
-}
 export default class Data extends PureComponent<MyProps> {
   public render(): JSX.Element {
     return (
       <div>
-        {this.props.res.map((data: Values, index: number) => (
+        {this.props.results.map((data: Values, index: number) => (
           <div key={data.message}>
             <span> Facility: {data.facility} </span> <br /> <br />
             <span> Level: {data.level} </span> <br />
