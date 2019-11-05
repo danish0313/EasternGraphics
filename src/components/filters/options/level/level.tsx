@@ -9,13 +9,14 @@ interface MyProps {
   facilityvalue: string;
 }
 
+
 export default class Level extends Component<MyProps> {
   public render(): JSX.Element {
     return (
       <>
         {this.props.facilityvalue.length ? (
           <>
-            <label className={classes.label}>search by facility</label>
+            <label className={classes.label}>search by Level</label>
 
             <select
               className={classes.all}

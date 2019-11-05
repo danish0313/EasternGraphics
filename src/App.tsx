@@ -4,128 +4,129 @@ import Filters from './components/filters/filters';
 import _ from 'lodash';
 
 interface MyState {
-  data: Array<Values>;
-  res: Array<Values>;
-  uniqueFacilities: Array<string>;
-  uniquelevels: Array<string>;
-  Error: boolean;
+    data: Array<Values>;
+    results: Array<Values>;
+    uniqueFacilities: Array<string>;
+    uniqueLevels: Array<string>;
+    error: boolean;
 }
-interface Values {
-  message: string;
-  facility: string;
-  level: string;
-  timeStamp: string;
+export interface Values {
+    message: string;
+    facility: string;
+    level: string;
+    timeStamp: string;
+    
 }
 
 class App extends Component<{}, MyState> {
 
-  constructor(props: {}) {
-    super(props);
-    this.state = {
-      data: [],
-      res: [],
-      uniqueFacilities: [],
-      uniquelevels: [],
-      Error: false
+    constructor(props: {}) {
+        super(props);
+        this.state = {
+            data: [],
+            results: [],
+            uniqueFacilities: [],
+            uniqueLevels: [],
+            error: false
+        };
+    }
+
+    public componentDidMount = () => {
+        // fetching the error log from public folder
+        fetch('./errors/errors.json').then(async (logs: Response) => {
+            if (logs.status !== 200) {
+                this.setState({ error: true });
+                return;
+
+            }
+            await logs.json().then((data) => {
+                this.setState(
+                    {
+                        error: false,
+                        data: data.data
+                    },
+                    this.ArrayChangeHandler // callback function
+                );
+            });
+        }).catch(() => 'obligatory catch');
     };
-  }
 
-  public componentDidMount = () => {
-    // fetching the error log from public folder
-    fetch('./errors/errors.json').then(async (logs: Response) => {
-      if (logs.status !== 200) {
-        this.setState({ Error: true });
-        return;
+    // Refracting the api json data
 
-      }
-      await logs.json().then((data) => {
-        this.setState(
-          {
-            Error: false,
-            data: data.data
-          },
-          this.ArrayChangeHandler
-        ); // callback function
-      });
-    }).catch(() => 'obligatory catch');
-  };
+    private ArrayChangeHandler = () => {
+        const errorLog: Array<Values> = this.state.data;
+        const results: Array<Values> = [];
 
-  // for refracting the api json data
+        // Loop Through the ErrorLog
+        for (let i: number = 0; i < errorLog.length; i++) {
 
-  public ArrayChangeHandler = () => {
-    const errorLog: Array<Values> = this.state.data;
-    const results: Array<Values> = [];
+            // similar indexes returned to be pushed in Results Array
+            const index: number = getIndexIfLogExists({ value: errorLog[i], arr: results });
 
-    // Loop Through the ErrorLog
-    for (const i in errorLog) {
-      if (errorLog.hasOwnProperty(i)) {
+            if (index >= 0) {
+                results[index].message += '\n' + errorLog[i].message;
+            }
+            else {
+                results.push(errorLog[i]);
+            }
 
-        // similar indexes returned to be pushed in Results Array
-        const index: number = getIndexIfLogExists({ value: errorLog[i], arr: results });
-
-        if (index >= 0) {
-          results[index].message += '\n' + errorLog[i].message;
-        } else {
-          results.push(errorLog[i]);
         }
-      }
-    }
 
-    // returning only those indexes which has same facility , level  and timeStamp
+        // returning only those indexes which has same facility , level  and timeStamp
 
-    function getIndexIfLogExists({ value, arr }: { value: Values; arr: Array<Values>; }): number {
-      let index: any = -1;
-      for (const i in arr) {
-        if (
-          arr[i].facility === value.facility &&
-          arr[i].level === value.level &&
-          arr[i].timeStamp === value.timeStamp
-        ) {
-          index = i;
-          break;
+        function getIndexIfLogExists({ value, arr }: { value: Values; arr: Array<Values>; }): number {
+            let index: number = -1;
+            for (let i: number = 0; i < arr.length; i++) {
+                if (
+                    arr[i].facility === value.facility &&
+                    arr[i].level === value.level &&
+                    arr[i].timeStamp === value.timeStamp
+                ) {
+                    index = i;
+                    break;
+                }
+            }
+            return index;
         }
-      }
-      return index;
+
+        // removing duplications from results array using lodash
+
+        const unique: Array<Values> = _.uniqBy(results, (e: Values): string => {
+            return e.message || e.timeStamp;
+        });
+
+        // getting unique facilities from unique array
+
+        const allFacility: Array<string> = unique.map((facilities: Values): string => {
+            return facilities.facility;
+        });
+        const uniqueFacilities: Array<string> = Array.from(new Set(allFacility));
+
+        // getting unique levels from unique array
+
+        const allLevels: Array<string> = unique.map((levels: Values): string => {
+            return levels.level;
+        });
+        const uniqueLevels: Array<string> = Array.from(new Set(allLevels));
+
+        // setting the state
+
+        this.setState({
+            results: unique,
+            uniqueFacilities: uniqueFacilities,
+            uniqueLevels: uniqueLevels
+        });
+    };
+
+    public render(): JSX.Element {
+
+        return (
+            <div className="App">
+                <Filters results={this.state.results} uniqueFacilities={this.state.uniqueFacilities} uniqueLevels={this.state.uniqueLevels} />
+            </div>
+
+        );
     }
-
-    // removing duplications from results array using lodash
-
-    const unique: Array<Values> = _.uniqBy(results, (e: Values): string => {
-      return e.message || e.timeStamp;
-    });
-
-    // getting unique facilities from unique array
-
-    const allFacility: Array<string> = unique.map((facilities: Values): string => {
-      return facilities.facility;
-    });
-    const uniqueFacilities: Array<string> = Array.from(new Set(allFacility));
-
-    // getting unique levels from unique array
-
-    const allLevels: Array<string> = unique.map((levels: Values): string => {
-      return levels.level;
-    });
-    const uniquelevels: Array<string> = Array.from(new Set(allLevels));
-
-    // setting the state
-
-    this.setState({
-      res: unique,
-      uniqueFacilities: uniqueFacilities,
-      uniquelevels: uniquelevels
-    });
-  };
-
-  public render(): JSX.Element {
-
-    return (
-      <div className="App">
-        <Filters res={this.state.res} uniqueFacilities={this.state.uniqueFacilities} uniquelevels={this.state.uniquelevels} />
-      </div>
-
-    );
-  }
 }
 
 export default App;
