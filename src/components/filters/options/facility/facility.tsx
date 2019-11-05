@@ -11,7 +11,7 @@ interface MyProps {
 
 export default class Facility extends Component<MyProps> {
 
- public render(): JSX.Element {
+  public render(): JSX.Element {
     return (
       <>
         {this.props.levelvalue.length ? (
@@ -24,7 +24,7 @@ export default class Facility extends Component<MyProps> {
                 return this.props.FacilitiesHandler(e);
               }}
             >
-              <option value=""/>
+              <option value="" />
               {this.props.uniquefacilities.map(
                 (facilities: string, i: number) => {
                   return (
@@ -49,27 +49,27 @@ export default class Facility extends Component<MyProps> {
             </select>
           </>
         ) : (
-          <>
-            <label className={classes.label}>search by facility</label>
+            <>
+              <label className={classes.label}>search by facility</label>
 
-            <select
-              className={classes.all}
-              onChange={(e) => this.props.FacilitiesHandler(e)}
-            >
-              <option value=""/>
-              {this.props.uniquefacilities.map(
-                (facilities: string, i: number) => {
-                  return (
-                    <option key={facilities + i} value={facilities}>
-                      {''}
-                      {facilities}
-                    </option>
-                  );
-                }
-              )}
-            </select>
-          </>
-        )}
+              <select
+                className={classes.all}
+                onChange={(e) => this.props.FacilitiesHandler(e)}
+              >
+                <option value="" />
+                {this.props.uniquefacilities.map(
+                  (facilities: string, i: number) => {
+                    return (
+                      <option key={facilities + i} value={facilities}>
+                        {''}
+                        {facilities}
+                      </option>
+                    );
+                  }
+                )}
+              </select>
+            </>
+          )}
       </>
     );
   }

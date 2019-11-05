@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import classes from './level.module.css';
 import _ from 'lodash';
 
-interface MyProps  {
+interface MyProps {
   uniquelevels: Array<string>;
   levelHandler: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  disablinglevel:  () => {};
+  disablinglevel: () => {};
   facilityvalue: string;
 }
 
@@ -23,7 +23,7 @@ export default class Level extends Component<MyProps> {
                 return this.props.levelHandler(e);
               }}
             >
-              <option value=""/>
+              <option value="" />
               {this.props.uniquelevels.map(
                 (level: string, i: number) => {
                   return (
@@ -48,29 +48,29 @@ export default class Level extends Component<MyProps> {
             </select>
           </>
         ) : (
-          <>
-            <label className={classes.label}>search by Level</label>
+            <>
+              <label className={classes.label}>search by Level</label>
 
-            <select
-              className={classes.all}
-              onChange={(e) => {
-                return this.props.levelHandler(e);
-              }}
-            >
-              <option value=""/>
-              {this.props.uniquelevels.map(
-                (level: string, i: number) => {
-                  return (
-                    <option key={level + i} value={level}>
-                      {''}
-                      {level}
-                    </option>
-                  );
-                }
-              )}
-            </select>
-          </>
-        )}
+              <select
+                className={classes.all}
+                onChange={(e) => {
+                  return this.props.levelHandler(e);
+                }}
+              >
+                <option value="" />
+                {this.props.uniquelevels.map(
+                  (level: string, i: number) => {
+                    return (
+                      <option key={level + i} value={level}>
+                        {''}
+                        {level}
+                      </option>
+                    );
+                  }
+                )}
+              </select>
+            </>
+          )}
       </>
     );
   }

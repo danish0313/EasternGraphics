@@ -8,19 +8,19 @@ interface MyProps {
 }
 
 interface Values {
-message: string ;
-facility: string;
-level: string;
-timeStamp: string;
+  message: string;
+  facility: string;
+  level: string;
+  timeStamp: string;
 }
 
 export default class FilterData extends Component<MyProps> {
- public render(): JSX.Element {
+  public render(): JSX.Element {
     let filteredData: string = '';
     if (this.props.SearchValue.length > 0) {
       filteredData = this.props
         .SearchFilter()
-        .map((data: Values , index: number) => (
+        .map((data: Values, index: number) => (
           <div key={data.message}>
             <span> Facility: {data.facility} </span> <br /> <br />
             <span> Level: {data.level} </span> <br />
