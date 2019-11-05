@@ -20,7 +20,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "npm-run-all lint:tslint lint:editorconfig",
-    "lint:editorconfig": "editorconfig-checker",
+    "lint:editorconfig": "editorconfig-checker src",
     "lint:tslint": "./node_modules/.bin/tslint --project tsconfig.json -c tslint.json"
   },
   "eslintConfig": {
