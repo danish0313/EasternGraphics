@@ -15,6 +15,7 @@ export interface Values {
     facility: string;
     level: string;
     timeStamp: string;
+    
 }
 
 class App extends Component<{}, MyState> {

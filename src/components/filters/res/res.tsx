@@ -5,6 +5,7 @@ interface MyProps {
   results: Array<Values>;
 }
 
+
 export default class Data extends PureComponent<MyProps> {
   public render(): JSX.Element {
     return (
@@ -21,6 +22,7 @@ export default class Data extends PureComponent<MyProps> {
             <hr />
           </div>
         ))}
+        
       </div>);
   }
 }

@@ -7,6 +7,7 @@ interface MyProps {
   SearchValue: string;
 }
 
+
 export default class FilterData extends Component<MyProps> {
   public render(): JSX.Element {
     let filteredData: string = '';

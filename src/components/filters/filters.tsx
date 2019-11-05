@@ -14,6 +14,7 @@ interface MyState {
 	SearchValue: string;
 }
 
+
 interface MyProps {
 	results: Array<Values>;
 	uniqueFacilities: Array<string>;
