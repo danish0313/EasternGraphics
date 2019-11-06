@@ -31,25 +31,33 @@ class App extends Component<{}, MyState> {
         };
     }
 
-    public componentDidMount = () => {
-        // fetching the error log from public folder
-        fetch('./errors/errors.json').then(async (logs: Response) => {
-            if (logs.status !== 200) {
-                this.setState({ error: true });
-                return;
-
-            }
-            await logs.json().then((data) => {
-                this.setState(
-                    {
-                        error: false,
-                        data: data.data
-                    },
-                    this.ArrayChangeHandler // callback function
-                );
-            });
-        }).catch(() => 'obligatory catch');
+    componentDidMount = () => {
+        this.errorLogApi();
     };
+
+
+    // API call function
+
+    private errorLogApi = async () => {
+        try {
+            const response = await fetch('./errors/errors.json');
+            const data = await response.json();
+            this.setState(
+                {
+                    data: data.data
+                },
+                this.ArrayChangeHandler // callback function
+            );
+
+        } catch{
+            this.setState(
+                {
+                    error: true
+                });
+        }
+    }
+
+
 
     // Refracting the api json data
 
@@ -57,7 +65,6 @@ class App extends Component<{}, MyState> {
         const errorLog: Array<Values> = this.state.data;
         const results: Array<Values> = [];
 
-        // Loop Through the ErrorLog
         for (let i: number = 0; i < errorLog.length; i++) {
 
             // similar indexes returned to be pushed in Results Array
