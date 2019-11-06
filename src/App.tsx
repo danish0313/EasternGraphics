@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 import Filters from './components/filters/filters';
 import _ from 'lodash';
-
 interface MyState {
     data: Array<Values>;
     results: Array<Values>;
@@ -31,33 +30,30 @@ class App extends Component<{}, MyState> {
         };
     }
 
-    componentDidMount = () => {
-        this.errorLogApi();
+    public componentDidMount = async () => {
+       await this.errorLogApi();
     };
-
 
     // API call function
 
     private errorLogApi = async () => {
         try {
-            const response = await fetch('./errors/errors.json');
-            const data = await response.json();
+            const response: Response = await fetch('./errors/errors.json');
+            const results = await response.json();
             this.setState(
                 {
-                    data: data.data
+                    data: results.data
                 },
                 this.ArrayChangeHandler // callback function
             );
 
-        } catch{
+        } catch {
             this.setState(
                 {
                     error: true
                 });
         }
-    }
-
-
+    };
 
     // Refracting the api json data
 
@@ -124,7 +120,6 @@ class App extends Component<{}, MyState> {
     };
 
     public render(): JSX.Element {
-
         return (
             <div className="App">
                 <Filters results={this.state.results} uniqueFacilities={this.state.uniqueFacilities} uniqueLevels={this.state.uniqueLevels} />

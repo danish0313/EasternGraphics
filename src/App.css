@@ -1,14 +1,13 @@
 h1{
-  text-align:center ;
+  text-align:center;
 }
 
 span{
-  font-weight: bold; 
+  font-weight:bold;
 }
 
 hr{
 
-border-top: 3px dashed grey;
-
+  border-top:3px dashed grey;
 
 }
