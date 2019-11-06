@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import classes from './filters.module.css';
-import FilterData from './filterdata/filterdata';
+import FilterData from './filterData/filterData';
 import Results from './res/res';
 import Facility from './options/facility/facility';
 import Level from './options/level/level';
-import SearchBar from './options/searchbar/searchbar';
+import SearchBar from './options/searchBar/searchBar';
 import { Values } from '../../App';
 import _ from 'lodash';
 

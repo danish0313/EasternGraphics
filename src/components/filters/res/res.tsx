@@ -6,7 +6,7 @@ interface MyProps {
 }
 
 
-export default class Data extends PureComponent<MyProps> {
+export default class Results extends PureComponent<MyProps> {
   public render(): JSX.Element {
     return (
       <div>

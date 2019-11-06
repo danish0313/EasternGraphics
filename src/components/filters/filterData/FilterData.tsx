@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classes from './filterdata.module.css';
+import classes from './filterData.module.css';
 import { Values } from '../../../App';
 interface MyProps {
   FacilityLevelFilter: any;
@@ -29,7 +29,7 @@ export default class FilterData extends Component<MyProps> {
             <hr />
           </div>
         ));
-    } 
+    }
     else {
       filteredData = this.props
         .FacilityLevelFilter()

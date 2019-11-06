@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import classes from './searchbar.module.css';
+import classes from './searchBar.module.css';
 interface MyProps {
   searchHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
