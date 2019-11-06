@@ -32,7 +32,7 @@ export default class Filters extends Component<MyProps, MyState> {
 		};
 	}
 
-	public filterFacilitiesHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+	private filterFacilitiesHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const value: string = (e.target as HTMLSelectElement).value;
 
 
@@ -42,7 +42,7 @@ export default class Filters extends Component<MyProps, MyState> {
 	};
 
 
-	public filterLevelHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+	private filterLevelHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const value: string = (e.target as HTMLSelectElement).value;
 
 
@@ -51,7 +51,7 @@ export default class Filters extends Component<MyProps, MyState> {
 		});
 	};
 
-	public FacilityLevelFilter = () => {
+	private FacilityLevelFilter = () => {
 		if (this.state.facilityValue.length > 0) {
 
 
@@ -69,7 +69,7 @@ export default class Filters extends Component<MyProps, MyState> {
 	};
 
 
-	public filterSearchHandler = (e: React.FormEvent<HTMLInputElement>) => {
+	private filterSearchHandler = (e: React.FormEvent<HTMLInputElement>) => {
 		const value: string = (e.target as HTMLInputElement).value;
 
 		this.setState({
@@ -79,7 +79,7 @@ export default class Filters extends Component<MyProps, MyState> {
 
 	// Search Filter
 
-	public SearchFilter = () => {
+	private SearchFilter = () => {
 
 		let searchable: object = [{}];
 
@@ -140,7 +140,7 @@ export default class Filters extends Component<MyProps, MyState> {
 
 	// Mapping the entire array for displaying on the UI
 
-	public ShowingResults = () => {
+	private ShowingResults = () => {
 		if (
 			this.state.facilityValue.length > 0 ||
 			this.state.LevelValue.length > 0 ||
@@ -164,13 +164,13 @@ export default class Filters extends Component<MyProps, MyState> {
 	};
 
 
-	public disablingOption = (): number => {
+	private disablingOption = (): number => {
 		return _.indexOf(this.props.uniqueFacilities, this.state.facilityValue);
 	};
 
 
 
-	public disablingFacility = (): number => {
+	private disablingFacility = (): number => {
 		return _.indexOf(this.props.uniqueLevels, this.state.LevelValue);
 	};
 
