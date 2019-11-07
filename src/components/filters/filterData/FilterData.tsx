@@ -28,8 +28,7 @@ export default class FilterData extends Component<MyProps> {
                         <hr />
                     </div>
                 ));
-        }
-        else {
+        } else {
             filteredData = this.props
                 .FacilityLevelFilter()
                 .map((data: Values, index: number) => (

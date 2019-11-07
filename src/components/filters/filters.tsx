@@ -10,8 +10,8 @@ import _ from 'lodash';
 
 interface MyState {
     facilityValue: string;
-    LevelValue: string;
-    SearchValue: string;
+    levelValue: string;
+    searchValue: string;
 }
 
 interface MyProps {
@@ -22,12 +22,12 @@ interface MyProps {
 }
 
 export default class Filters extends Component<MyProps, MyState> {
-    constructor(props: MyProps) {
+    public constructor(props: MyProps) {
         super(props);
         this.state = {
             facilityValue: '',
-            LevelValue: '',
-            SearchValue: '',
+            levelValue: '',
+            searchValue: '',
         };
     }
 
@@ -43,21 +43,21 @@ export default class Filters extends Component<MyProps, MyState> {
         const value: string = (e.target as HTMLSelectElement).value;
 
         this.setState({
-            LevelValue: value
+            levelValue: value
         });
     };
 
-    private FacilityLevelFilter = () => {
+    private FacilityLevelFilter = (): Array<Values> | undefined => {
         if (this.state.facilityValue.length > 0) {
 
             return this.props.results.filter(
                 (fac: Values): boolean => fac.facility === this.state.facilityValue
             );
         }
-        if (this.state.LevelValue.length > 0) {
+        if (this.state.levelValue.length > 0) {
 
             return this.props.results.filter(
-                (lev: Values): boolean => lev.level === this.state.LevelValue
+                (lev: Values): boolean => lev.level === this.state.levelValue
             );
         }
     };
@@ -66,68 +66,51 @@ export default class Filters extends Component<MyProps, MyState> {
         const value: string = (e.target as HTMLInputElement).value;
 
         this.setState({
-            SearchValue: value
+            searchValue: value
         });
     };
 
     // Search Filter
 
-    private SearchFilter = () => {
+    private SearchFilter = (): object | undefined => {
 
         let searchable: object = [{}];
 
-        // filter the messages based on user inputs
+        const filteringData: Array<Values> = this.state.facilityValue ? this.props.results.filter(
+            (fac: Values): boolean => fac.facility === this.state.facilityValue
+        ) : this.props.results.filter(
+            (lev: Values): boolean => lev.level === this.state.levelValue
+        );
 
-        if (this.state.SearchValue.length > 0 && this.state.facilityValue.length > 0) {
-            searchable = this.props.results
-                .filter((facilities: Values) => {
-                    return facilities.facility === this.state.facilityValue;
-                })
-                .filter(
-                    (search: Values): boolean =>
-                        search.message
-                            .toLocaleLowerCase()
-                            .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
-                        search.level
-                            .toLocaleLowerCase()
-                            .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
-                        search.facility
-                            .toLocaleLowerCase()
-                            .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0
-                );
-            return searchable;
-        }
-        if (this.state.SearchValue.length > 0 && this.state.LevelValue.length > 0) {
-            searchable = this.props.results
-                .filter((levels: Values) => levels.level === this.state.LevelValue)
-                .filter((searched: Values): boolean => {
-                    return (
-                        searched.message
-                            .toLocaleLowerCase()
-                            .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
-                        searched.level
-                            .toLocaleLowerCase()
-                            .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
-                        searched.facility
-                            .toLocaleLowerCase()
-                            .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0
-                    );
-                });
-            return searchable;
-        }
-        searchable = this.props.results.filter(
-            (search: Values): boolean =>
+        // filter the messages based on user inputs
+        if (_.indexOf(this.props.uniqueFacilities, this.state.facilityValue) === this.disablingOption() ||
+            _.indexOf(this.props.uniqueLevels, this.state.levelValue) === this.disablingFacility()) {
+
+            searchable = this.state.facilityValue || this.state.levelValue ? filteringData.filter((search: Values): boolean =>
                 search.message
                     .toLocaleLowerCase()
-                    .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
+                    .indexOf(this.state.searchValue.toLocaleLowerCase()) >= 0 ||
                 search.level
                     .toLocaleLowerCase()
-                    .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0 ||
+                    .indexOf(this.state.searchValue.toLocaleLowerCase()) >= 0 ||
                 search.facility
                     .toLocaleLowerCase()
-                    .indexOf(this.state.SearchValue.toLocaleLowerCase()) >= 0
-        );
-        return searchable;
+                    .indexOf(this.state.searchValue.toLocaleLowerCase()) >= 0
+            ) : this.props.results.filter(
+
+                (search: Values): boolean =>
+                    search.message
+                        .toLocaleLowerCase()
+                        .indexOf(this.state.searchValue.toLocaleLowerCase()) >= 0 ||
+                    search.level
+                        .toLocaleLowerCase()
+                        .indexOf(this.state.searchValue.toLocaleLowerCase()) >= 0 ||
+                    search.facility
+                        .toLocaleLowerCase()
+                        .indexOf(this.state.searchValue.toLocaleLowerCase()) >= 0
+            );
+            return searchable;
+        }
 
     };
 
@@ -136,21 +119,21 @@ export default class Filters extends Component<MyProps, MyState> {
     private ShowingResults = () => {
         if (
             this.state.facilityValue.length > 0 ||
-            this.state.LevelValue.length > 0 ||
-            this.state.SearchValue.length > 0
+            this.state.levelValue.length > 0 ||
+            this.state.searchValue.length > 0
         ) {
             return (
                 <FilterData
                     FacilityLevelFilter={this.FacilityLevelFilter}
-                    SearchValue={this.state.SearchValue}
+                    SearchValue={this.state.searchValue}
                     SearchFilter={this.SearchFilter}
                 />
             );
         }
         if (
             this.state.facilityValue === '' ||
-            this.state.LevelValue === '' ||
-            this.state.SearchValue === ''
+            this.state.levelValue === '' ||
+            this.state.searchValue === ''
         ) {
             return <Results results={this.props.results} />;
         }
@@ -161,7 +144,7 @@ export default class Filters extends Component<MyProps, MyState> {
     };
 
     private disablingFacility = (): number => {
-        return _.indexOf(this.props.uniqueLevels, this.state.LevelValue);
+        return _.indexOf(this.props.uniqueLevels, this.state.levelValue);
     };
 
     public render(): JSX.Element {
@@ -174,7 +157,7 @@ export default class Filters extends Component<MyProps, MyState> {
                             uniqueFacilities={this.props.uniqueFacilities}
                             FacilitiesHandler={this.filterFacilitiesHandler}
                             disablingFacility={this.disablingFacility}
-                            levelValue={this.state.LevelValue}
+                            levelValue={this.state.levelValue}
                         />
                         <Level
                             uniqueLevels={this.props.uniqueLevels}

@@ -16,7 +16,16 @@ export interface Values {
     timeStamp: string;
 
 }
+export interface Data {
+    data: [{
+        message: string;
+        facility: string;
+        level: string;
+        timeStamp: string;
 
+    }];
+
+}
 class App extends Component<{}, MyState> {
 
     constructor(props: {}) {
@@ -31,7 +40,7 @@ class App extends Component<{}, MyState> {
     }
 
     public componentDidMount = async () => {
-       await this.errorLogApi();
+        await this.errorLogApi();
     };
 
     // API call function
@@ -39,7 +48,7 @@ class App extends Component<{}, MyState> {
     private errorLogApi = async () => {
         try {
             const response: Response = await fetch('./errors/errors.json');
-            const results = await response.json();
+            const results: Data = await response.json();
             this.setState(
                 {
                     data: results.data
@@ -68,8 +77,7 @@ class App extends Component<{}, MyState> {
 
             if (index >= 0) {
                 results[index].message += '\n' + errorLog[i].message;
-            }
-            else {
+            } else {
                 results.push(errorLog[i]);
             }
 
