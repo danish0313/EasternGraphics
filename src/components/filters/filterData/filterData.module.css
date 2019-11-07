@@ -1,0 +1,15 @@
+.results{
+    border:2px dashed black;
+    margin: 0 auto;
+    width:90% ;
+    text-align: center;
+     height:100% ;
+     
+    padding-top: 50px;
+    padding:20px;
+    }
+.timestamp{
+    font-weight: bold;
+    font-size: 20px;
+    text-align:left;
+    }
