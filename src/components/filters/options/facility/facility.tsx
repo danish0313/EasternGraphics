@@ -12,6 +12,7 @@ interface MyProps {
 export default class Facility extends Component<MyProps> {
 
     public render(): JSX.Element {
+        const handleClick: React.ChangeEventHandler  = (e: React.ChangeEvent<HTMLSelectElement>) => this.props.FacilitiesHandler(e);
         return (
             <>
                 {this.props.levelValue.length ? (
@@ -20,9 +21,7 @@ export default class Facility extends Component<MyProps> {
 
                         <select
                             className={classes.all}
-                            onChange={(e) => {
-                                return this.props.FacilitiesHandler(e);
-                            }}
+                            onChange={handleClick}
                         >
                             <option value="" />
                             {this.props.uniqueFacilities.map(
@@ -54,7 +53,7 @@ export default class Facility extends Component<MyProps> {
 
                             <select
                                 className={classes.all}
-                                onChange={(e) => this.props.FacilitiesHandler(e)}
+                                onChange={handleClick}
                             >
                                 <option value="" />
                                 {this.props.uniqueFacilities.map(
