@@ -6,14 +6,13 @@ interface MyProps {
 
 export default class SearchBar extends PureComponent<MyProps> {
     public render(): JSX.Element {
+        const handleClick: React.ChangeEventHandler  = (e: React.ChangeEvent<HTMLInputElement>) => this.props.searchHandler(e);
         return (
             <div className={classes.searchbox}>
                 <label className={classes.label}>SEARCH YOUR MESSAGES:</label>
                 <input
                     className={classes.search}
-                    onChange={(event) => {
-                        return this.props.searchHandler(event);
-                    }}
+                    onChange={handleClick}
                     type="search"
                     id="site search"
                     aria-label="Search through messages"

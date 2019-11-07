@@ -11,6 +11,7 @@ interface MyProps {
 
 export default class Level extends Component<MyProps> {
     public render(): JSX.Element {
+        const handleClick: React.ChangeEventHandler  = (e: React.ChangeEvent<HTMLSelectElement>) => this.props.levelHandler(e);
         return (
             <>
                 {this.props.facilityValue.length ? (
@@ -19,9 +20,7 @@ export default class Level extends Component<MyProps> {
 
                         <select
                             className={classes.all}
-                            onChange={(e) => {
-                                return this.props.levelHandler(e);
-                            }}
+                            onChange={handleClick}
                         >
                             <option value="" />
                             {this.props.uniqueLevels.map(
@@ -53,9 +52,7 @@ export default class Level extends Component<MyProps> {
 
                             <select
                                 className={classes.all}
-                                onChange={(e) => {
-                                    return this.props.levelHandler(e);
-                                }}
+                                onChange={handleClick}
                             >
                                 <option value="" />
                                 {this.props.uniqueLevels.map(
