@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import classes from './facility.module.css';
 import _ from 'lodash';
 
-interface MyProps {
+interface MyFacilityProps {
     uniqueFacilities: Array<string>;
     FacilitiesHandler: (e: React.ChangeEvent<HTMLSelectElement>) => void;
     disablingFacility: () => {};
     levelValue: string;
 }
 
-export default class Facility extends Component<MyProps> {
+export default class Facility extends Component<MyFacilityProps> {
 
     public render(): JSX.Element {
         const handleClick: React.ChangeEventHandler  = (e: React.ChangeEvent<HTMLSelectElement>) => this.props.FacilitiesHandler(e);

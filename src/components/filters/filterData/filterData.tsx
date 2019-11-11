@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import classes from './filterData.module.css';
 import { Values } from '../../../App';
-interface MyProps {
-    FacilityLevelFilter: any;
-    SearchFilter: any;
+interface MyFilterDataProps {
+    FacilityLevelFilter: () => any | undefined;
+    SearchFilter: () => any | undefined;
     SearchValue: string;
 }
 
-export default class FilterData extends Component<MyProps> {
+export default class FilterData extends Component<MyFilterDataProps> {
     public render(): JSX.Element {
         let filteredData: string = '';
         if (this.props.SearchValue.length > 0) {

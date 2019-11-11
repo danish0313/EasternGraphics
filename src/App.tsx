@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Filters from './components/filters/filters';
 import _ from 'lodash';
-interface MyState {
+interface MyAppState {
     data: Array<Values>;
     results: Array<Values>;
     uniqueFacilities: Array<string>;
@@ -26,7 +26,7 @@ interface Data {
     }];
 
 }
-class App extends Component<{}, MyState> {
+class App extends Component<{}, MyAppState> {
 
     constructor(props: {}) {
         super(props);

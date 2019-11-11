@@ -8,21 +8,21 @@ import SearchBar from './options/searchBar/searchBar';
 import { Values } from '../../App';
 import _ from 'lodash';
 
-interface MyState {
+interface MyFiltersState {
     facilityValue: string;
     levelValue: string;
     searchValue: string;
 }
 
-interface MyProps {
+interface MyFiltersProps {
     results: Array<Values>;
     uniqueFacilities: Array<string>;
     uniqueLevels: Array<string>;
 
 }
 
-export default class Filters extends Component<MyProps, MyState> {
-    constructor(props: MyProps) {
+export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
+    constructor(props: MyFiltersProps) {
         super(props);
         this.state = {
             facilityValue: '',

@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import classes from './level.module.css';
 import _ from 'lodash';
 
-interface MyProps {
+interface MyLevelProps {
     uniqueLevels: Array<string>;
     levelHandler: (e: React.ChangeEvent<HTMLSelectElement>) => void;
     disablingLevel: () => {};
     facilityValue: string;
 }
 
-export default class Level extends Component<MyProps> {
+export default class Level extends Component<MyLevelProps> {
     public render(): JSX.Element {
         const handleClick: React.ChangeEventHandler  = (e: React.ChangeEvent<HTMLSelectElement>) => this.props.levelHandler(e);
         return (

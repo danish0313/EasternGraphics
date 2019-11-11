@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import classes from './searchBar.module.css';
-interface MyProps {
+interface MySearchBarProps {
     searchHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default class SearchBar extends PureComponent<MyProps> {
+export default class SearchBar extends PureComponent<MySearchBarProps> {
     public render(): JSX.Element {
         const handleClick: React.ChangeEventHandler  = (e: React.ChangeEvent<HTMLInputElement>) => this.props.searchHandler(e);
         return (

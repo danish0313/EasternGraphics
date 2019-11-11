@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 import classes from './res.module.css';
 import { Values } from '../../../App';
-interface MyProps {
+interface MyResultsProps {
     results: Array<Values>;
 }
 
-export default class Results extends PureComponent<MyProps> {
+export default class Results extends PureComponent<MyResultsProps> {
     public render(): JSX.Element {
         return (
             <div>
