@@ -22,7 +22,7 @@ interface MyProps {
 }
 
 export default class Filters extends Component<MyProps, MyState> {
-    public constructor(props: MyProps) {
+    constructor(props: MyProps) {
         super(props);
         this.state = {
             facilityValue: '',
@@ -70,23 +70,30 @@ export default class Filters extends Component<MyProps, MyState> {
         });
     };
 
-    // Search Filter
-
-    private SearchFilter = (): object | undefined => {
-
-        let searchable: object = [{}];
-
+    private SearchBasedOnFacilityLevel = (): Array<Values> => {
         const filteringData: Array<Values> = this.state.facilityValue ? this.props.results.filter(
             (fac: Values): boolean => fac.facility === this.state.facilityValue
         ) : this.props.results.filter(
             (lev: Values): boolean => lev.level === this.state.levelValue
         );
 
-        // filter the messages based on user inputs
-        if (_.indexOf(this.props.uniqueFacilities, this.state.facilityValue) === this.disablingOption() ||
-            _.indexOf(this.props.uniqueLevels, this.state.levelValue) === this.disablingFacility()) {
+        return filteringData.filter((search: Values): boolean =>
+            search.message
+                .toLocaleLowerCase()
+                .indexOf(this.state.searchValue.toLocaleLowerCase()) >= 0 ||
+            search.level
+                .toLocaleLowerCase()
+                .indexOf(this.state.searchValue.toLocaleLowerCase()) >= 0 ||
+            search.facility
+                .toLocaleLowerCase()
+                .indexOf(this.state.searchValue.toLocaleLowerCase()) >= 0
+        );
+    };
 
-            searchable = this.state.facilityValue || this.state.levelValue ? filteringData.filter((search: Values): boolean =>
+    private SearchBasedOnUserInput = (): Array<Values> => {
+        return this.props.results.filter(
+
+            (search: Values): boolean =>
                 search.message
                     .toLocaleLowerCase()
                     .indexOf(this.state.searchValue.toLocaleLowerCase()) >= 0 ||
@@ -96,20 +103,19 @@ export default class Filters extends Component<MyProps, MyState> {
                 search.facility
                     .toLocaleLowerCase()
                     .indexOf(this.state.searchValue.toLocaleLowerCase()) >= 0
-            ) : this.props.results.filter(
+        );
+    };
 
-                (search: Values): boolean =>
-                    search.message
-                        .toLocaleLowerCase()
-                        .indexOf(this.state.searchValue.toLocaleLowerCase()) >= 0 ||
-                    search.level
-                        .toLocaleLowerCase()
-                        .indexOf(this.state.searchValue.toLocaleLowerCase()) >= 0 ||
-                    search.facility
-                        .toLocaleLowerCase()
-                        .indexOf(this.state.searchValue.toLocaleLowerCase()) >= 0
-            );
-            return searchable;
+    // Search Filter
+
+    private SearchFilter = (): object | undefined => {
+
+        // filter the messages based on user inputs
+        if (_.indexOf(this.props.uniqueFacilities, this.state.facilityValue) === this.disablingLevel() ||
+            _.indexOf(this.props.uniqueLevels, this.state.levelValue) === this.disablingFacility()) {
+
+            return this.state.facilityValue || this.state.levelValue ? this.SearchBasedOnFacilityLevel() : this.SearchBasedOnUserInput();
+
         }
 
     };
@@ -139,7 +145,7 @@ export default class Filters extends Component<MyProps, MyState> {
         }
     };
 
-    private disablingOption = (): number => {
+    private disablingLevel = (): number => {
         return _.indexOf(this.props.uniqueFacilities, this.state.facilityValue);
     };
 
@@ -162,7 +168,7 @@ export default class Filters extends Component<MyProps, MyState> {
                         <Level
                             uniqueLevels={this.props.uniqueLevels}
                             levelHandler={this.filterLevelHandler}
-                            disablingLevel={this.disablingOption}
+                            disablingLevel={this.disablingLevel}
                             facilityValue={this.state.facilityValue}
                         /> <br />
                         <SearchBar searchHandler={this.filterSearchHandler} />

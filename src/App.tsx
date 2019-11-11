@@ -16,7 +16,7 @@ export interface Values {
     timeStamp: string;
 
 }
-export interface Data {
+interface Data {
     data: [{
         message: string;
         facility: string;
