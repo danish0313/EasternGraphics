@@ -138,13 +138,8 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                 (search: Values): boolean =>
                     search.message
                         .toLocaleLowerCase()
-                        .includes(this.state.searchValue.toLocaleLowerCase()) ||
-                    search.level
-                        .toLocaleLowerCase()
-                        .includes(this.state.searchValue.toLocaleLowerCase()) ||
-                    search.facility
-                        .toLocaleLowerCase()
                         .includes(this.state.searchValue.toLocaleLowerCase())
+
             );
         }
         return [];
