@@ -31,128 +31,6 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         };
     }
 
-    private filterFacilitiesHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value: string = (e.target as HTMLSelectElement).value;
-
-        this.setState({
-            facilityValue: value
-        });
-    };
-
-    private filterLevelHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value: string = (e.target as HTMLSelectElement).value;
-
-        this.setState({
-            levelValue: value
-        });
-    };
-
-    private FacilityLevelFilter = (): Array<Values> | undefined => {
-        if (this.state.facilityValue.length > 0) {
-
-            return this.props.results.filter(
-                (fac: Values): boolean => fac.facility === this.state.facilityValue
-            );
-        }
-        if (this.state.levelValue.length > 0) {
-
-            return this.props.results.filter(
-                (lev: Values): boolean => lev.level === this.state.levelValue
-            );
-        }
-    };
-
-    private filterSearchHandler = (e: React.FormEvent<HTMLInputElement>) => {
-        const value: string = (e.target as HTMLInputElement).value;
-
-        this.setState({
-            searchValue: value
-        });
-    };
-
-    private SearchBasedOnFacilityLevel = (): Array<Values> => {
-        const filteringData: Array<Values> = this.state.facilityValue ? this.props.results.filter(
-            (fac: Values): boolean => fac.facility === this.state.facilityValue
-        ) : this.props.results.filter(
-            (lev: Values): boolean => lev.level === this.state.levelValue
-        );
-
-        return filteringData.filter((search: Values): boolean =>
-            search.message
-                .toLocaleLowerCase()
-                .indexOf(this.state.searchValue.toLocaleLowerCase()) >= 0 ||
-            search.level
-                .toLocaleLowerCase()
-                .indexOf(this.state.searchValue.toLocaleLowerCase()) >= 0 ||
-            search.facility
-                .toLocaleLowerCase()
-                .indexOf(this.state.searchValue.toLocaleLowerCase()) >= 0
-        );
-    };
-
-    private SearchBasedOnUserInput = (): Array<Values> => {
-        return this.props.results.filter(
-
-            (search: Values): boolean =>
-                search.message
-                    .toLocaleLowerCase()
-                    .indexOf(this.state.searchValue.toLocaleLowerCase()) >= 0 ||
-                search.level
-                    .toLocaleLowerCase()
-                    .indexOf(this.state.searchValue.toLocaleLowerCase()) >= 0 ||
-                search.facility
-                    .toLocaleLowerCase()
-                    .indexOf(this.state.searchValue.toLocaleLowerCase()) >= 0
-        );
-    };
-
-    // Search Filter
-
-    private SearchFilter = (): object | undefined => {
-
-        // filter the messages based on user inputs
-        if (_.indexOf(this.props.uniqueFacilities, this.state.facilityValue) === this.disablingLevel() ||
-            _.indexOf(this.props.uniqueLevels, this.state.levelValue) === this.disablingFacility()) {
-
-            return this.state.facilityValue || this.state.levelValue ? this.SearchBasedOnFacilityLevel() : this.SearchBasedOnUserInput();
-
-        }
-
-    };
-
-    // Mapping the entire array for displaying on the UI
-
-    private ShowingResults = () => {
-        if (
-            this.state.facilityValue.length > 0 ||
-            this.state.levelValue.length > 0 ||
-            this.state.searchValue.length > 0
-        ) {
-            return (
-                <FilterData
-                    FacilityLevelFilter={this.FacilityLevelFilter}
-                    SearchValue={this.state.searchValue}
-                    SearchFilter={this.SearchFilter}
-                />
-            );
-        }
-        if (
-            this.state.facilityValue === '' ||
-            this.state.levelValue === '' ||
-            this.state.searchValue === ''
-        ) {
-            return <Results results={this.props.results} />;
-        }
-    };
-
-    private disablingLevel = (): number => {
-        return _.indexOf(this.props.uniqueFacilities, this.state.facilityValue);
-    };
-
-    private disablingFacility = (): number => {
-        return _.indexOf(this.props.uniqueLevels, this.state.levelValue);
-    };
-
     public render(): JSX.Element {
         return (
             <>
@@ -174,8 +52,152 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                         <SearchBar searchHandler={this.filterSearchHandler} />
                     </div>
                 </div>
-                <div className={classes.results}>{this.ShowingResults()}</div>
+                <div className={classes.results}>{this.showingResults()}</div>
             </>
         );
     }
+
+    private filterFacilitiesHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value: string = (e.target as HTMLSelectElement).value;
+
+        this.setState({
+            facilityValue: value
+        });
+    };
+
+    private filterLevelHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value: string = (e.target as HTMLSelectElement).value;
+
+        this.setState({
+            levelValue: value
+        });
+    };
+
+    private levelFilter = (): Array<Values> => {
+        if (this.state.facilityValue.length > 0) {
+
+            return this.props.results.filter(
+                (fac: Values): boolean => fac.facility === this.state.facilityValue
+            );
+        }
+        return [];
+
+    };
+
+    private facilityFilter = (): Array<Values> => {
+        if (this.state.levelValue.length > 0) {
+
+            return this.props.results.filter(
+                (lev: Values): boolean => lev.level === this.state.levelValue
+            );
+        }
+        return [];
+    };
+
+    private filterSearchHandler = (e: React.FormEvent<HTMLInputElement>) => {
+        const value: string = (e.target as HTMLInputElement).value;
+
+        this.setState({
+            searchValue: value
+        });
+    };
+
+    private searchBasedOnMessages = (message: string): Array<Values> => {
+        if (this.state.facilityValue.length > 0) {
+
+            return this.levelFilter().filter(
+
+                (search: Values): boolean =>
+
+                    search.message
+                        .toLocaleLowerCase()
+                        .includes(message.toLocaleLowerCase())
+
+            );
+        }
+        if (this.state.levelValue.length > 0) {
+
+            return this.facilityFilter().filter(
+
+                (search: Values): boolean =>
+
+                    search.message
+                        .toLocaleLowerCase()
+                        .includes(message.toLocaleLowerCase())
+            );
+        }
+        return [];
+
+    };
+
+    private searchingWithoutOption = (array: Array<Values>, searchValue: string): Array<Values> => {
+        if (searchValue.length > 0) {
+
+            return array.filter(
+
+                (search: Values): boolean =>
+                    search.message
+                        .toLocaleLowerCase()
+                        .includes(this.state.searchValue.toLocaleLowerCase()) ||
+                    search.level
+                        .toLocaleLowerCase()
+                        .includes(this.state.searchValue.toLocaleLowerCase()) ||
+                    search.facility
+                        .toLocaleLowerCase()
+                        .includes(this.state.searchValue.toLocaleLowerCase())
+            );
+        }
+        return [];
+
+    };
+
+    // Search Filter
+
+    private SearchFilter = (): Array<Values> => {
+
+        // filter the messages based on user inputs
+        if (this.state.facilityValue || this.state.levelValue) {
+
+            return this.searchBasedOnMessages(this.state.searchValue);
+
+        }
+        return this.searchingWithoutOption(this.props.results, this.state.searchValue);
+
+    };
+
+    // Mapping the entire array for displaying on the UI
+
+    private showingResults = () => {
+        if (
+            this.state.facilityValue.length > 0 ||
+            this.state.levelValue.length > 0 ||
+            this.state.searchValue.length > 0
+        ) {
+            return (
+                <FilterData
+                    facilityFilter={this.facilityFilter}
+                    levelFilter={this.levelFilter}
+                    searchValue={this.state.searchValue}
+                    facilityValue={this.state.facilityValue}
+                    levelValue={this.state.levelValue}
+                    searchFilter={this.SearchFilter}
+                />
+            );
+        }
+        if (
+            this.state.facilityValue === '' ||
+            this.state.levelValue === '' ||
+            this.state.searchValue === ''
+        ) {
+            return <Results results={this.props.results} />;
+        }
+    };
+
+    private disablingLevel = (): number => {
+        return _.indexOf(this.props.uniqueFacilities, this.state.facilityValue);
+    };
+
+    private disablingFacility = (): number => {
+        return _.indexOf(this.props.uniqueLevels, this.state.levelValue);
+    };
 }
