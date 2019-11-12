@@ -26,7 +26,7 @@ interface Data {
     }];
 
 }
-class App extends Component<{}, MyAppState> {
+export default class App extends Component<{}, MyAppState> {
 
     constructor(props: {}) {
         super(props);
@@ -37,6 +37,14 @@ class App extends Component<{}, MyAppState> {
             uniqueLevels: [],
             error: false
         };
+    }
+    public render(): JSX.Element {
+        return (
+            <div className="App">
+                <Filters results={this.state.results} uniqueFacilities={this.state.uniqueFacilities} uniqueLevels={this.state.uniqueLevels} />
+            </div>
+
+        );
     }
 
     public componentDidMount = async () => {
@@ -126,15 +134,4 @@ class App extends Component<{}, MyAppState> {
             uniqueLevels: uniqueLevels
         });
     };
-
-    public render(): JSX.Element {
-        return (
-            <div className="App">
-                <Filters results={this.state.results} uniqueFacilities={this.state.uniqueFacilities} uniqueLevels={this.state.uniqueLevels} />
-            </div>
-
-        );
-    }
 }
-
-export default App;
