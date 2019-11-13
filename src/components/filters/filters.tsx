@@ -38,12 +38,14 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                     <h1> Error-LOG SEARCH !</h1>
                     <div>
                         <Facility
+                            label="Facility"
                             uniqueFacilities={this.props.uniqueFacilities}
                             FacilitiesHandler={this.filterFacilitiesHandler}
                             disablingFacility={this.disablingFacility}
                             levelValue={this.state.levelValue}
                         />
                         <Level
+                            label="Level"
                             uniqueLevels={this.props.uniqueLevels}
                             levelHandler={this.filterLevelHandler}
                             disablingLevel={this.disablingLevel}
@@ -179,13 +181,9 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                 />
             );
         }
-        if (
-            this.state.facilityValue === '' ||
-            this.state.levelValue === '' ||
-            this.state.searchValue === ''
-        ) {
-            return <Results results={this.props.results} />;
-        }
+
+        return <Results results={this.props.results} />;
+
     };
 
     private disablingLevel = (): number => {
