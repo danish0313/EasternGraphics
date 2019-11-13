@@ -7,67 +7,43 @@ interface MyLevelProps {
     levelHandler: (e: React.ChangeEvent<HTMLSelectElement>) => void;
     disablingLevel: () => {};
     facilityValue: string;
+    label: string;
 }
 
 export default class Level extends Component<MyLevelProps> {
     public render(): JSX.Element {
-        const handleClick: React.ChangeEventHandler  = (e: React.ChangeEvent<HTMLSelectElement>) => this.props.levelHandler(e);
+        const handleClick: React.ChangeEventHandler = (e: React.ChangeEvent<HTMLSelectElement>) => this.props.levelHandler(e);
         return (
             <>
-                {this.props.facilityValue.length ? (
-                    <>
-                        <label className={classes.label}>search by Level</label>
-
-                        <select
-                            className={classes.all}
-                            onChange={handleClick}
-                        >
-                            <option value="" />
-                            {this.props.uniqueLevels.map(
-                                (level: string, i: number) => {
-                                    return (
-                                        <option
-                                            key={level + i}
-                                            disabled={
-                                                _.indexOf(this.props.uniqueLevels, level) !==
-                                                this.props.disablingLevel()
-                                            }
-                                            selected={
-                                                _.indexOf(this.props.uniqueLevels, level) ===
-                                                this.props.disablingLevel()
-                                            }
-                                            value={level}
-                                        >
-                                            {''}
-                                            {level}
-                                        </option>
-                                    );
-                                }
-                            )}
-                        </select>
-                    </>
-                ) : (
-                        <>
-                            <label className={classes.label}>search by Level</label>
-
-                            <select
-                                className={classes.all}
-                                onChange={handleClick}
-                            >
-                                <option value="" />
-                                {this.props.uniqueLevels.map(
-                                    (level: string, i: number) => {
-                                        return (
-                                            <option key={level + i} value={level}>
-                                                {''}
-                                                {level}
-                                            </option>
-                                        );
+                <label className={classes.label}>search by {this.props.label}</label>
+                <select
+                    className={classes.all}
+                    onChange={handleClick}
+                >
+                    <option value="" />
+                    {this.props.uniqueLevels.map(
+                        (level: string, i: number) => {
+                            return (
+                                <option
+                                    key={level + i}
+                                    value={level}
+                                    disabled={this.props.facilityValue ?
+                                        _.indexOf(this.props.uniqueLevels, level) !==
+                                        this.props.disablingLevel() : false
                                     }
-                                )}
-                            </select>
-                        </>
+                                    selected={
+                                        _.indexOf(this.props.uniqueLevels, level) ===
+                                        this.props.disablingLevel()
+                                    }
+
+                                >
+                                    {''}
+                                    {level}
+                                </option>
+                            );
+                        }
                     )}
+                </select>
             </>
         );
     }
