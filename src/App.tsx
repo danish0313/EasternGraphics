@@ -55,6 +55,7 @@ export default class App extends Component<{}, MyAppState> {
 
     private errorLogApi = async () => {
         try {
+
             const response: Response = await fetch('./errors/errors.json');
             const results: Data = await response.json();
             this.setState(

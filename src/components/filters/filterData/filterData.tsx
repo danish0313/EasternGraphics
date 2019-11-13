@@ -32,7 +32,7 @@ export default class FilterData extends Component<MyFilterDataProps> {
                     </div>
                 ));
         } else {
-            filteredData = this.props.levelValue ? this.props.facilityFilter().map((data: Values, index: number) => (
+            filteredData = this.props.facilityValue ? this.props.facilityFilter().map((data: Values, index: number) => (
                 <div key={data.message}>
                     <span> Facility: {data.facility} </span> <br /> <br />
                     <span> Level: {data.level} </span> <br />

@@ -74,28 +74,6 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             levelValue: value
         });
     };
-
-    private levelFilter = (): Array<Values> => {
-        if (this.state.facilityValue.length > 0) {
-
-            return this.props.results.filter(
-                (fac: Values): boolean => fac.facility === this.state.facilityValue
-            );
-        }
-        return [];
-
-    };
-
-    private facilityFilter = (): Array<Values> => {
-        if (this.state.levelValue.length > 0) {
-
-            return this.props.results.filter(
-                (lev: Values): boolean => lev.level === this.state.levelValue
-            );
-        }
-        return [];
-    };
-
     private filterSearchHandler = (e: React.FormEvent<HTMLInputElement>) => {
         const value: string = (e.target as HTMLInputElement).value;
 
@@ -104,48 +82,49 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         });
     };
 
-    private searchBasedOnMessages = (message: string): Array<Values> => {
-        if (this.state.facilityValue.length > 0) {
+    private facilityFilter = (): Array<Values> => {
 
-            return this.levelFilter().filter(
-
-                (search: Values): boolean =>
-
-                    search.message
-                        .toLocaleLowerCase()
-                        .includes(message.toLocaleLowerCase())
-
-            );
-        }
-        if (this.state.levelValue.length > 0) {
-
-            return this.facilityFilter().filter(
-
-                (search: Values): boolean =>
-
-                    search.message
-                        .toLocaleLowerCase()
-                        .includes(message.toLocaleLowerCase())
-            );
-        }
-        return [];
+        return this.props.results.filter(
+            (fac: Values): boolean => fac.facility === this.state.facilityValue
+        );
 
     };
 
-    private searchingWithoutOption = (array: Array<Values>, searchValue: string): Array<Values> => {
-        if (searchValue.length > 0) {
+    private levelFilter = (): Array<Values> => {
+        return this.props.results.filter(
+            (lev: Values): boolean => lev.level === this.state.levelValue
+        );
 
-            return array.filter(
+    };
 
-                (search: Values): boolean =>
-                    search.message
-                        .toLocaleLowerCase()
-                        .includes(this.state.searchValue.toLocaleLowerCase())
+    private searchBasedOnLevel = (array: Array<Values>, input: string): Array<Values> => {
 
-            );
-        }
-        return [];
+        return array.filter(
+            (search: Values): boolean =>
+                search.message
+                    .toLocaleLowerCase()
+                    .includes(input.toLocaleLowerCase())
+        );
 
+    };
+
+    private searchBasedOnFacility = (array: Array<Values>, input: string): Array<Values> => {
+        return array.filter(
+            (search: Values): boolean =>
+                search.message
+                    .toLocaleLowerCase()
+                    .includes(input.toLocaleLowerCase())
+        );
+    };
+
+    private searchBasedOnMessages = (array: Array<Values>, input: string): Array<Values> => {
+
+        return array.filter(
+            (search: Values): boolean =>
+                search.message
+                    .toLocaleLowerCase()
+                    .includes(input.toLocaleLowerCase())
+        );
     };
 
     // Search Filter
@@ -153,12 +132,15 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
     private SearchFilter = (): Array<Values> => {
 
         // filter the messages based on user inputs
-        if (this.state.facilityValue || this.state.levelValue) {
+        if (this.state.facilityValue.length > 0) {
 
-            return this.searchBasedOnMessages(this.state.searchValue);
-
+            return this.searchBasedOnFacility(this.facilityFilter(), this.state.searchValue);
         }
-        return this.searchingWithoutOption(this.props.results, this.state.searchValue);
+        if (this.state.levelValue.length > 0) {
+
+            return this.searchBasedOnLevel(this.levelFilter(), this.state.searchValue);
+        }
+        return this.searchBasedOnMessages(this.props.results, this.state.searchValue);
 
     };
 
