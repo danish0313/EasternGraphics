@@ -38,14 +38,14 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                     <h1> Error-LOG SEARCH !</h1>
                     <div>
                         <Facility
-                            label="Facility"
+                            labelForFacility="Facility"
                             uniqueFacilities={this.props.uniqueFacilities}
                             FacilitiesHandler={this.filterFacilitiesHandler}
                             disablingFacility={this.disablingFacility}
                             levelValue={this.state.levelValue}
                         />
                         <Level
-                            label="Level"
+                            labelForLevel="Level"
                             uniqueLevels={this.props.uniqueLevels}
                             levelHandler={this.filterLevelHandler}
                             disablingLevel={this.disablingLevel}
@@ -82,39 +82,28 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         });
     };
 
-    private facilityFilter = (): Array<Values> => {
-
-        return this.props.results.filter(
-            (fac: Values): boolean => fac.facility === this.state.facilityValue
+    private searchBasedOnFacility = (array: Array<Values>, input: string, facility: string): Array<Values> => {
+        return array.filter(
+            (fac: Values): boolean => fac.facility === facility
+        ).filter(
+            (search: Values): boolean =>
+                search.message
+                    .toLocaleLowerCase()
+                    .includes(input.toLocaleLowerCase())
         );
-
     };
 
-    private levelFilter = (): Array<Values> => {
-        return this.props.results.filter(
-            (lev: Values): boolean => lev.level === this.state.levelValue
-        );
-
-    };
-
-    private searchBasedOnLevel = (array: Array<Values>, input: string): Array<Values> => {
+    private searchBasedOnLevel = (array: Array<Values>, input: string, level: string): Array<Values> => {
 
         return array.filter(
+            (lev: Values): boolean => lev.level === level
+        ).filter(
             (search: Values): boolean =>
                 search.message
                     .toLocaleLowerCase()
                     .includes(input.toLocaleLowerCase())
         );
 
-    };
-
-    private searchBasedOnFacility = (array: Array<Values>, input: string): Array<Values> => {
-        return array.filter(
-            (search: Values): boolean =>
-                search.message
-                    .toLocaleLowerCase()
-                    .includes(input.toLocaleLowerCase())
-        );
     };
 
     private searchBasedOnMessages = (array: Array<Values>, input: string): Array<Values> => {
@@ -134,14 +123,13 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         // filter the messages based on user inputs
         if (this.state.facilityValue.length > 0) {
 
-            return this.searchBasedOnFacility(this.facilityFilter(), this.state.searchValue);
+            return this.searchBasedOnFacility(this.props.results, this.state.searchValue, this.state.facilityValue);
         }
         if (this.state.levelValue.length > 0) {
 
-            return this.searchBasedOnLevel(this.levelFilter(), this.state.searchValue);
+            return this.searchBasedOnLevel(this.props.results, this.state.searchValue, this.state.levelValue);
         }
         return this.searchBasedOnMessages(this.props.results, this.state.searchValue);
-
     };
 
     // Mapping the entire array for displaying on the UI
@@ -154,11 +142,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         ) {
             return (
                 <FilterData
-                    facilityFilter={this.facilityFilter}
-                    levelFilter={this.levelFilter}
-                    searchValue={this.state.searchValue}
-                    facilityValue={this.state.facilityValue}
-                    levelValue={this.state.levelValue}
+
                     searchFilter={this.SearchFilter}
                 />
             );

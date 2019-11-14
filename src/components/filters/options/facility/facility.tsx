@@ -7,7 +7,7 @@ interface MyFacilityProps {
     FacilitiesHandler: (e: React.ChangeEvent<HTMLSelectElement>) => void;
     disablingFacility: () => {};
     levelValue: string;
-    label: string;
+    labelForFacility: string;
 }
 
 export default class Facility extends Component<MyFacilityProps> {
@@ -16,7 +16,7 @@ export default class Facility extends Component<MyFacilityProps> {
         const handleClick: React.ChangeEventHandler = (e: React.ChangeEvent<HTMLSelectElement>) => this.props.FacilitiesHandler(e);
         return (
             <>
-    <label className={classes.label}>search by {this.props.label}</label>
+    <label className={classes.label}>search by {this.props.labelForFacility}</label>
 
                 <select
                     className={classes.all}

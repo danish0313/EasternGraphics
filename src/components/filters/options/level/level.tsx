@@ -7,7 +7,7 @@ interface MyLevelProps {
     levelHandler: (e: React.ChangeEvent<HTMLSelectElement>) => void;
     disablingLevel: () => {};
     facilityValue: string;
-    label: string;
+    labelForLevel: string;
 }
 
 export default class Level extends Component<MyLevelProps> {
@@ -15,7 +15,7 @@ export default class Level extends Component<MyLevelProps> {
         const handleClick: React.ChangeEventHandler = (e: React.ChangeEvent<HTMLSelectElement>) => this.props.levelHandler(e);
         return (
             <>
-                <label className={classes.label}>search by {this.props.label}</label>
+                <label className={classes.label}>search by {this.props.labelForLevel}</label>
                 <select
                     className={classes.all}
                     onChange={handleClick}
