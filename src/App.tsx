@@ -26,6 +26,42 @@ interface Data {
     }];
 
 }
+
+// returning only those indexes which has same facility , level  and timeStamp
+const getIndexIfLogExists: (value: Values, arr: Array<Values>) => number = (value: Values, arr: Array<Values>): number => {
+    let index: number = -1;
+    for (let i: number = 0; i < arr.length; i++) {
+        if (
+            arr[i].facility === value.facility &&
+            arr[i].level === value.level &&
+            arr[i].timeStamp === value.timeStamp
+        ) {
+            index = i;
+            break;
+        }
+    }
+    return index;
+};
+
+const ArrayMergingHandler: (array: Array<Values>) => Array<Values> = (array: Array<Values>): Array<Values> => {
+    const errorLog: Array<Values> = array;
+    const results: Array<Values> = [];
+
+    for (let i: number = 0; i < errorLog.length; i++) {
+
+        // similar indexes returned from getIndexIfLogExists
+        const index: number = getIndexIfLogExists(errorLog[i] , results);
+
+        if (index >= 0) {
+            results[index].message += '\n' + errorLog[i].message;
+        } else {
+            results.push(errorLog[i]);
+        }
+    }
+
+    return results;
+};
+
 export default class App extends Component<{}, MyAppState> {
 
     constructor(props: {}) {
@@ -76,38 +112,8 @@ export default class App extends Component<{}, MyAppState> {
     // Refracting the api json data
 
     private ArrayChangeHandler = () => {
-        const errorLog: Array<Values> = this.state.data;
-        const results: Array<Values> = [];
 
-        for (let i: number = 0; i < errorLog.length; i++) {
-
-            // similar indexes returned to be pushed in Results Array
-            const index: number = getIndexIfLogExists({ value: errorLog[i], arr: results });
-
-            if (index >= 0) {
-                results[index].message += '\n' + errorLog[i].message;
-            } else {
-                results.push(errorLog[i]);
-            }
-
-        }
-
-        // returning only those indexes which has same facility , level  and timeStamp
-
-        function getIndexIfLogExists({ value, arr }: { value: Values; arr: Array<Values>; }): number {
-            let index: number = -1;
-            for (let i: number = 0; i < arr.length; i++) {
-                if (
-                    arr[i].facility === value.facility &&
-                    arr[i].level === value.level &&
-                    arr[i].timeStamp === value.timeStamp
-                ) {
-                    index = i;
-                    break;
-                }
-            }
-            return index;
-        }
+        const results: Array<Values> = ArrayMergingHandler(this.state.data);
 
         // removing duplications from results array using lodash
 
