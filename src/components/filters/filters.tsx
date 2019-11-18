@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import classes from './filters.module.css';
 import FilterData from './filterData/filterData';
 import Results from './res/res';
-import Facility from './options/facility/facility';
-import Level from './options/level/level';
+import Options from './options/options';
 import SearchBar from './options/searchBar/searchBar';
 import { Values } from '../../App';
 import _ from 'lodash';
@@ -36,21 +35,58 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             <>
                 <div className={classes.box}>
                     <h1> Error-LOG SEARCH !</h1>
-                    <div>
-                        <Facility
-                            labelForFacility="Facility"
-                            uniqueFacilities={this.props.uniqueFacilities}
-                            FacilitiesHandler={this.filterFacilitiesHandler}
-                            disablingFacility={this.disablingFacility}
-                            levelValue={this.state.levelValue}
+                    <div><Options
+                        label="Facility"
+                        options={this.props.uniqueFacilities.map(
+                            (options: string, i: number) => {
+                                return (
+                                    <option
+                                        key={options + i}
+                                        value={options}
+                                        selected={
+                                            _.indexOf(this.props.uniqueFacilities, options) ===
+                                            this.disablingFacility()
+                                        }
+                                        disabled={this.state.levelValue ?
+                                            _.indexOf(this.props.uniqueFacilities, options) !==
+                                            this.disablingFacility() : false
+                                        }
+                                    >
+                                        {''}
+                                        {options}
+                                    </option>
+                                );
+                            }
+                        )}
+                        handler={this.filterFacilitiesHandler}
+
+                    />
+                        <Options
+                            label="Level"
+                            options={this.props.uniqueLevels.map(
+                                (options: string, i: number) => {
+                                    return (
+                                        <option
+                                            key={options + i}
+                                            value={options}
+                                            selected={
+                                                _.indexOf(this.props.uniqueLevels, options) ===
+                                                this.disablingLevel()
+                                            }
+                                            disabled={this.state.facilityValue ?
+                                                _.indexOf(this.props.uniqueLevels, options) !==
+                                                this.disablingLevel() : false
+                                            }
+                                        >
+                                            {''}
+                                            {options}
+                                        </option>
+                                    );
+                                }
+                            )}
+                            handler={this.filterLevelHandler}
                         />
-                        <Level
-                            labelForLevel="Level"
-                            uniqueLevels={this.props.uniqueLevels}
-                            levelHandler={this.filterLevelHandler}
-                            disablingLevel={this.disablingLevel}
-                            facilityValue={this.state.facilityValue}
-                        /> <br />
+                        <br />
                         <SearchBar searchHandler={this.filterSearchHandler} />
                     </div>
                 </div>

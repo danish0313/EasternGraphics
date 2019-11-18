@@ -27,38 +27,29 @@ interface Data {
 
 }
 
-// returning only those indexes which has same facility , level  and timeStamp
-const getIndexIfLogExists: (value: Values, arr: Array<Values>) => number = (value: Values, arr: Array<Values>): number => {
-    let index: number = -1;
-    for (let i: number = 0; i < arr.length; i++) {
-        if (
-            arr[i].facility === value.facility &&
-            arr[i].level === value.level &&
-            arr[i].timeStamp === value.timeStamp
-        ) {
-            index = i;
-            break;
-        }
-    }
-    return index;
-};
-
+//  Message Merging Logic Function
 const ArrayMergingHandler: (array: Array<Values>) => Array<Values> = (array: Array<Values>): Array<Values> => {
     const errorLog: Array<Values> = array;
     const results: Array<Values> = [];
 
-    for (let i: number = 0; i < errorLog.length; i++) {
-
-        // similar indexes returned from getIndexIfLogExists
-        const index: number = getIndexIfLogExists(errorLog[i] , results);
-
+    for (let j: number = 0; j < errorLog.length; j++) {
+        let index: number = -1;
+        for (let i: number = 0; i < results.length; i++) {
+            if (
+                results[i].facility === errorLog[j].facility &&
+                results[i].level === errorLog[j].level &&
+                results[i].timeStamp === errorLog[j].timeStamp
+            ) {
+                index = i;
+                break;
+            }
+        }
         if (index >= 0) {
-            results[index].message += '\n' + errorLog[i].message;
+            results[index].message += '\n' + errorLog[j].message;
         } else {
-            results.push(errorLog[i]);
+            results.push(errorLog[j]);
         }
     }
-
     return results;
 };
 
