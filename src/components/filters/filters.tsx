@@ -118,54 +118,47 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         });
     };
 
-    private searchBasedOnFacility = (array: Array<Values>, input: string, facility: string): Array<Values> => {
-        return array.filter(
-            (fac: Values): boolean => fac.facility === facility
-        ).filter(
-            (search: Values): boolean =>
-                search.message
-                    .toLocaleLowerCase()
-                    .includes(input.toLocaleLowerCase())
-        );
+    private searchBasedOnFacility = (array: Array<Values>, facility: string): Array<Values> => {
+        if (facility) {
+            return array.filter(
+                (fac: Values): boolean => fac.facility === facility
+            );
+        }
+        return array;
     };
 
-    private searchBasedOnLevel = (array: Array<Values>, input: string, level: string): Array<Values> => {
-
-        return array.filter(
-            (lev: Values): boolean => lev.level === level
-        ).filter(
-            (search: Values): boolean =>
-                search.message
-                    .toLocaleLowerCase()
-                    .includes(input.toLocaleLowerCase())
-        );
-
+    private searchBasedOnLevel = (array: Array<Values>, level: string): Array<Values> => {
+        if (level) {
+            return array.filter(
+                (lev: Values): boolean => lev.level === level
+            );
+        }
+        return array;
     };
 
     private searchBasedOnMessages = (array: Array<Values>, input: string): Array<Values> => {
-
-        return array.filter(
-            (search: Values): boolean =>
-                search.message
-                    .toLocaleLowerCase()
-                    .includes(input.toLocaleLowerCase())
-        );
+        if (input) {
+            return array.filter(
+                (search: Values): boolean =>
+                    search.message
+                        .toLocaleLowerCase()
+                        .includes(input.toLocaleLowerCase())
+            );
+        }
+        return array;
     };
 
     // Search Filter
 
     private SearchFilter = (): Array<Values> => {
-
         // filter the messages based on user inputs
-        if (this.state.facilityValue.length > 0) {
+        let res: Array<Values> = this.props.results;
 
-            return this.searchBasedOnFacility(this.props.results, this.state.searchValue, this.state.facilityValue);
-        }
-        if (this.state.levelValue.length > 0) {
+        res = this.searchBasedOnFacility(res, this.state.facilityValue);
+        res = this.searchBasedOnLevel(res, this.state.levelValue);
+        res = this.searchBasedOnMessages(res, this.state.searchValue);
 
-            return this.searchBasedOnLevel(this.props.results, this.state.searchValue, this.state.levelValue);
-        }
-        return this.searchBasedOnMessages(this.props.results, this.state.searchValue);
+        return res;
     };
 
     // Mapping the entire array for displaying on the UI
