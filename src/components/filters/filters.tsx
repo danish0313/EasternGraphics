@@ -152,13 +152,13 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
 
     private SearchFilter = (): Array<Values> => {
         // filter the messages based on user inputs
-        let res: Array<Values> = this.props.results;
+        let results: Array<Values> = this.props.results;
 
-        res = this.searchBasedOnFacility(res, this.state.facilityValue);
-        res = this.searchBasedOnLevel(res, this.state.levelValue);
-        res = this.searchBasedOnMessages(res, this.state.searchValue);
+        results = this.searchBasedOnFacility(results, this.state.facilityValue);
+        results = this.searchBasedOnLevel(results, this.state.levelValue);
+        results = this.searchBasedOnMessages(results, this.state.searchValue);
 
-        return res;
+        return results;
     };
 
     // Mapping the entire array for displaying on the UI
