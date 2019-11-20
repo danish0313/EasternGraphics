@@ -5,28 +5,28 @@ import Results from './res/res';
 import Options from './options/options';
 import SearchBar from './options/searchBar/searchBar';
 import { Values } from '../../App';
-import _ from 'lodash';
-
 interface MyFiltersState {
     facilityValue: string;
     levelValue: string;
     searchValue: string;
+    facilityOption: Array<string>;
+    levelOption: Array<string>;
 }
 
 interface MyFiltersProps {
     results: Array<Values>;
-    uniqueFacilities: Array<string>;
-    uniqueLevels: Array<string>;
-
 }
 
 export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
     constructor(props: MyFiltersProps) {
         super(props);
         this.state = {
+            facilityOption: [],
+            levelOption: [],
             facilityValue: '',
             levelValue: '',
             searchValue: '',
+
         };
     }
 
@@ -35,65 +35,44 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             <>
                 <div className={classes.box}>
                     <h1> Error-LOG SEARCH !</h1>
-                    <div><Options
-                        label="Facility"
-                        options={this.props.uniqueFacilities.map(
-                            (options: string, i: number) => {
-                                return (
-                                    <option
-                                        key={options + i}
-                                        value={options}
-                                        selected={
-                                            _.indexOf(this.props.uniqueFacilities, options) ===
-                                            this.disablingFacility()
-                                        }
-                                        disabled={this.state.levelValue ?
-                                            _.indexOf(this.props.uniqueFacilities, options) !==
-                                            this.disablingFacility() : false
-                                        }
-                                    >
-                                        {''}
-                                        {options}
-                                    </option>
-                                );
-                            }
-                        )}
-                        handler={this.filterFacilitiesHandler}
+                    <div className="ms-Grid" dir="1tr">
+                        <div className="ms-Grid-row">
+                            <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg6" >
+                                <Options
+                                    label="Search By Facility"
+                                    options={this.state.facilityOption}
+                                    handler={this.filterFacilitiesHandler}
 
-                    />
-                        <Options
-                            label="Level"
-                            options={this.props.uniqueLevels.map(
-                                (options: string, i: number) => {
-                                    return (
-                                        <option
-                                            key={options + i}
-                                            value={options}
-                                            selected={
-                                                _.indexOf(this.props.uniqueLevels, options) ===
-                                                this.disablingLevel()
-                                            }
-                                            disabled={this.state.facilityValue ?
-                                                _.indexOf(this.props.uniqueLevels, options) !==
-                                                this.disablingLevel() : false
-                                            }
-                                        >
-                                            {''}
-                                            {options}
-                                        </option>
-                                    );
-                                }
-                            )}
-                            handler={this.filterLevelHandler}
-                        />
-                        <br />
-                        <SearchBar searchHandler={this.filterSearchHandler} />
+                                />
+                                </div>
+                                <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg6" >
+                                <Options
+                                    label=" Search By Level"
+                                    options={this.state.levelOption}
+                                    handler={this.filterLevelHandler}
+                                />
+                                <br />
+                            </div>
+                        </div>
+
                     </div>
-                </div>
+                    <div className="ms-Grid" dir="ltr">
+                        <div className="ms-Grid-row">
+                            <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg12">
+                                <SearchBar label="Search Your Messages!" searchHandler={this.filterSearchHandler} />
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
                 <div className={classes.results}>{this.showingResults()}</div>
+
             </>
         );
     }
+    public componentDidMount = async () => {
+        await this.FilterOptionApi();
+    };
 
     private filterFacilitiesHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value: string = (e.target as HTMLSelectElement).value;
@@ -110,9 +89,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             levelValue: value
         });
     };
-    private filterSearchHandler = (e: React.FormEvent<HTMLInputElement>) => {
-        const value: string = (e.target as HTMLInputElement).value;
-
+    private filterSearchHandler = (value: string) => {
         this.setState({
             searchValue: value
         });
@@ -140,7 +117,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         if (input) {
             return array.filter(
                 (search: Values): boolean =>
-                    search.message
+                    search.content
                         .toLocaleLowerCase()
                         .includes(input.toLocaleLowerCase())
             );
@@ -178,14 +155,28 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         }
 
         return <Results results={this.props.results} />;
-
     };
 
-    private disablingLevel = (): number => {
-        return _.indexOf(this.props.uniqueFacilities, this.state.facilityValue);
+// API call for fetching Facility and Level Options
+    private FilterOptionApi = async () => {
+        try {
+
+            const repl: Response = await fetch('http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/filter');
+            const filterOptions: any  = await repl.json();
+            const facility: Array<string>  = filterOptions.filters.facility;
+            const level: Array<string> = filterOptions.filters.level;
+
+            this.setState(
+                {
+                    facilityOption: facility,
+                    levelOption: level
+                },
+            );
+
+        } catch {
+
+            console.log('option not found!');
+        }
     };
 
-    private disablingFacility = (): number => {
-        return _.indexOf(this.props.uniqueLevels, this.state.levelValue);
-    };
 }

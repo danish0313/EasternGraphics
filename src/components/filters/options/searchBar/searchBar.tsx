@@ -1,23 +1,43 @@
 import React, { PureComponent } from 'react';
-import classes from './searchBar.module.css';
+import { Label } from 'office-ui-fabric-react/lib/Label';
+
+// import classes from './searchBar.module.css';
+import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 interface MySearchBarProps {
-    searchHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    searchHandler: (newValue: string) => void;
+    label: string;
+}
+interface MySearchBarState {
+    searchText: string | undefined;
 }
 
-export default class SearchBar extends PureComponent<MySearchBarProps> {
+export default class SearchBar extends PureComponent<MySearchBarProps, MySearchBarState> {
+    constructor(props: MySearchBarProps) {
+        super(props);
+        this.state = {
+            searchText: undefined
+
+        };
+    }
+    //  handleClick  = (e:React.ChangeEvent<HTMLInputElement>) => this.props.searchHandler(e);
     public render(): JSX.Element {
-        const handleClick: React.ChangeEventHandler  = (e: React.ChangeEvent<HTMLInputElement>) => this.props.searchHandler(e);
+
         return (
-            <div className={classes.searchbox}>
-                <label className={classes.label}>SEARCH YOUR MESSAGES:</label>
-                <input
-                    className={classes.search}
-                    onChange={handleClick}
-                    type="search"
-                    id="site search"
-                    aria-label="Search through messages"
-                />
-            </div>
+        <>
+            <Label style={{ textAlign: 'center' }}>{this.props.label}</Label>
+            <SearchBox
+                styles={{ root: { width: 700, margin: '0 auto', height: 40 } }}
+                placeholder="Search"
+                onChange={(newValue) => this.onChangeHandler(newValue)}
+            />
+        </>
         );
     }
+    private onChangeHandler = (newValue: React.ChangeEvent<HTMLInputElement> | undefined) => {
+        if (newValue == null) {
+            return;
+        }
+        const value: string = newValue.target.value;
+        this.props.searchHandler(value);
+    };
 }
