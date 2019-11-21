@@ -19,25 +19,25 @@ export default class SearchBar extends PureComponent<MySearchBarProps, MySearchB
 
         };
     }
-    //  handleClick  = (e:React.ChangeEvent<HTMLInputElement>) => this.props.searchHandler(e);
     public render(): JSX.Element {
+        const handleClick: (e: React.ChangeEvent<HTMLInputElement> | undefined, newValue?: string | undefined) => void
+        = (e: React.ChangeEvent<HTMLInputElement> | undefined) => {
+            if (e == null) {
+                return;
+            }
+            const value: string = e.target.value;
+            this.props.searchHandler(value);
+        };
 
         return (
-        <>
-            <Label style={{ textAlign: 'center' }}>{this.props.label}</Label>
-            <SearchBox
-                styles={{ root: { width: 700, margin: '0 auto', height: 40 } }}
-                placeholder="Search"
-                onChange={(newValue) => this.onChangeHandler(newValue)}
-            />
-        </>
+            <>
+                <Label style={{ textAlign: 'center' }}>{this.props.label}</Label>
+                <SearchBox
+                    styles={{ root: { width: 700, margin: '0 auto', height: 40 } }}
+                    placeholder="Search"
+                    onChange={handleClick}
+                />
+            </>
         );
     }
-    private onChangeHandler = (newValue: React.ChangeEvent<HTMLInputElement> | undefined) => {
-        if (newValue == null) {
-            return;
-        }
-        const value: string = newValue.target.value;
-        this.props.searchHandler(value);
-    };
 }

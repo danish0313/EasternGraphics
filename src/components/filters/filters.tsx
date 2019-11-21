@@ -11,6 +11,7 @@ interface MyFiltersState {
     searchValue: string;
     facilityOption: Array<string>;
     levelOption: Array<string>;
+    error: boolean;
 }
 
 interface MyFiltersProps {
@@ -26,6 +27,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             facilityValue: '',
             levelValue: '',
             searchValue: '',
+            error: false
 
         };
     }
@@ -44,8 +46,8 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                                     handler={this.filterFacilitiesHandler}
 
                                 />
-                                </div>
-                                <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg6" >
+                            </div>
+                            <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg6" >
                                 <Options
                                     label=" Search By Level"
                                     options={this.state.levelOption}
@@ -63,7 +65,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                             </div>
                         </div>
                     </div>
-                    </div>
+                </div>
 
                 <div className={classes.results}>{this.showingResults()}</div>
 
@@ -74,17 +76,13 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         await this.FilterOptionApi();
     };
 
-    private filterFacilitiesHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value: string = (e.target as HTMLSelectElement).value;
-
+    private filterFacilitiesHandler = (value: string) => {
         this.setState({
             facilityValue: value
         });
     };
 
-    private filterLevelHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value: string = (e.target as HTMLSelectElement).value;
-
+    private filterLevelHandler = (value: string) => {
         this.setState({
             levelValue: value
         });
@@ -157,15 +155,16 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         return <Results results={this.props.results} />;
     };
 
-// API call for fetching Facility and Level Options
+    // API call for fetching Facility and Level Options
     private FilterOptionApi = async () => {
         try {
 
             const repl: Response = await fetch('http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/filter');
-            const filterOptions: any  = await repl.json();
-            const facility: Array<string>  = filterOptions.filters.facility;
+            const filterOptions: any = await repl.json();
+            const facility: Array<string> = filterOptions.filters.facility;
             const level: Array<string> = filterOptions.filters.level;
-
+            facility.unshift('');
+            level.unshift('');
             this.setState(
                 {
                     facilityOption: facility,
@@ -175,7 +174,10 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
 
         } catch {
 
-            console.log('option not found!');
+            this.setState(
+                {
+                    error: true
+                });
         }
     };
 
