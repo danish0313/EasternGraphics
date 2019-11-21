@@ -1,13 +1,10 @@
 h1{
   text-align:center;
+  color: #605E5C;
 }
-
 span{
   font-weight:bold;
 }
-
 hr{
-
   border-top:3px dashed grey;
-
 }
