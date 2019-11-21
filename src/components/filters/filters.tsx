@@ -61,7 +61,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                     <div className="ms-Grid" dir="ltr">
                         <div className="ms-Grid-row">
                             <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg12">
-                                <SearchBar label="Search Your Messages!" searchHandler={this.filterSearchHandler} />
+                                <SearchBar label="Search Your Content!" searchHandler={this.filterSearchHandler} />
                             </div>
                         </div>
                     </div>
