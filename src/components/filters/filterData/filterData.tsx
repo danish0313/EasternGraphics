@@ -43,7 +43,7 @@ export default class FilterData extends Component<MyFilterDataProps> {
                 Id: i,
                 Level: array[i].level,
                 Facility: array[i].facility,
-                Content: array[i].content.split(',').map(j => <p title={array[i].content}>{j}</p>),
+                Content: array[i].content.split(',').map(j => <p title={`Content = ${array[i].content}`}>{j}</p>),
                 TimeStamp: new Date(array[i].date).toUTCString()
             });
         }
