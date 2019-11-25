@@ -66,9 +66,13 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                         </div>
                     </div>
                 </div>
-
+                <div className="ms-Grid" dir="ltr">
+                        <div className="ms-Grid-row">
+                            <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg12">
                 <div className={classes.results}>{this.showingResults()}</div>
-
+                </div>
+                        </div>
+                    </div>
             </>
         );
     }

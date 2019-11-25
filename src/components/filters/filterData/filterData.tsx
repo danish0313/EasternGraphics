@@ -23,11 +23,11 @@ export default class FilterData extends Component<MyFilterDataProps> {
         }
 
         const columns: Array<DetailsListBasicItem> = [
-            { key: 'column1', name: 'Id', fieldName: 'Id', minWidth: 50, maxWidth: 50, isResizable: true },
-            { key: 'column2', name: 'Level', fieldName: 'Level', minWidth: 100, maxWidth: 100, isResizable: true },
-            { key: 'column3', name: 'Facility', fieldName: 'Facility', minWidth: 100, maxWidth: 100, isResizable: true },
-            { key: 'column4', name: 'Content', fieldName: 'Content', minWidth: 100, maxWidth: 900, isResizable: true },
-            { key: 'column5', name: 'TimeStamp', fieldName: 'TimeStamp', minWidth: 100, maxWidth: 200, isResizable: true }
+            { key: 'column1', name: 'Id', fieldName: 'Id', minWidth: 20, maxWidth: 50, isResizable: true },
+            { key: 'column2', name: 'Level', fieldName: 'Level', minWidth: 50, maxWidth: 100, isResizable: true },
+            { key: 'column3', name: 'Facility', fieldName: 'Facility', minWidth: 50, maxWidth: 100, isResizable: true },
+            { key: 'column4', name: 'Content', fieldName: 'Content', minWidth: 50, maxWidth: 900, isResizable: true },
+            { key: 'column5', name: 'TimeStamp', fieldName: 'TimeStamp', minWidth: 100, maxWidth: 150, isResizable: true }
         ];
         return (
             <div>

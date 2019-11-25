@@ -44,7 +44,6 @@ export default class App extends Component<{}, MyAppState> {
 
     public componentDidMount = async () => {
         await this.errorLogApi();
-
     };
 
     // API call function
