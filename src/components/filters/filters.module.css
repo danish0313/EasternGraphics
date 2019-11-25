@@ -26,7 +26,7 @@
 .results {
   border: 2px dashed #D4D3D2;
   margin: 0 auto;
-  width: 90%;
+  width: 100% auto;
   text-align: center;
   height: 100%;
   margin-top: 100px;

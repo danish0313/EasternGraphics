@@ -7,6 +7,7 @@ interface MyFilterDataProps {
     results: Array<Values>;
     facilityValue: string;
     levelValue: string;
+    searchValue: string;
 }
 export interface DetailsListBasicItem {
     key: string;
@@ -20,7 +21,7 @@ export interface Data {
     Id: number;
     Level?: string;
     Facility?: string;
-    Content: string;
+    Content: string | any;
     TimeStamp: string;
 }
 export default class FilterData extends Component<MyFilterDataProps> {
@@ -28,7 +29,7 @@ export default class FilterData extends Component<MyFilterDataProps> {
 
         // Populate with items for datalist.
         let array: Array<Values> = [];
-        if (this.props.facilityValue.length > 0 || this.props.levelValue.length > 0) {
+        if (this.props.facilityValue.length > 0 || this.props.levelValue.length > 0 || this.props.searchValue.length > 0) {
              array  = this.props.searchFilter();
         }
         else {
@@ -42,7 +43,7 @@ export default class FilterData extends Component<MyFilterDataProps> {
                 Id: i,
                 Level: array[i].level,
                 Facility: array[i].facility,
-                Content: array[i].content,
+                Content: array[i].content.split(',').map(i => <p>{i}</p>),
                 TimeStamp: new Date(array[i].date).toUTCString()
             });
         }
@@ -51,7 +52,7 @@ export default class FilterData extends Component<MyFilterDataProps> {
             { key: 'column1', name: 'Id', fieldName: 'Id', minWidth: 20, maxWidth: 50, isResizable: true },
             { key: 'column2', name: 'Level', fieldName: 'Level', minWidth: 50, maxWidth: 100, isResizable: true },
             { key: 'column3', name: 'Facility', fieldName: 'Facility', minWidth: 50, maxWidth: 100, isResizable: true },
-            { key: 'column4', name: 'Content', fieldName: 'Content', minWidth: 50, maxWidth: 900, isResizable: true },
+            { key: 'column4', name: 'Content', fieldName: 'Content', minWidth: 50, maxWidth: 1000, isResizable: true },
             { key: 'column5', name: 'TimeStamp', fieldName: 'TimeStamp', minWidth: 100, maxWidth: 150, isResizable: true }
         ];
         return (

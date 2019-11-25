@@ -82,6 +82,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                                 results={this.props.results}
                                 facilityValue={this.state.facilityValue}
                                 levelValue={this.state.levelValue}
+                                searchValue={this.state.searchValue}
                             /></div>
                         </div>
                     </div>
