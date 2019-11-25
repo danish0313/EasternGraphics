@@ -61,7 +61,7 @@ export default class App extends Component<{}, MyAppState> {
                     body: JSON.stringify({
                     })
                 });
-            const data: any = await response.json();
+            const data: Results = await response.json();
             this.setState(
                 {
                     data: data.results

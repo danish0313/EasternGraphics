@@ -18,6 +18,14 @@ interface MyFiltersProps {
     results: Array<Values>;
 }
 
+interface ApiFilters {
+    filters: {
+        facility: Array<string>;
+        level: Array<string>;
+    }
+
+}
+
 export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
     constructor(props: MyFiltersProps) {
         super(props);
@@ -67,12 +75,12 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                     </div>
                 </div>
                 <div className="ms-Grid" dir="ltr">
-                        <div className="ms-Grid-row">
-                            <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg12">
-                <div className={classes.results}>{this.showingResults()}</div>
-                </div>
+                    <div className="ms-Grid-row">
+                        <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg12">
+                            <div className={classes.results}>{this.showingResults()}</div>
                         </div>
                     </div>
+                </div>
             </>
         );
     }
@@ -164,7 +172,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         try {
 
             const repl: Response = await fetch('http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/filter');
-            const filterOptions: any = await repl.json();
+            const filterOptions: ApiFilters = await repl.json();
             const facility: Array<string> = filterOptions.filters.facility;
             const level: Array<string> = filterOptions.filters.level;
             facility.unshift('');
