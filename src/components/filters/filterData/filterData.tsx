@@ -2,15 +2,40 @@ import React, { Component } from 'react';
 import { Values } from '../../../App';
 import { DetailsList, DetailsListLayoutMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
-import { DetailsListBasicItem, Data } from '../res/res';
 interface MyFilterDataProps {
     searchFilter: () => Array<Values>;
+    results: Array<Values>;
+    facilityValue: string;
+    levelValue: string;
+}
+export interface DetailsListBasicItem {
+    key: string;
+    name: string;
+    fieldName: string;
+    minWidth: number;
+    maxWidth: number;
+    isResizable: boolean;
+}
+export interface Data {
+    Id: number;
+    Level?: string;
+    Facility?: string;
+    Content: string;
+    TimeStamp: string;
 }
 export default class FilterData extends Component<MyFilterDataProps> {
     public render(): JSX.Element {
 
         // Populate with items for datalist.
-        const array: Array<Values> = this.props.searchFilter();
+        let array: Array<Values> = [];
+        if (this.props.facilityValue.length > 0 || this.props.levelValue.length > 0) {
+             array  = this.props.searchFilter();
+        }
+        else {
+             array = this.props.results;
+
+        }
+
         const data: Array<Data> = [];
         for (let i: number = 0; i < array.length; i++) {
             data.push({

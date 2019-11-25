@@ -25,7 +25,6 @@
 
 .results {
   border: 2px dashed #D4D3D2;
-  overflow-y: auto;
   margin: 0 auto;
   width: 90%;
   text-align: center;

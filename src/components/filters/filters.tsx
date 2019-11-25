@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import classes from './filters.module.css';
 import FilterData from './filterData/filterData';
-import Results from './res/res';
 import Options from './options/options';
 import SearchBar from './options/searchBar/searchBar';
 import { Values } from '../../App';
@@ -22,7 +21,7 @@ interface ApiFilters {
     filters: {
         facility: Array<string>;
         level: Array<string>;
-    }
+    };
 
 }
 
@@ -77,7 +76,13 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                 <div className="ms-Grid" dir="ltr">
                     <div className="ms-Grid-row">
                         <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg12">
-                            <div className={classes.results}>{this.showingResults()}</div>
+                            <div className={classes.results}>  <FilterData
+
+                                searchFilter={this.SearchFilter}
+                                results={this.props.results}
+                                facilityValue={this.state.facilityValue}
+                                levelValue={this.state.levelValue}
+                            /></div>
                         </div>
                     </div>
                 </div>
@@ -146,25 +151,6 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         results = this.searchBasedOnMessages(results, this.state.searchValue);
 
         return results;
-    };
-
-    // Mapping the entire array for displaying on the UI
-
-    private showingResults = () => {
-        if (
-            this.state.facilityValue.length > 0 ||
-            this.state.levelValue.length > 0 ||
-            this.state.searchValue.length > 0
-        ) {
-            return (
-                <FilterData
-
-                    searchFilter={this.SearchFilter}
-                />
-            );
-        }
-
-        return <Results results={this.props.results} />;
     };
 
     // API call for fetching Facility and Level Options
