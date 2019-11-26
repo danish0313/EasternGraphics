@@ -3,7 +3,8 @@ import classes from './filters.module.css';
 import FilterData from './filterData/filterData';
 import Options from './options/options';
 import SearchBar from './options/searchBar/searchBar';
-import { Values } from '../../App';
+import { Values, Results } from '../../App';
+import { returnStatement } from '@babel/types';
 interface MyFiltersState {
     facilityValue: string;
     levelValue: string;
@@ -11,6 +12,7 @@ interface MyFiltersState {
     facilityOption: Array<string>;
     levelOption: Array<string>;
     error: boolean;
+    FilteredArray: Array<Values>;
 }
 
 interface MyFiltersProps {
@@ -34,8 +36,8 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             facilityValue: '',
             levelValue: '',
             searchValue: '',
-            error: false
-
+            error: false,
+            FilteredArray: []
         };
     }
 
@@ -94,37 +96,73 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         await this.FilterOptionApi();
     };
 
-    private filterFacilitiesHandler = (value: string) => {
+    private filterFacilitiesHandler = async (value: string) => {
         this.setState({
             facilityValue: value
         });
+        const response: Response = await fetch('http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
+            {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    // level: "DEBUG",
+                    // message: "Session",
+                    facility: value
+
+                })
+            });
+        const data: Results = await response.json();
+        this.setState(
+            {
+                FilteredArray: data.results
+            },
+        );
     };
 
-    private filterLevelHandler = (value: string) => {
+    private filterLevelHandler = async (value: string) => {
         this.setState({
             levelValue: value
         });
+        const response: Response = await fetch('http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
+            {
+                method: 'POST',
+                headers: {
+                Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                level: value,
+                    // message: "Session",
+                    // facility: value
+                })
+            });
+        const data: Results = await response.json();
+        this.setState(
+            {
+                FilteredArray: data.results
+            },
+        );
     };
+
     private filterSearchHandler = (value: string) => {
         this.setState({
             searchValue: value
         });
     };
 
-    private searchBasedOnFacility = (array: Array<Values>, facility: string): Array<Values> => {
+    private searchBasedOnFacility = (array: Array<Values> , facility: string): Array<Values> => {
         if (facility) {
-            return array.filter(
-                (fac: Values): boolean => fac.facility === facility
-            );
+            return this.state.FilteredArray;
         }
         return array;
     };
 
     private searchBasedOnLevel = (array: Array<Values>, level: string): Array<Values> => {
         if (level) {
-            return array.filter(
-                (lev: Values): boolean => lev.level === level
-            );
+            return this.state.FilteredArray;
         }
         return array;
     };
@@ -146,11 +184,9 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
     private SearchFilter = (): Array<Values> => {
         // filter the messages based on user inputs
         let results: Array<Values> = this.props.results;
-
-        results = this.searchBasedOnFacility(results, this.state.facilityValue);
+        results = this.searchBasedOnFacility(results , this.state.facilityValue);
         results = this.searchBasedOnLevel(results, this.state.levelValue);
         results = this.searchBasedOnMessages(results, this.state.searchValue);
-
         return results;
     };
 

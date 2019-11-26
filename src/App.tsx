@@ -10,14 +10,14 @@ interface MyAppState {
 export interface Values {
     content: string;
     date: string;
-    level: string;
+    level?: string;
     facility?: string;
 }
-interface Results {
+export interface Results {
     results: [{
         content: string;
         date: string;
-        level: string;
+        level?: string;
         facility?: string;
     }];
 }
