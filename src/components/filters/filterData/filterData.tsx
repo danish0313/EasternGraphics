@@ -8,6 +8,7 @@ interface MyFilterDataProps {
     facilityValue: string;
     levelValue: string;
     searchValue: string;
+    loading: boolean;
 }
 export interface DetailsListBasicItem {
     key: string;
@@ -30,10 +31,10 @@ export default class FilterData extends Component<MyFilterDataProps> {
         // Populate with items for datalist.
         let array: Array<Values> = [];
         if (this.props.facilityValue.length > 0 || this.props.levelValue.length > 0 || this.props.searchValue.length > 0) {
-             array  = this.props.searchFilter();
+            array = this.props.searchFilter();
         }
         else {
-             array = this.props.results;
+            array = this.props.results;
 
         }
 
@@ -43,7 +44,7 @@ export default class FilterData extends Component<MyFilterDataProps> {
                 Id: i,
                 Level: array[i].level,
                 Facility: array[i].facility,
-                Content: array[i].content.split(/[./_',\n;]/).map((j , index: number) => <p key={j + index} title={`Content = ${array[i].content}`}>{j}</p>),
+                Content: array[i].content.split(/[./_',\n;]/).map((j, index: number) => <p key={j + index} title={`Content = ${array[i].content}`}>{j}</p>),
                 TimeStamp: new Date(array[i].date).toUTCString()
             });
         }
@@ -56,8 +57,10 @@ export default class FilterData extends Component<MyFilterDataProps> {
             { key: 'column5', name: 'TimeStamp', fieldName: 'TimeStamp', minWidth: 100, maxWidth: 150, isResizable: true }
         ];
         return (
-            <div>
-                <Fabric>
+            <div>{this.props.loading ? (<div className="loadingio-spinner-dual-ring-0ziandjjgd3e"><div className="ldio-lybarkgpaal">
+                <div></div><div><div></div></div>
+            </div></div>) :
+                (<Fabric>
                     <DetailsList
                         items={data}
                         columns={columns}
@@ -68,7 +71,8 @@ export default class FilterData extends Component<MyFilterDataProps> {
                         ariaLabelForSelectAllCheckbox="Toggle selection for all items"
                         checkButtonAriaLabel="Row checkbox"
                     />
-                </Fabric>
+                </Fabric>)
+            }
             </div>);
     }
 }

@@ -11,6 +11,7 @@ interface MyFiltersState {
     facilityOption: Array<string>;
     levelOption: Array<string>;
     error: boolean;
+    loading: boolean;
     FilteredArray: Array<Values>;
 }
 
@@ -36,6 +37,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             levelValue: '',
             searchValue: '',
             error: false,
+            loading: false,
             FilteredArray: []
         };
     }
@@ -84,6 +86,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                                 facilityValue={this.state.facilityValue}
                                 levelValue={this.state.levelValue}
                                 searchValue={this.state.searchValue}
+                                loading={this.state.loading}
                             /></div>
                         </div>
                     </div>
@@ -97,33 +100,35 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
 
     private filterFacilitiesHandler = async (value: string) => {
         this.setState({
-            facilityValue: value
+            facilityValue: value,
+            loading: true
         });
         const response: Response = await fetch('http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
             {
                 method: 'POST',
                 headers: {
-                    'Accept': 'application/json',
+                    Accept: 'application/json',
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     // level: "DEBUG",
                     // message: "Session",
                     facility: value
-
                 })
             });
         const data: Results = await response.json();
         this.setState(
             {
-                FilteredArray: data.results
+                FilteredArray: data.results,
+                loading: false
             },
         );
     };
 
     private filterLevelHandler = async (value: string) => {
         this.setState({
-            levelValue: value
+            levelValue: value,
+            loading: true
         });
         const response: Response = await fetch('http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
             {
@@ -141,7 +146,8 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         const data: Results = await response.json();
         this.setState(
             {
-                FilteredArray: data.results
+                FilteredArray: data.results,
+                loading: false
             },
         );
     };
