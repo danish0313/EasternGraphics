@@ -4,7 +4,6 @@ import FilterData from './filterData/filterData';
 import Options from './options/options';
 import SearchBar from './options/searchBar/searchBar';
 import { Values, Results } from '../../App';
-import { returnStatement } from '@babel/types';
 interface MyFiltersState {
     facilityValue: string;
     levelValue: string;
