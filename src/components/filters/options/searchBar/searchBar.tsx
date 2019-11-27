@@ -9,13 +9,15 @@ interface MySearchBarProps {
 }
 interface MySearchBarState {
     searchText: string | undefined;
+    suggestions: boolean;
 }
 
 export default class SearchBar extends PureComponent<MySearchBarProps, MySearchBarState> {
     constructor(props: MySearchBarProps) {
         super(props);
         this.state = {
-            searchText: undefined
+            searchText: undefined,
+            suggestions: false
 
         };
     }
@@ -34,9 +36,12 @@ export default class SearchBar extends PureComponent<MySearchBarProps, MySearchB
                 <Label style={{ textAlign: 'center' }}>{this.props.label}</Label>
                 <SearchBox
                     styles={{ root: { width: '60vh', margin: '0 auto', height: 40 } }}
-                    placeholder="Search"
+                    placeholder="Search Your Content!"
+                    iconProps={{ iconName: 'Filter' }}
                     onChange={handleClick}
+                    onFocus={() =>  this.setState({suggestions: !this.state.suggestions})}
                 />
+    {this.state.suggestions ?   (<div style={{width: '60vh', margin: '0 auto', height: '100px' , border: '1px solid grey' , borderTop: 'none'}}/>) : null}
             </>
         );
     }

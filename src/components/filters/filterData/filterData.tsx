@@ -47,8 +47,8 @@ export default class FilterData extends Component<MyFilterDataProps> {
                 Id: i,
                 Level: array[i].level,
                 Facility: array[i].facility,
-                Content: array[i].content.split(/[./_',\n;]/).map((j, index: number) => (
-                    <div key={j + index}>
+                Content: array[i].content.split('=').map((j, index: number) => (
+                    <pre key={j + index}>
                         <TooltipHost
                             content={`Content = ${array[i].content}`}
                             closeDelay={500}
@@ -57,7 +57,7 @@ export default class FilterData extends Component<MyFilterDataProps> {
                             styles={{ root: { display: 'inline-block' } }}
                         >{j}
                         </TooltipHost>
-                    </div>)),
+                    </pre>)),
                 TimeStamp: new Date(array[i].date).toUTCString()
             });
         }
@@ -71,7 +71,7 @@ export default class FilterData extends Component<MyFilterDataProps> {
         ];
         return (
             <div>{this.props.loading ? (<div className="loadingio-spinner-dual-ring-0ziandjjgd3e"><div className="ldio-lybarkgpaal">
-                <div></div><div><div></div></div>
+                <div/><div/><div/><div/><div/><div/>
             </div></div>) :
                 (<Fabric>
 
