@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Values } from '../../../App';
 import { DetailsList, DetailsListLayoutMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { getId } from 'office-ui-fabric-react/lib/Utilities';
 interface MyFilterDataProps {
     searchFilter: () => Array<Values>;
     results: Array<Values>;
@@ -26,6 +28,7 @@ export interface Data {
     TimeStamp: string;
 }
 export default class FilterData extends Component<MyFilterDataProps> {
+    private hostId: string = getId('tooltipHost');
     public render(): JSX.Element {
 
         // Populate with items for datalist.
@@ -44,7 +47,17 @@ export default class FilterData extends Component<MyFilterDataProps> {
                 Id: i,
                 Level: array[i].level,
                 Facility: array[i].facility,
-                Content: array[i].content.split(/[./_',\n;]/).map((j, index: number) => <p key={j + index} title={`Content = ${array[i].content}`}>{j}</p>),
+                Content: array[i].content.split(/[./_',\n;]/).map((j, index: number) => (
+                    <div key={j + index}>
+                        <TooltipHost
+                            content={`Content = ${array[i].content}`}
+                            closeDelay={500}
+                            id={this.hostId}
+                            calloutProps={{ gapSpace: 0 }}
+                            styles={{ root: { display: 'inline-block' } }}
+                        >{j}
+                        </TooltipHost>
+                    </div>)),
                 TimeStamp: new Date(array[i].date).toUTCString()
             });
         }
@@ -61,6 +74,7 @@ export default class FilterData extends Component<MyFilterDataProps> {
                 <div></div><div><div></div></div>
             </div></div>) :
                 (<Fabric>
+
                     <DetailsList
                         items={data}
                         columns={columns}

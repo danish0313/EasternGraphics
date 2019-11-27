@@ -107,7 +107,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             {
                 method: 'POST',
                 headers: {
-                    Accept: 'application/json',
+                     Accept: 'application/json',
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -131,11 +131,11 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             loading: true
         });
         const response: Response = await fetch('http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
-            {
+           {
                 method: 'POST',
                 headers: {
                 Accept: 'application/json',
-                    'Content-Type': 'application/json'
+               'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                 level: value,
