@@ -5,6 +5,8 @@ import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { getId } from 'office-ui-fabric-react/lib/Utilities';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { ActionButton , IIconProps } from 'office-ui-fabric-react';
+
 interface MyFilterDataProps {
     searchFilter: () => Array<Values>;
     results: Array<Values>;
@@ -22,14 +24,15 @@ export interface DetailsListBasicItem {
     isResizable: boolean;
 }
 export interface Data {
-    Id: number;
     Level?: string;
     Facility?: string;
     Content: string | any;
     TimeStamp: string;
 }
+const addFriendIcon: IIconProps = { iconName: 'Copy' };
 export default class FilterData extends Component<MyFilterDataProps> {
     private hostId: string = getId('tooltipHost');
+
     public render(): JSX.Element {
 
         // Populate with items for datalist.
@@ -41,11 +44,9 @@ export default class FilterData extends Component<MyFilterDataProps> {
             array = this.props.results;
 
         }
-
         const data: Array<Data> = [];
         for (let i: number = 0; i < array.length; i++) {
             data.push({
-                Id: i,
                 Level: array[i].level,
                 Facility: array[i].facility,
                 Content: array[i].content.split('=').map((j, index: number) => (
@@ -57,6 +58,9 @@ export default class FilterData extends Component<MyFilterDataProps> {
                             calloutProps={{ gapSpace: 0 }}
                             styles={{ root: { display: 'inline-block' } }}
                         >{j}
+                        <ActionButton iconProps={addFriendIcon} onClick={() => this.handleClick(j)} style={{marginLeft: '30px'}}>
+                        Copy!
+                      </ActionButton>
                         </TooltipHost>
                     </pre>)),
                 TimeStamp: new Date(array[i].date).toUTCString()
@@ -64,7 +68,6 @@ export default class FilterData extends Component<MyFilterDataProps> {
         }
 
         const columns: Array<DetailsListBasicItem> = [
-            { key: 'column1', name: 'Id', fieldName: 'Id', minWidth: 20, maxWidth: 50, isResizable: true },
             { key: 'column2', name: 'Level', fieldName: 'Level', minWidth: 50, maxWidth: 100, isResizable: true },
             { key: 'column3', name: 'Facility', fieldName: 'Facility', minWidth: 50, maxWidth: 100, isResizable: true },
             { key: 'column4', name: 'Content', fieldName: 'Content', minWidth: 50, maxWidth: 1000, isResizable: true },
@@ -88,4 +91,9 @@ export default class FilterData extends Component<MyFilterDataProps> {
                 </Fabric>)}
             </div>);
     }
+
+    private handleClick = (event: string | HTMLButtonElement | HTMLDivElement  | HTMLSpanElement) =>  {
+          console.log(event);
+          alert(`Copied to clipboard!, ${event}`);
+    };
 }
