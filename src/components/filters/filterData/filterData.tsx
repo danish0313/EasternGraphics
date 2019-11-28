@@ -4,6 +4,7 @@ import { DetailsList, DetailsListLayoutMode } from 'office-ui-fabric-react/lib/D
 import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { getId } from 'office-ui-fabric-react/lib/Utilities';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 interface MyFilterDataProps {
     searchFilter: () => Array<Values>;
     results: Array<Values>;
@@ -70,9 +71,8 @@ export default class FilterData extends Component<MyFilterDataProps> {
             { key: 'column5', name: 'TimeStamp', fieldName: 'TimeStamp', minWidth: 100, maxWidth: 150, isResizable: true }
         ];
         return (
-            <div>{this.props.loading ? (<div className="loadingio-spinner-dual-ring-0ziandjjgd3e"><div className="ldio-lybarkgpaal">
-                <div/><div/><div/><div/><div/><div/>
-            </div></div>) :
+            <div>{this.props.loading ? (<Spinner label="Waiting for Content..." ariaLive="assertive" labelPosition="top" size={SpinnerSize.large} />
+               ) :
                 (<Fabric>
 
                     <DetailsList
