@@ -40,6 +40,7 @@ export default class SearchBar extends PureComponent<MySearchBarProps, MySearchB
             </>
         );
     }
+
     private handleClick = (e: React.ChangeEvent<HTMLInputElement> | undefined, newValue?: string | undefined): void => {
         if (e == null) {
             return;

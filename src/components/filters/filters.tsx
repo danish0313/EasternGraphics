@@ -4,6 +4,7 @@ import FilterData from './filterData/filterData';
 import Options from './options/options';
 import SearchBar from './options/searchBar/searchBar';
 import { Values, Results } from '../../App';
+import _ from 'lodash';
 interface MyFiltersState {
     facilityValue: string;
     levelValue: string;
@@ -40,6 +41,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             loading: false,
             FilteredArray: []
         };
+        this.filterSearchHandler = _.debounce(this.filterSearchHandler, 1500);
     }
 
     public render(): JSX.Element {
@@ -103,6 +105,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             facilityValue: value,
             loading: true
         });
+
         const response: Response = await fetch(
             'http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
             {
@@ -154,46 +157,39 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         );
     };
 
-    private filterSearchHandler = (value: string) => {
-        this.setState({
-            searchValue: value
-        });
-    };
+    private filterSearchHandler = async (value: string) => {
+            this.setState({
+                searchValue: value
+            });
 
-    private searchBasedOnFacility = (array: Array<Values> , facility: string): Array<Values> => {
-        if (facility) {
-            return this.state.FilteredArray;
-        }
-        return array;
-    };
-
-    private searchBasedOnLevel = (array: Array<Values>, level: string): Array<Values> => {
-        if (level) {
-            return this.state.FilteredArray;
-        }
-        return array;
-    };
-
-    private searchBasedOnMessages = (array: Array<Values>, input: string): Array<Values> => {
-        if (input) {
-            return array.filter(
-                (search: Values): boolean =>
-                    search.content
-                        .toLocaleLowerCase()
-                        .includes(input.toLocaleLowerCase())
+            const response: Response = await fetch(
+                'http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
+                {
+                    method: 'POST',
+                    headers: {
+                         Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        facility: this.state.facilityValue || undefined,
+                        level: this.state.levelValue || undefined,
+                        message: value
+                    })
+                });
+            const data: Results = await response.json();
+            this.setState(
+                {
+                    FilteredArray: data.results,
+                    loading: false
+                },
             );
-        }
-        return array;
     };
 
     // Search Filter
-
     private SearchFilter = (): Array<Values> => {
         // filter the messages based on user inputs
         let results: Array<Values> = this.props.results;
-        results = this.searchBasedOnFacility(results , this.state.facilityValue);
-        results = this.searchBasedOnLevel(results, this.state.levelValue);
-        results = this.searchBasedOnMessages(results, this.state.searchValue);
+        results = this.state.FilteredArray;
         return results;
     };
 

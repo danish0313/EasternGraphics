@@ -85,8 +85,7 @@ export default class FilterData extends Component<MyFilterDataProps> {
                         ariaLabelForSelectAllCheckbox="Toggle selection for all items"
                         checkButtonAriaLabel="Row checkbox"
                     />
-                </Fabric>)
-            }
+                </Fabric>)}
             </div>);
     }
 }

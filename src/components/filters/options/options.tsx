@@ -36,7 +36,6 @@ export default class Options extends Component<MyOptionsProps> {
 
         );
     }
-
     private handleClick = (e: React.FormEvent<HTMLDivElement> | undefined, option?: IDropdownOption | undefined, index?: number | undefined): void => {
         if (e == null || option == null) {
             return;
