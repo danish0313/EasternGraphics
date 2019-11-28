@@ -103,7 +103,8 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             facilityValue: value,
             loading: true
         });
-        const response: Response = await fetch('http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
+        const response: Response = await fetch(
+            'http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
             {
                 method: 'POST',
                 headers: {
@@ -130,8 +131,9 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             levelValue: value,
             loading: true
         });
-        const response: Response = await fetch('http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
-           {
+        const response: Response = await fetch(
+            'http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
+            {
                 method: 'POST',
                 headers: {
                 Accept: 'application/json',

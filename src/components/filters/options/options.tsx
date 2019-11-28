@@ -18,13 +18,7 @@ interface MyOptionsProps {
 }
 export default class Options extends Component<MyOptionsProps> {
     public render(): JSX.Element {
-        const handleClick: (e: React.FormEvent<HTMLDivElement> | undefined, option?: IDropdownOption) => void
-        = (e: React.FormEvent<HTMLDivElement> | undefined, option?: IDropdownOption) => {
-            if (e == null || option == null) {
-                return;
-            }
-            this.props.handler(option.text);
-        };
+
         return (
             <>
                 <Stack tokens={stackTokens} >
@@ -34,7 +28,7 @@ export default class Options extends Component<MyOptionsProps> {
                         ariaLabel="Custom dropdown example"
                         options={this.props.options.map((item) => { return { key: item, text: item }; })}
                         styles={dropdownStyles}
-                        onChange={handleClick}
+                        onChange={this.handleClick}
                     />
                 </Stack>
 
@@ -42,4 +36,11 @@ export default class Options extends Component<MyOptionsProps> {
 
         );
     }
+
+    private handleClick = (e: React.FormEvent<HTMLDivElement> | undefined, option?: IDropdownOption | undefined, index?: number | undefined): void => {
+        if (e == null || option == null) {
+            return;
+        }
+        this.props.handler(option.text);
+    };
 }
