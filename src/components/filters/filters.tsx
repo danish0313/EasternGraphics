@@ -179,7 +179,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                 body: JSON.stringify({
                     facility: this.state.facilityValue || undefined,
                     level: this.state.levelValue || undefined,
-                    message: value
+                    message: value || undefined
                 })
             });
         const data: Results = await response.json();

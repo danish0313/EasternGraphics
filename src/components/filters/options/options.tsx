@@ -5,7 +5,7 @@ import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 initializeIcons(/* optional base url */);
 const dropdownStyles: Partial<IDropdownStyles> = {
     dropdown: {
-        width: 310,
+        width: 290,
         margin: '0 auto'
     },
 

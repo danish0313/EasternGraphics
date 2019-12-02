@@ -38,7 +38,7 @@ interface DatePickerInputProps {
 const controlClass = mergeStyleSets({
     control: {
         margin: '0 auto',
-        maxWidth: '300px',
+        maxWidth: '290px',
         marginBottom: '10px'
     }
 });
