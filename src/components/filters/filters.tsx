@@ -4,11 +4,13 @@ import FilterData from './filterData/filterData';
 import Options from './options/options';
 import SearchBar from './options/searchBar/searchBar';
 import { Values, Results } from '../../App';
+import DatePickerInput from './options/datePicker/datePicker';
 import _ from 'lodash';
 interface MyFiltersState {
     facilityValue: string;
     levelValue: string;
     searchValue: string;
+    DateValue: number | null | undefined;
     facilityOption: Array<string>;
     levelOption: Array<string>;
     error: boolean;
@@ -37,6 +39,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             facilityValue: '',
             levelValue: '',
             searchValue: '',
+            DateValue: undefined,
             error: false,
             loading: false,
             filteredArray: []
@@ -51,7 +54,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                     <h1> Error-LOG SEARCH !</h1>
                     <div className="ms-Grid" dir="1tr">
                         <div className="ms-Grid-row">
-                            <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg6" >
+                            <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg4" >
                                 <Options
                                     label="Search By Facility"
                                     options={this.state.facilityOption}
@@ -59,13 +62,16 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
 
                                 />
                             </div>
-                            <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg6" >
+                            <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg4" >
                                 <Options
                                     label=" Search By Level"
                                     options={this.state.levelOption}
                                     handler={this.filterLevelHandler}
                                 />
-                                <br />
+
+                            </div>
+                            <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg4" >
+                                <DatePickerInput datePickerHandler={this.datePickerHandler} />
                             </div>
                         </div>
 
@@ -117,7 +123,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                 body: JSON.stringify({
                     // level: "DEBUG",
                     // message: "Session",
-                    facility: value || undefined
+                    facility: value
                 })
             });
         const data: Results = await response.json();
@@ -174,6 +180,31 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                     facility: this.state.facilityValue || undefined,
                     level: this.state.levelValue || undefined,
                     message: value
+                })
+            });
+        const data: Results = await response.json();
+        this.setState(
+            {
+                filteredArray: data.results,
+                loading: false
+            },
+        );
+    };
+    private datePickerHandler = async (value: number) => {
+
+        this.setState({
+            DateValue: value
+        });
+        const response: Response = await fetch(
+            'http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
+            {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    date: value
                 })
             });
         const data: Results = await response.json();

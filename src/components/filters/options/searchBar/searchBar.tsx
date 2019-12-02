@@ -23,7 +23,8 @@ export default class SearchBar extends PureComponent<MySearchBarProps, MySearchB
 
         return (
             <>
-                <Label style={{ textAlign: 'center' }}>{this.props.label}</Label>
+                <Label style={{ textAlign: 'center' , marginTop: '30px' }}>
+                    {this.props.label}</Label>
                 <SearchBox
                     styles={{ root: { width: '60vh', margin: '0 auto', height: 40 } }}
                     placeholder="Search Your Content!"
