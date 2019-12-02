@@ -10,7 +10,7 @@ interface MyFiltersState {
     facilityValue: string;
     levelValue: string;
     searchValue: string;
-    DateValue: number | null | undefined;
+    dateValue: number | null | undefined;
     facilityOption: Array<string>;
     levelOption: Array<string>;
     error: boolean;
@@ -39,7 +39,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             facilityValue: '',
             levelValue: '',
             searchValue: '',
-            DateValue: undefined,
+            dateValue: undefined,
             error: false,
             loading: false,
             filteredArray: []
@@ -193,7 +193,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
     private datePickerHandler = async (value: number) => {
 
         this.setState({
-            DateValue: value
+            dateValue: value
         });
         const response: Response = await fetch(
             'http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
