@@ -19,9 +19,6 @@
   height: 30px;
   margin: 10px;
 }
-.searchBox {
-  margin-top: 30px;
-}
 
 .results {
   border: 2px dashed #D4D3D2;
@@ -29,7 +26,7 @@
   width: 100% auto;
   text-align: center;
   height: 100%;
-  margin-top: 100px;
+  margin-top: 50px;
   padding: 20px;
 }
 .timestamp {
