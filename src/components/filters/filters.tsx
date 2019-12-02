@@ -13,7 +13,7 @@ interface MyFiltersState {
     levelOption: Array<string>;
     error: boolean;
     loading: boolean;
-    FilteredArray: Array<Values>;
+    filteredArray: Array<Values>;
 }
 
 interface MyFiltersProps {
@@ -39,7 +39,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             searchValue: '',
             error: false,
             loading: false,
-            FilteredArray: []
+            filteredArray: []
         };
         this.filterSearchHandler = _.debounce(this.filterSearchHandler, 1500);
     }
@@ -83,7 +83,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                         <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg12">
                             <div className={classes.results}>  <FilterData
 
-                                searchFilter={this.SearchFilter}
+                                filteredArray={this.state.filteredArray}
                                 results={this.props.results}
                                 facilityValue={this.state.facilityValue}
                                 levelValue={this.state.levelValue}
@@ -111,19 +111,19 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             {
                 method: 'POST',
                 headers: {
-                     Accept: 'application/json',
+                    Accept: 'application/json',
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     // level: "DEBUG",
                     // message: "Session",
-                    facility: value
+                    facility: value || undefined
                 })
             });
         const data: Results = await response.json();
         this.setState(
             {
-                FilteredArray: data.results,
+                filteredArray: data.results,
                 loading: false
             },
         );
@@ -139,11 +139,11 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             {
                 method: 'POST',
                 headers: {
-                Accept: 'application/json',
-               'Content-Type': 'application/json'
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                level: value,
+                    level: value,
                     // message: "Session",
                     // facility: value
                 })
@@ -151,46 +151,38 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         const data: Results = await response.json();
         this.setState(
             {
-                FilteredArray: data.results,
+                filteredArray: data.results,
                 loading: false
             },
         );
     };
 
     private filterSearchHandler = async (value: string) => {
-            this.setState({
-                searchValue: value
-            });
+        this.setState({
+            searchValue: value
+        });
 
-            const response: Response = await fetch(
-                'http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
-                {
-                    method: 'POST',
-                    headers: {
-                         Accept: 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        facility: this.state.facilityValue || undefined,
-                        level: this.state.levelValue || undefined,
-                        message: value
-                    })
-                });
-            const data: Results = await response.json();
-            this.setState(
-                {
-                    FilteredArray: data.results,
-                    loading: false
+        const response: Response = await fetch(
+            'http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
+            {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
                 },
-            );
-    };
-
-    // Search Filter
-    private SearchFilter = (): Array<Values> => {
-        // filter the messages based on user inputs
-        let results: Array<Values> = this.props.results;
-        results = this.state.FilteredArray;
-        return results;
+                body: JSON.stringify({
+                    facility: this.state.facilityValue || undefined,
+                    level: this.state.levelValue || undefined,
+                    message: value
+                })
+            });
+        const data: Results = await response.json();
+        this.setState(
+            {
+                filteredArray: data.results,
+                loading: false
+            },
+        );
     };
 
     // API call for fetching Facility and Level Options

@@ -29,7 +29,7 @@ export default class SearchBar extends PureComponent<MySearchBarProps, MySearchB
                     placeholder="Search Your Content!"
                     iconProps={{ iconName: 'Filter' }}
                     onChange={this.handleClick}
-                    onFocus={() => this.setState({ suggestions: !this.state.suggestions })}
+                    onFocus={this.suggestionHandler}
                 />
                 {this.state.suggestions ? (
                 <div
@@ -47,5 +47,12 @@ export default class SearchBar extends PureComponent<MySearchBarProps, MySearchB
         }
         const value: string = e.target.value;
         this.props.searchHandler(value);
+    };
+
+    private suggestionHandler = (e: React.ChangeEvent<HTMLInputElement> | undefined, newValue?: string | undefined): void => {
+        if (e == null) {
+            return;
+        }
+        this.setState({ suggestions: !this.state.suggestions });
     };
 }
