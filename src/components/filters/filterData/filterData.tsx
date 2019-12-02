@@ -56,10 +56,8 @@ export default class FilterData extends Component<MyFilterDataProps> {
                             id={this.hostId}
                             calloutProps={{ gapSpace: 0 }}
                             styles={{ root: { display: 'inline-block' } }}
-                        >{contents} <br/>
-                            <ActionButton iconProps={addFriendIcon} onClick={() => this.handleClick(contents)} style={{ marginLeft: '30px' }}>
-                                Copy!
-                      </ActionButton>
+                        >  <ActionButton iconProps={addFriendIcon} onClick={() => this.handleClick(contents)} style={{marginRight: '30px'}}/>
+                        {contents}
                         </TooltipHost>
                     </pre>)),
                 TimeStamp: new Date(array[i].date).toUTCString()

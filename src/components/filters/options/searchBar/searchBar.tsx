@@ -35,7 +35,7 @@ export default class SearchBar extends PureComponent<MySearchBarProps, MySearchB
                 {this.state.suggestions ? (
                 <div
                    style={{ width: '60vh', margin: '0 auto', height: '100px',
-                   border: '1px solid grey', borderTop: 'none' }}
+                   border: '1px solid #0078D4', borderTop: 'none' }}
                 />)
                 : null}
             </>
