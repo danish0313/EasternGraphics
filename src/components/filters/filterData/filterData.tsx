@@ -26,7 +26,7 @@ export interface DetailsListBasicItem {
 export interface Data {
     Level?: string;
     Facility?: string;
-    Content: string | any;
+    Content?:  React.ReactNodeArray;
     TimeStamp: string;
 }
 const addFriendIcon: IIconProps = { iconName: 'Copy' };
@@ -44,14 +44,14 @@ export default class FilterData extends Component<MyFilterDataProps> {
 
         }
         const data: Array<Data> = [];
-        for (let i: number = 0; i < array.length; i++) {
+        for (const i of array) {
             data.push({
-                Level: array[i].level,
-                Facility: array[i].facility,
-                Content: array[i].content.split('</br>').map((contents, index: number) => (
+                Level: i.level,
+                Facility: i.facility,
+                Content: i.content.split('<br/>').map((contents, index: number) => (
                     <pre key={contents + index}>
                         <TooltipHost
-                            content={`Content = ${array[i].content}`}
+                            content={`Content = ${i.content}`}
                             closeDelay={500}
                             id={this.hostId}
                             calloutProps={{ gapSpace: 0 }}
@@ -60,7 +60,7 @@ export default class FilterData extends Component<MyFilterDataProps> {
                         {contents}
                         </TooltipHost>
                     </pre>)),
-                TimeStamp: new Date(array[i].date).toUTCString()
+                TimeStamp: new Date(i.date).toUTCString()
             });
         }
 
