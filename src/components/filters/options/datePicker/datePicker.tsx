@@ -34,8 +34,10 @@ interface DatePickerInputProps {
     datePickerHandler: (newValue: number) => void;
 
 }
-
-const controlClass = mergeStyleSets({
+interface ProcessedStyleSet {
+control: string;
+}
+const controlClass: ProcessedStyleSet = mergeStyleSets({
     control: {
         margin: '0 auto',
         maxWidth: '290px',
