@@ -27,9 +27,7 @@ interface ApiFilters {
         facility: Array<string>;
         level: Array<string>;
     };
-
 }
-
 export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
     constructor(props: MyFiltersProps) {
         super(props);
@@ -46,7 +44,6 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         };
         this.filterSearchHandler = _.debounce(this.filterSearchHandler, 1500);
     }
-
     public render(): JSX.Element {
         return (
             <>
@@ -88,7 +85,6 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                     <div className="ms-Grid-row">
                         <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg12">
                             <div className={classes.results}>  <FilterData
-
                                 filteredArray={this.state.filteredArray}
                                 results={this.props.results}
                                 facilityValue={this.state.facilityValue}

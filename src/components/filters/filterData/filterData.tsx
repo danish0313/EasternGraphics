@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { Values } from '../../../App';
-import { DetailsList, DetailsListLayoutMode } from 'office-ui-fabric-react/lib/DetailsList';
+import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { getId } from 'office-ui-fabric-react/lib/Utilities';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { ActionButton, IIconProps } from 'office-ui-fabric-react';
 
@@ -26,66 +24,64 @@ export interface DetailsListBasicItem {
 export interface Data {
     Level?: string;
     Facility?: string;
-    Content?:  React.ReactNodeArray;
-    TimeStamp: string;
+    Content?: React.ReactNode;
+    TimeStamp?: string;
+    Copy?: React.ReactNodeArray;
 }
 const addFriendIcon: IIconProps = { iconName: 'Copy' };
 export default class FilterData extends Component<MyFilterDataProps> {
-    private hostId: string = getId('tooltipHost');
-
     public render(): JSX.Element {
-
         // Populate with items for datalist.
-        let array: Array<Values> = [];
-        if (this.props.facilityValue.length > 0 || this.props.levelValue.length > 0 || this.props.searchValue.length > 0) {
-            array = this.props.filteredArray;
-        } else {
-            array = this.props.results;
-
-        }
+        const results: Array<Values> = this.props.filteredArray.length > 0 ? this.props.filteredArray : this.props.results;
         const data: Array<Data> = [];
-        for (const i of array) {
+        for (const i of results) {
             data.push({
                 Level: i.level,
                 Facility: i.facility,
-                Content: i.content.split('<br/>').map((contents, index: number) => (
-                    <pre key={contents + index}>
-                        <TooltipHost
-                            content={`Content = ${i.content}`}
-                            closeDelay={500}
-                            id={this.hostId}
-                            calloutProps={{ gapSpace: 0 }}
-                            styles={{ root: { display: 'inline-block' } }}
-                        >  <ActionButton iconProps={addFriendIcon} onClick={() => this.handleClick(contents)} style={{marginRight: '30px'}}/>
-                        {contents}
-                        </TooltipHost>
-                    </pre>)),
-                TimeStamp: new Date(i.date).toUTCString()
+                Content: (
+                    <pre>
+                        {i.content.split('<br/>').map((contents, index: number) => (
+                            <div key={contents + index}>
+                                {contents}
+                            </div>))}
+                    </pre>
+                ),
+                TimeStamp: new Date(i.date).toString() ,
+                Copy: i.content.split('<br/>').map((contents, index: number) => (
+                    <ActionButton
+                        key={contents + index}
+                        iconProps={addFriendIcon}
+                        onClick={() => this.handleClick(contents)}
+                        style={{ marginRight: '30px' }}
+                    />))
             });
         }
 
         const columns: Array<DetailsListBasicItem> = [
+            { key: 'column1', name: '', fieldName: 'Copy', minWidth: 50, maxWidth: 100, isResizable: true },
             { key: 'column2', name: 'Level', fieldName: 'Level', minWidth: 50, maxWidth: 100, isResizable: true },
             { key: 'column3', name: 'Facility', fieldName: 'Facility', minWidth: 50, maxWidth: 100, isResizable: true },
-            { key: 'column4', name: 'Content', fieldName: 'Content', minWidth: 50, maxWidth: 1200, isResizable: true },
-            { key: 'column5', name: 'TimeStamp', fieldName: 'TimeStamp', minWidth: 100, maxWidth: 150, isResizable: true }
+            { key: 'column4', name: 'Content', fieldName: 'Content', minWidth: 50, maxWidth: 1050, isResizable: true },
+            { key: 'column5', name: 'TimeStamp', fieldName: 'TimeStamp', minWidth: 100, maxWidth: 250, isResizable: true }
         ];
         return (
             <div>{this.props.loading ? (<Spinner label="Waiting for Content..." ariaLive="assertive" labelPosition="top" size={SpinnerSize.large} />
             ) :
-                (<Fabric>
-
-                    <DetailsList
-                        items={data}
-                        columns={columns}
-                        setKey="set"
-                        layoutMode={DetailsListLayoutMode.justified}
-                        selectionPreservedOnEmptyClick={true}
-                        ariaLabelForSelectionColumn="Toggle selection"
-                        ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-                        checkButtonAriaLabel="Row checkbox"
-                    />
-                </Fabric>)}
+                (
+                    <Fabric>
+                        <DetailsList
+                            items={data}
+                            columns={columns}
+                            selectionMode={SelectionMode.none}
+                            setKey="set"
+                            layoutMode={DetailsListLayoutMode.justified}
+                            selectionPreservedOnEmptyClick={true}
+                            ariaLabelForSelectionColumn="Toggle selection"
+                            ariaLabelForSelectAllCheckbox="Toggle selection for all items"
+                            checkButtonAriaLabel="Row checkbox"
+                        />
+                    </Fabric>
+                )}
             </div>);
     }
 
