@@ -25,7 +25,7 @@ export interface Data {
     Level?: string;
     Facility?: string;
     Content?: React.ReactNode;
-    TimeStamp?: string;
+    TimeStamp?: string | number;
     Copy?: React.ReactNodeArray;
 }
 const addFriendIcon: IIconProps = { iconName: 'Copy' };
@@ -46,7 +46,7 @@ export default class FilterData extends Component<MyFilterDataProps> {
                             </div>))}
                     </pre>
                 ),
-                TimeStamp: new Date(i.date).toString() ,
+                TimeStamp: new Date(Number(i.date) *1000).toString(),
                 Copy: i.content.split('<br/>').map((contents, index: number) => (
                     <ActionButton
                         key={contents + index}
