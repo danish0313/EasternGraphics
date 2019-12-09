@@ -8,9 +8,6 @@ import { ActionButton, IIconProps } from 'office-ui-fabric-react';
 interface MyFilterDataProps {
     filteredArray: Array<Values>;
     arrayWithoutFilter: Array<Values>;
-    facilityValue: string;
-    levelValue: string;
-    searchValue: string;
     loading: boolean;
 }
 export interface DetailsListBasicItem {

@@ -57,7 +57,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                                 <Options
                                     label="Search By Facility"
                                     options={this.state.facilityOption}
-                                    handler={this.filterFacilitiesHandler}
+                                    handler={this.optionFilterHandler}
 
                                 />
                             </div>
@@ -65,12 +65,12 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                                 <Options
                                     label=" Search By Level"
                                     options={this.state.levelOption}
-                                    handler={this.filterLevelHandler}
+                                    handler={this.optionFilterHandler}
                                 />
 
                             </div>
                             <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg4" >
-                                <DatePickerInput datePickerHandler={this.datePickerHandler} />
+                                <DatePickerInput  handler={this.optionFilterHandler} />
                             </div>
                         </div>
 
@@ -89,9 +89,6 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                             <div className={classes.results}>  <FilterData
                                 filteredArray={this.state.filteredArray}
                                 arrayWithoutFilter={this.props.arrayWithoutFilter}
-                                facilityValue={this.state.facilityValue}
-                                levelValue={this.state.levelValue}
-                                searchValue={this.state.searchValue}
                                 loading={this.state.loading}
                             /></div>
                         </div>
@@ -104,11 +101,23 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         await this.FilterOptionApi();
     };
 
-    private filterFacilitiesHandler = async (value: string) => {
+    private optionFilterHandler = async (option: string , start?: number , end?: number) => {
+        let facility: string = '';
+        let level: string = '';
+        if (this.state.facilityOption.includes(option)) {
+             facility = option;
+        } else {
+         level  = option;
+        }
+
         this.setState({
-            facilityValue: value,
+            facilityValue: facility,
+            levelValue: level,
+            dateStartValue: start,
+            dateEndValue: end,
             loading: true
         });
+        console.log(start , end);
 
         const response: Response = await fetch(
             'http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
@@ -119,37 +128,10 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    // level: "DEBUG",
-                    // message: "Session",
-                    facility: value
-                })
-            });
-        const data: Results = await response.json();
-        this.setState(
-            {
-                filteredArray: data.results,
-                loading: false
-            },
-        );
-    };
-
-    private filterLevelHandler = async (value: string) => {
-        this.setState({
-            levelValue: value,
-            loading: true
-        });
-        const response: Response = await fetch(
-            'http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
-            {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    level: value,
-                    // message: "Session",
-                    // facility: value
+                    facility: facility || undefined,
+                    level: level || undefined,
+                    start_date: start || undefined,
+                    end_date: end || undefined
                 })
             });
         const data: Results = await response.json();
@@ -177,34 +159,6 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                     facility: this.state.facilityValue || undefined,
                     level: this.state.levelValue || undefined,
                     message: value || undefined
-                })
-            });
-        const data: Results = await response.json();
-        this.setState(
-            {
-                filteredArray: data.results,
-                loading: false
-            },
-        );
-    };
-    private datePickerHandler = async (start: number , end: number) => {
-
-        this.setState({
-            dateStartValue: start,
-            dateEndValue: end
-        });
-        console.log(start ,  end);
-        const response: Response = await fetch(
-            'http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
-            {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    start_date: start || undefined,
-                    end_date: end || undefined
                 })
             });
         const data: Results = await response.json();

@@ -32,7 +32,7 @@ export interface DatePickerInputState {
 
 interface DatePickerInputProps {
 
-    datePickerHandler: (start: number, end: number) => void;
+    handler: (option: string , start: number, end: number) => void;
 
 }
 interface ProcessedStyleSet {
@@ -91,7 +91,7 @@ export default class DatePickerInput extends React.Component<DatePickerInputProp
         this.setState({ startDate: startDate });
         const start: Date | null | number = Number(startDate);
         const end: Date | null | number = Number(this.state.endDate);
-        this.props.datePickerHandler(start, end);
+        this.props.handler('', start, end);
     };
 
     private endDateSelection = (endDate: Date | null | undefined): void => {
@@ -101,7 +101,7 @@ export default class DatePickerInput extends React.Component<DatePickerInputProp
         this.setState({ endDate: endDate });
         const end: Date | null | number = Number(endDate);
         const start: Date | null | number = Number(this.state.startDate);
-        this.props.datePickerHandler(start, end);
+        this.props.handler('' , start, end);
     };
     private onClick = (): void => {
         this.setState({ startDate: null, endDate: null });

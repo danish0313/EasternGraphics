@@ -13,7 +13,7 @@ const dropdownStyles: Partial<IDropdownStyles> = {
 const stackTokens: IStackTokens = { childrenGap: 20 };
 interface MyOptionsProps {
     options: Array<string>;
-    handler: (value: string) => void;
+    handler: (value: string , start?: number , end?: number) => void;
     label: string;
 }
 export default class Options extends Component<MyOptionsProps> {
