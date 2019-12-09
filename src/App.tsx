@@ -36,7 +36,7 @@ export default class App extends Component<{}, MyAppState> {
     public render(): JSX.Element {
         return (
             <div className="App">
-                <Filters results={this.state.data} />
+                <Filters arrayWithoutFilter={this.state.data} />
             </div>
 
         );
