@@ -7,7 +7,7 @@ import { ActionButton, IIconProps } from 'office-ui-fabric-react';
 
 interface MyFilterDataProps {
     filteredArray: Array<Values>;
-    results: Array<Values>;
+    arrayWithoutFilter: Array<Values>;
     facilityValue: string;
     levelValue: string;
     searchValue: string;
@@ -26,13 +26,13 @@ export interface Data {
     Facility?: string;
     Content?: React.ReactNode;
     TimeStamp?: string | number;
-    Copy?: React.ReactNodeArray;
+    Copy?: React.ReactNode;
 }
 const addFriendIcon: IIconProps = { iconName: 'Copy' };
 export default class FilterData extends Component<MyFilterDataProps> {
     public render(): JSX.Element {
         // Populate with items for datalist.
-        const results: Array<Values> = this.props.filteredArray.length > 0 ? this.props.filteredArray : this.props.results;
+        const results: Array<Values> = this.props.filteredArray.length > 0 ? this.props.filteredArray : this.props.arrayWithoutFilter;
         const data: Array<Data> = [];
         for (const i of results) {
             data.push({
@@ -40,20 +40,17 @@ export default class FilterData extends Component<MyFilterDataProps> {
                 Facility: i.facility,
                 Content: (
                     <pre>
-                        {i.content.split('<br/>').map((contents, index: number) => (
-                            <div key={contents + index}>
-                                {contents}
-                            </div>))}
+                       {i.content}
                     </pre>
                 ),
-                TimeStamp: new Date(Number(i.date) *1000).toString(),
-                Copy: i.content.split('<br/>').map((contents, index: number) => (
+                TimeStamp: new Date(Number(i.date) * 1000).toLocaleString('en-US').split('/').join('-'),
+                Copy: (
                     <ActionButton
-                        key={contents + index}
+                        key={i.content}
                         iconProps={addFriendIcon}
-                        onClick={() => this.handleClick(contents)}
+                        onClick={() => this.handleClick(i.content)}
                         style={{ marginRight: '30px' }}
-                    />))
+                    />)
             });
         }
 
@@ -61,8 +58,8 @@ export default class FilterData extends Component<MyFilterDataProps> {
             { key: 'column1', name: '', fieldName: 'Copy', minWidth: 50, maxWidth: 100, isResizable: true },
             { key: 'column2', name: 'Level', fieldName: 'Level', minWidth: 50, maxWidth: 100, isResizable: true },
             { key: 'column3', name: 'Facility', fieldName: 'Facility', minWidth: 50, maxWidth: 100, isResizable: true },
-            { key: 'column4', name: 'Content', fieldName: 'Content', minWidth: 50, maxWidth: 1050, isResizable: true },
-            { key: 'column5', name: 'TimeStamp', fieldName: 'TimeStamp', minWidth: 100, maxWidth: 250, isResizable: true }
+            { key: 'column4', name: 'Content', fieldName: 'Content', minWidth: 50, maxWidth: 1300, isResizable: true },
+            { key: 'column5', name: 'TimeStamp', fieldName: 'TimeStamp', minWidth: 100, maxWidth: 100, isResizable: true }
         ];
         return (
             <div>{this.props.loading ? (<Spinner label="Waiting for Content..." ariaLive="assertive" labelPosition="top" size={SpinnerSize.large} />
@@ -92,6 +89,5 @@ export default class FilterData extends Component<MyFilterDataProps> {
         textArea.select();
         document.execCommand('Copy');
         textArea.remove();
-        alert(`Copied to clipboard!, ${event}`);
     };
 }

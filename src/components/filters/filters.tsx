@@ -10,7 +10,8 @@ interface MyFiltersState {
     facilityValue: string;
     levelValue: string;
     searchValue: string;
-    dateValue: number | null | undefined;
+    dateStartValue: number  | undefined;
+    dateEndValue: number | undefined;
     facilityOption: Array<string>;
     levelOption: Array<string>;
     error: boolean;
@@ -19,7 +20,7 @@ interface MyFiltersState {
 }
 
 interface MyFiltersProps {
-    results: Array<Values>;
+    arrayWithoutFilter: Array<Values>;
 }
 
 interface ApiFilters {
@@ -37,7 +38,8 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             facilityValue: '',
             levelValue: '',
             searchValue: '',
-            dateValue: undefined,
+            dateStartValue: undefined,
+            dateEndValue: undefined,
             error: false,
             loading: false,
             filteredArray: []
@@ -86,7 +88,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                         <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg12">
                             <div className={classes.results}>  <FilterData
                                 filteredArray={this.state.filteredArray}
-                                results={this.props.results}
+                                arrayWithoutFilter={this.props.arrayWithoutFilter}
                                 facilityValue={this.state.facilityValue}
                                 levelValue={this.state.levelValue}
                                 searchValue={this.state.searchValue}
@@ -163,7 +165,6 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         this.setState({
             searchValue: value
         });
-
         const response: Response = await fetch(
             'http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
             {
@@ -186,11 +187,13 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             },
         );
     };
-    private datePickerHandler = async (value: number) => {
+    private datePickerHandler = async (start: number , end: number) => {
 
         this.setState({
-            dateValue: value
+            dateStartValue: start,
+            dateEndValue: end
         });
+        console.log(start ,  end);
         const response: Response = await fetch(
             'http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
             {
@@ -200,7 +203,8 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    date: value
+                    start_date: start || undefined,
+                    end_date: end || undefined
                 })
             });
         const data: Results = await response.json();

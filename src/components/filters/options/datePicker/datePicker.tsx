@@ -26,16 +26,17 @@ const DayPickerStrings: IDatePickerStrings = {
 
 export interface DatePickerInputState {
     firstDayOfWeek?: DayOfWeek;
-    value?: Date | null;
+    startDate?: Date | null;
+    endDate?: Date | null;
 }
 
 interface DatePickerInputProps {
 
-    datePickerHandler: (newValue: number) => void;
+    datePickerHandler: (start: number, end: number) => void;
 
 }
 interface ProcessedStyleSet {
-control: string;
+    control: string;
 }
 const controlClass: ProcessedStyleSet = mergeStyleSets({
     control: {
@@ -51,38 +52,58 @@ export default class DatePickerInput extends React.Component<DatePickerInputProp
 
         this.state = {
             firstDayOfWeek: DayOfWeek.Sunday,
-            value: null
+            startDate: null,
+            endDate: null
         };
     }
     public render(): JSX.Element {
-        const { firstDayOfWeek, value } = this.state;
+        const { firstDayOfWeek, startDate, endDate } = this.state;
         return (
             <>
                 <DatePicker
                     className={controlClass.control}
-                    label="Search By DatePicker"
+                    label="Start Date"
                     isRequired={false}
                     allowTextInput={true}
                     firstDayOfWeek={firstDayOfWeek}
                     strings={DayPickerStrings}
-                    value={value!}
-                    onSelectDate={this.onSelectDate}
+                    value={startDate!}
+                    onSelectDate={this.startDateSelection}
+                />
+                <DatePicker
+                    className={controlClass.control}
+                    label="End Date"
+                    isRequired={false}
+                    allowTextInput={true}
+                    firstDayOfWeek={firstDayOfWeek}
+                    strings={DayPickerStrings}
+                    value={endDate!}
+                    onSelectDate={this.endDateSelection}
                 />
                 <DefaultButton onClick={this.onClick} text="Clear" />
             </>
         );
     }
-    private onSelectDate = (date: Date | null | undefined): void => {
-        if (date == null) {
+    private startDateSelection = (startDate?: Date | null | undefined): void => {
+        if (startDate == null) {
             return;
         }
-        this.setState({ value: date });
-        const timeStamp: Date | null | undefined = date;
-        const time: number = new Date(timeStamp).getTime();
-        this.props.datePickerHandler(time);
-    };
-    private onClick = (): void => {
-        this.setState({ value: null });
+        this.setState({ startDate: startDate });
+        const start: Date | null | number = Number(startDate);
+        const end: Date | null | number = Number(this.state.endDate);
+        this.props.datePickerHandler(start, end);
     };
 
+    private endDateSelection = (endDate: Date | null | undefined): void => {
+        if (endDate == null) {
+            return;
+        }
+        this.setState({ endDate: endDate });
+        const end: Date | null | number = Number(endDate);
+        const start: Date | null | number = Number(this.state.startDate);
+        this.props.datePickerHandler(start, end);
+    };
+    private onClick = (): void => {
+        this.setState({ startDate: null, endDate: null });
+    };
 }
