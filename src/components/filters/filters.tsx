@@ -5,15 +5,18 @@ import Options from './options/options';
 import SearchBar from './options/searchBar/searchBar';
 import { Values, Results } from '../../App';
 import DatePickerInput from './options/datePicker/datePicker';
+import { Label } from 'office-ui-fabric-react/lib/Label';
 import _ from 'lodash';
 interface MyFiltersState {
     facilityValue: string;
     levelValue: string;
+    hostValue: string;
     searchValue: string;
-    dateStartValue: number  | undefined;
-    dateEndValue: number | undefined;
-    facilityOption: Array<string>;
-    levelOption: Array<string>;
+    dateStartValue: number | Date | undefined;
+    dateEndValue: number | Date | undefined;
+
+    filterOptions: Array<string[]>;
+    optionLabels: Array<string>;
     error: boolean;
     loading: boolean;
     filteredArray: Array<Values>;
@@ -27,16 +30,18 @@ interface ApiFilters {
     filters: {
         facility: Array<string>;
         level: Array<string>;
+        host: Array<string>;
     };
 }
 export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
     constructor(props: MyFiltersProps) {
         super(props);
         this.state = {
-            facilityOption: [],
-            levelOption: [],
+            filterOptions: [],
+            optionLabels: [],
             facilityValue: '',
             levelValue: '',
+            hostValue: '',
             searchValue: '',
             dateStartValue: undefined,
             dateEndValue: undefined,
@@ -47,34 +52,31 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         this.filterSearchHandler = _.debounce(this.filterSearchHandler, 1500);
     }
     public render(): JSX.Element {
+
         return (
             <>
                 <div className={classes.box}>
                     <h1> Error-LOG SEARCH !</h1>
                     <div className="ms-Grid" dir="1tr">
-                        <div className="ms-Grid-row">
-                            <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg4" >
+                        <div className="ms-Grid-row" style={{ marginBottom: '50px' }}>
+                            {this.state.optionLabels.map((label, index) => <div key={index} className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg4">
+                                <Label>{`Search By ${label}`} </Label>
+                            </div>)}
+                            {this.state.filterOptions.map((options, index) => <div key={index} className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg4">
                                 <Options
-                                    label="Search By Facility"
-                                    options={this.state.facilityOption}
+                                    options={options}
                                     handler={this.optionFilterHandler}
 
                                 />
-                            </div>
-                            <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg4" >
-                                <Options
-                                    label=" Search By Level"
-                                    options={this.state.levelOption}
-                                    handler={this.optionFilterHandler}
-                                />
-
-                            </div>
-                            <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg4" >
-                                <DatePickerInput  handler={this.optionFilterHandler} />
-                            </div>
+                            </div>)}
                         </div>
-
-                    </div>
+                        <div className="ms-Grid" dir="1tr">
+                            <div className="ms-Grid-row">
+                                <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg4" >
+                                    <DatePickerInput handler={this.optionFilterHandler} />
+                                </div>
+                            </div>
+                        </div> </div>
                     <div className="ms-Grid" dir="ltr">
                         <div className="ms-Grid-row">
                             <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg12">
@@ -101,23 +103,29 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         await this.FilterOptionApi();
     };
 
-    private optionFilterHandler = async (option: string , start?: number , end?: number) => {
-        let facility: string = '';
+    private optionFilterHandler = async (option: string, start?: number | Date, end?: number | Date) => {
         let level: string = '';
-        if (this.state.facilityOption.includes(option)) {
-             facility = option;
+        let facility: string = '';
+        let host: string = '';
+
+        if (this.state.filterOptions[0].includes(option)) {
+            level = option;
+        } else if (this.state.filterOptions[1].includes(option)) {
+            host = option;
         } else {
-         level  = option;
+            facility = option;
         }
 
         this.setState({
             facilityValue: facility,
             levelValue: level,
+            hostValue: host,
             dateStartValue: start,
             dateEndValue: end,
             loading: true
         });
-        console.log(start , end);
+
+        console.log(start, end);
 
         const response: Response = await fetch(
             'http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
@@ -130,6 +138,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                 body: JSON.stringify({
                     facility: facility || undefined,
                     level: level || undefined,
+                    host: host || undefined,
                     start_date: start || undefined,
                     end_date: end || undefined
                 })
@@ -158,6 +167,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                 body: JSON.stringify({
                     facility: this.state.facilityValue || undefined,
                     level: this.state.levelValue || undefined,
+                    host: this.state.hostValue || undefined,
                     message: value || undefined
                 })
             });
@@ -176,14 +186,16 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
 
             const repl: Response = await fetch('http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/filter');
             const filterOptions: ApiFilters = await repl.json();
-            const facility: Array<string> = filterOptions.filters.facility;
-            const level: Array<string> = filterOptions.filters.level;
-            facility.unshift('');
-            level.unshift('');
+            const allOptions: Array<string[]> = Object.values(filterOptions.filters);
+            const allLabels: Array<string> = Object.keys(filterOptions.filters);
+
+            for (const values of allOptions) {
+                values.unshift('');
+            }
             this.setState(
                 {
-                    facilityOption: facility,
-                    levelOption: level
+                    filterOptions: allOptions,
+                    optionLabels: allLabels
                 },
             );
 

@@ -89,8 +89,9 @@ export default class DatePickerInput extends React.Component<DatePickerInputProp
             return;
         }
         this.setState({ startDate: startDate });
-        const start: Date | null | number = Number(startDate);
-        const end: Date | null | number = Number(this.state.endDate);
+
+        const start: Date | null | number = Math.floor(Number(startDate) / 1000) ;
+        const end: Date | null | number = Math.floor(Number(this.state.endDate) / 1000);
         this.props.handler('', start, end);
     };
 

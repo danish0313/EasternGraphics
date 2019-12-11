@@ -14,17 +14,15 @@ const stackTokens: IStackTokens = { childrenGap: 20 };
 interface MyOptionsProps {
     options: Array<string>;
     handler: (value: string , start?: number , end?: number) => void;
-    label: string;
 }
 export default class Options extends Component<MyOptionsProps> {
     public render(): JSX.Element {
-
         return (
             <>
+
                 <Stack tokens={stackTokens} >
                     <Dropdown
                         placeholder="Select an option"
-                        label={this.props.label}
                         ariaLabel="Custom dropdown example"
                         options={this.props.options.map((item) => { return { key: item, text: item }; })}
                         styles={dropdownStyles}

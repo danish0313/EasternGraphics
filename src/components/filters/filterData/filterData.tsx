@@ -59,7 +59,7 @@ export default class FilterData extends Component<MyFilterDataProps> {
             { key: 'column5', name: 'TimeStamp', fieldName: 'TimeStamp', minWidth: 100, maxWidth: 100, isResizable: true }
         ];
         return (
-            <div>{this.props.loading ? (<Spinner label="Waiting for Content..." ariaLive="assertive" labelPosition="top" size={SpinnerSize.large} />
+            <div>{this.props.loading  ? (<Spinner label="Waiting for Content..." ariaLive="assertive" labelPosition="top" size={SpinnerSize.large} />
             ) :
                 (
                     <Fabric>
