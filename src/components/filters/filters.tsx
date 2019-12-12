@@ -121,12 +121,13 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             levelValue: level,
             hostValue: host,
             dateStartValue: start,
-            dateEndValue: end,
             loading: true
         });
 
-        console.log(start, end);
-
+       // console.log(new Date(Number(start) * 1000).toLocaleString('en-US').split('/').join('-') ,
+       // new Date(Number(end) * 1000).toLocaleString('en-US').split('/').join('-'));
+       // console.log(new Date(Number(1575443889) * 1000));
+      //  console.log(1575443889);
         const response: Response = await fetch(
             'http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
             {
