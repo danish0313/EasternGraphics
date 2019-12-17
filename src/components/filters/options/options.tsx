@@ -13,7 +13,8 @@ const dropdownStyles: Partial<IDropdownStyles> = {
 const stackTokens: IStackTokens = { childrenGap: 20 };
 interface MyOptionsProps {
     options: Array<string>;
-    handler: (value: string , start?: number , end?: number) => void;
+    label: string;
+    handler: (option: string , key: string | number , value?: string , start?: number , end?: number) => void;
 }
 export default class Options extends Component<MyOptionsProps> {
     public render(): JSX.Element {
@@ -23,8 +24,9 @@ export default class Options extends Component<MyOptionsProps> {
                 <Stack tokens={stackTokens} >
                     <Dropdown
                         placeholder="Select an option"
+                        label={`Search By ${this.props.label}`}
                         ariaLabel="Custom dropdown example"
-                        options={this.props.options.map((item) => { return { key: item, text: item }; })}
+                        options={this.props.options.map((item: string , index: number) => { return { key: `${this.props.label}${index}`  , text: item }; })}
                         styles={dropdownStyles}
                         onChange={this.handleClick}
                     />
@@ -38,6 +40,6 @@ export default class Options extends Component<MyOptionsProps> {
         if (e == null || option == null) {
             return;
         }
-        this.props.handler(option.text);
+        this.props.handler(option.text , option.key);
     };
 }

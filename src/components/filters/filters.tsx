@@ -5,18 +5,16 @@ import Options from './options/options';
 import SearchBar from './options/searchBar/searchBar';
 import { Values, Results } from '../../App';
 import DatePickerInput from './options/datePicker/datePicker';
-import { Label } from 'office-ui-fabric-react/lib/Label';
 import _ from 'lodash';
 interface MyFiltersState {
-    facilityValue: string;
-    levelValue: string;
-    hostValue: string;
-    searchValue: string;
+    option: string;
+    key: string | number;
+    searchValue: string | undefined;
     dateStartValue: number | Date | undefined;
     dateEndValue: number | Date | undefined;
 
-    filterOptions: Array<string[]>;
-    optionLabels: Array<string>;
+    filterOptions: Array<Option>;
+
     error: boolean;
     loading: boolean;
     filteredArray: Array<Values>;
@@ -33,23 +31,27 @@ interface ApiFilters {
         host: Array<string>;
     };
 }
+
+interface Option {
+    values: Array<string>;
+    keys: string;
+}
+
 export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
     constructor(props: MyFiltersProps) {
         super(props);
         this.state = {
             filterOptions: [],
-            optionLabels: [],
-            facilityValue: '',
-            levelValue: '',
-            hostValue: '',
-            searchValue: '',
+            option: '',
+            key: '',
+            searchValue: undefined,
             dateStartValue: undefined,
             dateEndValue: undefined,
             error: false,
             loading: false,
             filteredArray: []
         };
-        this.filterSearchHandler = _.debounce(this.filterSearchHandler, 1500);
+        this.filterHandler = _.debounce(this.filterHandler, 700);
     }
     public render(): JSX.Element {
 
@@ -58,33 +60,30 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                 <div className={classes.box}>
                     <h1> Error-LOG SEARCH !</h1>
                     <div className="ms-Grid" dir="1tr">
-                        <div className="ms-Grid-row" style={{ marginBottom: '50px' }}>
-                            {this.state.optionLabels.map((label, index) => <div key={index} className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg4">
-                                <Label>{`Search By ${label}`} </Label>
-                            </div>)}
-                            {this.state.filterOptions.map((options, index) => <div key={index} className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg4">
-                                <Options
-                                    options={options}
-                                    handler={this.optionFilterHandler}
+                        {this.state.filterOptions.map((options, index) => <div key={index} className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg4">
 
-                                />
-                            </div>)}
-                        </div>
-                        <div className="ms-Grid" dir="1tr">
-                            <div className="ms-Grid-row">
-                                <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg4" >
-                                    <DatePickerInput handler={this.optionFilterHandler} />
-                                </div>
-                            </div>
-                        </div> </div>
-                    <div className="ms-Grid" dir="ltr">
+                            <Options
+                                options={options.values}
+                                handler={this.optionFilterHandler}
+                                label={options.keys}
+                            />
+                        </div>)}
+                    </div>
+                    <div className="ms-Grid" dir="1tr">
                         <div className="ms-Grid-row">
-                            <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg12">
-                                <SearchBar label="Search Your Content!" searchHandler={this.filterSearchHandler} />
+                            <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg4" >
+                                <DatePickerInput handler={this.optionFilterHandler} />
                             </div>
+                        </div>
+                    </div> </div>
+                <div className="ms-Grid" dir="ltr">
+                    <div className="ms-Grid-row">
+                        <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg12">
+                            <SearchBar label="Search Your Content!" searchHandler={this.optionFilterHandler} />
                         </div>
                     </div>
                 </div>
+
                 <div className="ms-Grid" dir="ltr">
                     <div className="ms-Grid-row">
                         <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg12">
@@ -103,31 +102,36 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         await this.FilterOptionApi();
     };
 
-    private optionFilterHandler = async (option: string, start?: number | Date, end?: number | Date) => {
-        let level: string = '';
-        let facility: string = '';
-        let host: string = '';
+    private optionFilterHandler = (option: string, key: string | number, value?: string, start?: number | Date, end?: number | Date, ) => {
 
-        if (this.state.filterOptions[0].includes(option)) {
-            level = option;
-        } else if (this.state.filterOptions[1].includes(option)) {
-            host = option;
-        } else {
-            facility = option;
+        if (option || key) {
+            this.setState({
+                option: option,
+                key: key,
+                dateStartValue: start,
+                dateEndValue: end,
+                loading: true
+            }, this.filterHandler ); // callback function
         }
-
         this.setState({
-            facilityValue: facility,
-            levelValue: level,
-            hostValue: host,
+            searchValue: value,
             dateStartValue: start,
+            dateEndValue: end,
             loading: true
+        }, this.filterHandler ); // callback function
+
+    };
+    private filterHandler = async () => {
+
+        const keys: string = this.state.key.toString().replace(/[0-9]/g, '');
+
+        const body: string = JSON.stringify({
+            [keys]: this.state.option.length > 0 ? this.state.option : undefined,
+            message: this.state.searchValue,
+            start_date: this.state.dateStartValue,
+            end_date: this.state.dateEndValue
         });
 
-       // console.log(new Date(Number(start) * 1000).toLocaleString('en-US').split('/').join('-') ,
-       // new Date(Number(end) * 1000).toLocaleString('en-US').split('/').join('-'));
-       // console.log(new Date(Number(1575443889) * 1000));
-      //  console.log(1575443889);
         const response: Response = await fetch(
             'http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
             {
@@ -136,13 +140,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    facility: facility || undefined,
-                    level: level || undefined,
-                    host: host || undefined,
-                    start_date: start || undefined,
-                    end_date: end || undefined
-                })
+                body: body
             });
         const data: Results = await response.json();
         this.setState(
@@ -153,50 +151,26 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         );
     };
 
-    private filterSearchHandler = async (value: string) => {
-        this.setState({
-            searchValue: value
-        });
-        const response: Response = await fetch(
-            'http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
-            {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    facility: this.state.facilityValue || undefined,
-                    level: this.state.levelValue || undefined,
-                    host: this.state.hostValue || undefined,
-                    message: value || undefined
-                })
-            });
-        const data: Results = await response.json();
-        this.setState(
-            {
-                filteredArray: data.results,
-                loading: false
-            },
-        );
-    };
-
-    // API call for fetching Facility and Level Options
+    // API call for fetching Options
     private FilterOptionApi = async () => {
         try {
 
             const repl: Response = await fetch('http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/filter');
             const filterOptions: ApiFilters = await repl.json();
-            const allOptions: Array<string[]> = Object.values(filterOptions.filters);
-            const allLabels: Array<string> = Object.keys(filterOptions.filters);
+            const arr: Array<Option> = [];
 
-            for (const values of allOptions) {
-                values.unshift('');
+            for (const [key, value] of Object.entries(filterOptions.filters)) {
+                value.unshift('');
+                arr.push({
+                    values: value,
+                    keys: key
+                });
             }
+
             this.setState(
                 {
-                    filterOptions: allOptions,
-                    optionLabels: allLabels
+                    filterOptions: arr
+
                 },
             );
 

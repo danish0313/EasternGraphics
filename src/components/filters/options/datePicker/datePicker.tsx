@@ -32,7 +32,7 @@ export interface DatePickerInputState {
 
 interface DatePickerInputProps {
 
-    handler: (option: string , start: number, end: number) => void;
+    handler: (option: string , key: string | number , value?: string , start?: number, end?: number ) => void;
 
 }
 interface ProcessedStyleSet {
@@ -42,7 +42,8 @@ const controlClass: ProcessedStyleSet = mergeStyleSets({
     control: {
         margin: '0 auto',
         maxWidth: '290px',
-        marginBottom: '10px'
+        marginTop: '20px',
+
     }
 });
 
@@ -80,7 +81,7 @@ export default class DatePickerInput extends React.Component<DatePickerInputProp
                     value={endDate!}
                     onSelectDate={this.endDateSelection}
                 />
-                <DefaultButton onClick={this.onClick} text="Clear" />
+                <DefaultButton style={{marginTop: '5px'}} onClick={this.onClick} text="Clear" />
             </>
         );
     }
@@ -90,9 +91,9 @@ export default class DatePickerInput extends React.Component<DatePickerInputProp
         }
         this.setState({ startDate: startDate });
 
-        const start: Date | null | number = new Date(Number(startDate)).setHours(1, 0, 0) / 1000 ;
+        const start: Date | null | number = new Date(Number(startDate)).setHours(0, 0, 0) / 1000 ;
         const end: Date | null | number = new Date(Number(this.state.endDate)).setHours(23, 59, 59) / 1000;
-        this.props.handler('', start, end);
+        this.props.handler('', '' , '' , start , end);
     };
 
     private endDateSelection = (endDate: Date | null | undefined): void => {
@@ -102,8 +103,8 @@ export default class DatePickerInput extends React.Component<DatePickerInputProp
         this.setState({ endDate: endDate });
 
         const end: Date | null | number = new Date(Number(endDate)).setHours(23, 59, 59) / 1000;
-        const start: Date | null | number =  new Date(Number(this.state.startDate)).setHours(1, 0, 0) / 1000;
-        this.props.handler('' , start, end);
+        const start: Date | null | number =  new Date(Number(this.state.startDate)).setHours(0, 0, 0) / 1000;
+        this.props.handler('' , '' , '', start, end);
     };
     private onClick = (): void => {
         this.setState({ startDate: null, endDate: null });
