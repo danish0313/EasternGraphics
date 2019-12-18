@@ -14,7 +14,7 @@ const stackTokens: IStackTokens = { childrenGap: 20 };
 interface MyOptionsProps {
     options: Array<string>;
     label: string;
-    handler: (option: string , key: string | number , value?: string , start?: number , end?: number) => void;
+    handler: (option: string , key: string  , value?: string , start?: number , end?: number) => void;
 }
 export default class Options extends Component<MyOptionsProps> {
     public render(): JSX.Element {
@@ -40,6 +40,7 @@ export default class Options extends Component<MyOptionsProps> {
         if (e == null || option == null) {
             return;
         }
-        this.props.handler(option.text , option.key);
+        const keys: string = option.key.toString().replace(/[0-9]/, '');
+        this.props.handler(option.text , keys);
     };
 }

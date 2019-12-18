@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 interface MySearchBarProps {
-    searchHandler: (option: string , key: string | number , value?: string , start?: number, end?: number ) => void;
+    searchHandler: (option: string , key: string  , value?: string , start?: number, end?: number ) => void;
     label: string;
 }
 interface MySearchBarState {

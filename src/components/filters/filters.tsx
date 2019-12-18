@@ -108,25 +108,29 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             this.setState({
                 option: option,
                 key: key,
-                dateStartValue: start,
-                dateEndValue: end,
+                dateStartValue: start == null ? this.state.dateStartValue : start,
+                dateEndValue: end == null ? this.state.dateEndValue : end,
                 loading: true
-            }, this.filterHandler ); // callback function
+            },
+             this.filterHandler
+            ); // callback function
         }
-        this.setState({
-            searchValue: value,
-            dateStartValue: start,
-            dateEndValue: end,
-            loading: true
-        }, this.filterHandler ); // callback function
 
+        if (!option || !key) {
+            this.setState({
+                searchValue: value,
+                dateStartValue: start == null ? this.state.dateStartValue : start,
+                dateEndValue: end == null ? this.state.dateEndValue : end,
+                loading: true
+            },
+            this.filterHandler
+            ); // callback function
+        }
     };
     private filterHandler = async () => {
 
-        const keys: string = this.state.key.toString().replace(/[0-9]/g, '');
-
         const body: string = JSON.stringify({
-            [keys]: this.state.option.length > 0 ? this.state.option : undefined,
+            [this.state.key]: this.state.option.length > 0 ? this.state.option : undefined,
             message: this.state.searchValue,
             start_date: this.state.dateStartValue,
             end_date: this.state.dateEndValue

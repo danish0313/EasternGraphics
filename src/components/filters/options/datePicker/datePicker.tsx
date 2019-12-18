@@ -32,7 +32,7 @@ export interface DatePickerInputState {
 
 interface DatePickerInputProps {
 
-    handler: (option: string , key: string | number , value?: string , start?: number, end?: number ) => void;
+    handler: (option: string , key: string , value?: string , start?: number, end?: number ) => void;
 
 }
 interface ProcessedStyleSet {
