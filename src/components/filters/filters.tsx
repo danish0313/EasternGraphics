@@ -10,8 +10,8 @@ interface MyFiltersState {
     option: string;
     key: string | number;
     searchValue: string | undefined;
-    dateStartValue: number | Date | undefined;
-    dateEndValue: number | Date | undefined;
+    dateStartValue: number | Date | undefined | null;
+    dateEndValue: number | Date | undefined | null;
 
     filterOptions: Array<Option>;
 
@@ -72,7 +72,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                     <div className="ms-Grid" dir="1tr">
                         <div className="ms-Grid-row">
                             <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg4" >
-                                <DatePickerInput handler={this.optionFilterHandler} />
+                                <DatePickerInput handler={this.optionFilterHandler} reset={this.resetDatePicker} />
                             </div>
                         </div>
                     </div> </div>
@@ -102,6 +102,10 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         await this.FilterOptionApi();
     };
 
+    private resetDatePicker = (): void => {
+        this.setState({ dateStartValue: null, dateEndValue: null }, this.filterHandler);
+    };
+
     private optionFilterHandler = (option: string, key: string | number, value?: string, start?: number | Date, end?: number | Date, ) => {
 
         if (option || key) {
@@ -112,7 +116,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                 dateEndValue: end == null ? this.state.dateEndValue : end,
                 loading: true
             },
-             this.filterHandler
+                this.filterHandler
             ); // callback function
         }
 
@@ -123,7 +127,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                 dateEndValue: end == null ? this.state.dateEndValue : end,
                 loading: true
             },
-            this.filterHandler
+                this.filterHandler
             ); // callback function
         }
     };
