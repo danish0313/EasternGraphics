@@ -27,12 +27,11 @@ const DayPickerStrings: IDatePickerStrings = {
 export interface DatePickerInputState {
     firstDayOfWeek?: DayOfWeek;
     startDate?: Date | null;
-    endDate?: Date | null;
 }
 
 interface DatePickerInputProps {
 
-    handler: (option: string , key: string , value?: string , start?: number, end?: number ) => void;
+    handler: (option: string , key: string , value?: string , start?: number) => void;
      reset:  () => void;
 
 }
@@ -55,16 +54,16 @@ export default class DatePickerInput extends React.Component<DatePickerInputProp
         this.state = {
             firstDayOfWeek: DayOfWeek.Sunday,
             startDate: null,
-            endDate: null
         };
     }
     public render(): JSX.Element {
-        const { firstDayOfWeek, startDate, endDate } = this.state;
+        const { firstDayOfWeek, startDate } = this.state;
         return (
             <>
+
                 <DatePicker
                     className={controlClass.control}
-                    label="Start Date"
+                    label="Search By Date"
                     isRequired={false}
                     allowTextInput={true}
                     firstDayOfWeek={firstDayOfWeek}
@@ -72,39 +71,18 @@ export default class DatePickerInput extends React.Component<DatePickerInputProp
                     value={startDate!}
                     onSelectDate={this.startDateSelection}
                 />
-                <DatePicker
-                    className={controlClass.control}
-                    label="End Date"
-                    isRequired={false}
-                    allowTextInput={true}
-                    firstDayOfWeek={firstDayOfWeek}
-                    strings={DayPickerStrings}
-                    value={endDate!}
-                    onSelectDate={this.endDateSelection}
-                />
                 <DefaultButton style={{marginTop: '5px'}} onClick={this.props.reset} text="Clear" />
             </>
         );
     }
-    private startDateSelection = (startDate?: Date | null | undefined): void => {
+    private startDateSelection = (startDate: Date | null | undefined): void => {
         if (startDate == null) {
             return;
         }
         this.setState({ startDate: startDate });
 
-        const start: Date | null | number = new Date(Number(startDate)).setHours(0, 0, 0) / 1000 ;
-        const end: Date | null | number = new Date(Number(this.state.endDate)).setHours(23, 59, 59) / 1000;
-        this.props.handler('', '' , '' , start , end);
-    };
+        const start: Date | null | number = new Date(Number(startDate)).setHours(23, 59, 59) / 1000;
 
-    private endDateSelection = (endDate: Date | null | undefined): void => {
-        if (endDate == null) {
-            return;
-        }
-        this.setState({ endDate: endDate });
-
-        const end: Date | null | number = new Date(Number(endDate)).setHours(23, 59, 59) / 1000;
-        const start: Date | null | number =  new Date(Number(this.state.startDate)).setHours(0, 0, 0) / 1000;
-        this.props.handler('' , '' , '', start, end);
+        this.props.handler('' , '' , '', start);
     };
 }

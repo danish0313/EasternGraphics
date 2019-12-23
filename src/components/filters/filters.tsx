@@ -10,9 +10,7 @@ interface MyFiltersState {
     option: string;
     key: string | number;
     searchValue: string | undefined;
-    dateStartValue: number | Date | undefined | null;
     dateEndValue: number | Date | undefined | null;
-
     filterOptions: Array<Option>;
 
     error: boolean;
@@ -45,7 +43,6 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             option: '',
             key: '',
             searchValue: undefined,
-            dateStartValue: undefined,
             dateEndValue: undefined,
             error: false,
             loading: false,
@@ -103,17 +100,16 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
     };
 
     private resetDatePicker = (): void => {
-        this.setState({ dateStartValue: null, dateEndValue: null }, this.filterHandler);
+        this.setState({ dateEndValue: null}, this.filterHandler);
     };
 
-    private optionFilterHandler = (option: string, key: string | number, value?: string, start?: number | Date, end?: number | Date, ) => {
+    private optionFilterHandler = (option: string, key: string | number, value?: string, start?: number | Date ) => {
 
         if (option || key) {
             this.setState({
                 option: option,
                 key: key,
-                dateStartValue: start == null ? this.state.dateStartValue : start,
-                dateEndValue: end == null ? this.state.dateEndValue : end,
+                dateEndValue: start == null ? this.state.dateEndValue : start,
                 loading: true
             },
                 this.filterHandler
@@ -123,8 +119,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         if (!option || !key) {
             this.setState({
                 searchValue: value,
-                dateStartValue: start == null ? this.state.dateStartValue : start,
-                dateEndValue: end == null ? this.state.dateEndValue : end,
+                dateEndValue: start == null ? this.state.dateEndValue : start,
                 loading: true
             },
                 this.filterHandler
@@ -136,8 +131,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         const body: string = JSON.stringify({
             [this.state.key]: this.state.option.length > 0 ? this.state.option : undefined,
             message: this.state.searchValue,
-            start_date: this.state.dateStartValue,
-            end_date: this.state.dateEndValue
+            end_date: this.state.dateEndValue,
         });
 
         const response: Response = await fetch(
