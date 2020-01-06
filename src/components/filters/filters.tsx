@@ -96,7 +96,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         );
     }
     public componentDidMount = async () => {
-        await this.FilterOptionApi();
+         await this.FilterOptionApi();
     };
 
     private resetDatePicker = (): void => {
