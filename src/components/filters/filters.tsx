@@ -106,16 +106,16 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
     };
 
     private resetDatePicker = (): void => {
-        this.setState({ dateEndValue: null }, this.filterHandler);
+        this.setState({ dateStartValue: null , dateEndValue: null }, this.filterHandler);
     };
 
     private optionFilterHandler = (option: string, key: string | number, value?: string, start?: number | Date, end?: number | Date) => {
 
         if (option && key) {
+
             this.setState({
                 options: { ...this.state.options, [key]: option },
-                // copies the old options object and sets the property `key` to
-                // the value `option`
+                // copies the old options object and sets the property `key` to  the value `option`
                 dateStartValue: start == null ? this.state.dateStartValue : start,
                 dateEndValue: end == null ? this.state.dateEndValue : end,
                 loading: true
