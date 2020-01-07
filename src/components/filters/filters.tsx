@@ -12,7 +12,7 @@ interface MyFiltersState {
     searchValue: string | undefined;
     dateStartValue: number | Date | undefined | null;
     dateEndValue: number | Date | undefined | null;
-
+    spinLabel: string;
     filterOptions: Array<Option>;
 
     error: boolean;
@@ -50,6 +50,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             searchValue: undefined,
             dateStartValue: undefined,
             dateEndValue: undefined,
+            spinLabel: '',
             error: false,
             loading: false,
             filteredArray: []
@@ -94,6 +95,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                                 filteredArray={this.state.filteredArray}
                                 arrayWithoutFilter={this.props.arrayWithoutFilter}
                                 loading={this.state.loading}
+                                label={this.state.spinLabel}
                             /></div>
                         </div>
                     </div>
@@ -106,32 +108,34 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
     };
 
     private resetDatePicker = (): void => {
-        this.setState({ dateStartValue: null , dateEndValue: null }, this.filterHandler);
+        this.setState({ dateStartValue: null, dateEndValue: null }, this.filterHandler);
     };
 
     private optionFilterHandler = (option: string, key: string | number, value?: string, start?: number | Date, end?: number | Date) => {
 
         if (option && key) {
 
-            this.setState({
-                options: { ...this.state.options, [key]: option },
-                // copies the old options object and sets the property `key` to  the value `option`
-                dateStartValue: start == null ? this.state.dateStartValue : start,
-                dateEndValue: end == null ? this.state.dateEndValue : end,
-                loading: true
-            },
+            this.setState(
+                {
+                    options: { ...this.state.options, [key]: option },
+                    // copies the old options object and sets the property `key` to  the value `option`
+                    dateStartValue: start == null ? this.state.dateStartValue : start,
+                    dateEndValue: end == null ? this.state.dateEndValue : end,
+                    loading: true
+                },
                 this.filterHandler
             ); // callback function
         }
 
         if (option.length === 0) {
-            this.setState({
-                options: { ...this.state.options, [key]: undefined },
-                searchValue: value,
-                dateStartValue: start == null ? this.state.dateStartValue : start,
-                dateEndValue: start == null ? this.state.dateEndValue : end,
-                loading: true
-            },
+            this.setState(
+                {
+                    options: { ...this.state.options, [key]: undefined },
+                    searchValue: value,
+                    dateStartValue: start == null ? this.state.dateStartValue : start,
+                    dateEndValue: start == null ? this.state.dateEndValue : end,
+                    loading: true
+                },
                 this.filterHandler
             ); // callback function
         }
@@ -151,18 +155,34 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
-            },
+                },
                 body: JSON.stringify(
                     body
                 )
             });
         const data: Results = await response.json();
+
         this.setState(
             {
                 filteredArray: data.results,
                 loading: false
             },
         );
+
+        if (this.state.filteredArray.length === 0) {
+            this.setState(
+                {
+                    loading: true,
+                    filteredArray: [],
+                    spinLabel: 'no matching results found'
+                });
+        } else {
+            this.setState(
+                {
+                    spinLabel: ''
+                });
+        }
+
     };
 
     // API call for fetching Options

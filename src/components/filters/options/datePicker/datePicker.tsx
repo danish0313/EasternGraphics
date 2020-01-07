@@ -83,6 +83,7 @@ export default class DatePickerInput extends React.Component<DatePickerInputProp
 
         const start: Date | null | number = new Date(Number(startDate)).setHours(0, 0, 0) / 1000;
         const end: Date | null | number = new Date(Number(startDate)).setHours(23, 59, 59) / 1000;
+
         this.props.handler('' , '' , '', start , end);
     };
 }

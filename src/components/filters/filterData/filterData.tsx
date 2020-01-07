@@ -9,6 +9,7 @@ interface MyFilterDataProps {
     filteredArray: Array<Values>;
     arrayWithoutFilter: Array<Values>;
     loading: boolean;
+    label: string;
 }
 export interface DetailsListBasicItem {
     key: string;
@@ -58,8 +59,9 @@ export default class FilterData extends Component<MyFilterDataProps> {
             { key: 'column4', name: 'Content', fieldName: 'Content', minWidth: 50, maxWidth: 1300, isResizable: true },
             { key: 'column5', name: 'TimeStamp', fieldName: 'TimeStamp', minWidth: 100, maxWidth: 100, isResizable: true }
         ];
+
         return (
-            <div>{this.props.loading  ? (<Spinner label="Waiting for Content..." ariaLive="assertive" labelPosition="top" size={SpinnerSize.large} />
+            <div>{this.props.loading  ? (<Spinner label={this.props.label} ariaLive="assertive" labelPosition="bottom" size={SpinnerSize.large} />
             ) :
                 (
                     <Fabric>
