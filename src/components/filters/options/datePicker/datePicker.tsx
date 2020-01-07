@@ -31,7 +31,7 @@ export interface DatePickerInputState {
 
 interface DatePickerInputProps {
 
-    handler: (option: string , key: string , value?: string , start?: number) => void;
+    handler: (option: string , key: string , value?: string , start?: number , end?: number) => void;
      reset:  () => void;
 
 }
@@ -81,8 +81,8 @@ export default class DatePickerInput extends React.Component<DatePickerInputProp
         }
         this.setState({ startDate: startDate });
 
-        const start: Date | null | number = new Date(Number(startDate)).setHours(23, 59, 59) / 1000;
-
-        this.props.handler('' , '' , '', start);
+        const start: Date | null | number = new Date(Number(startDate)).setHours(0, 0, 0) / 1000;
+        const end: Date | null | number = new Date(Number(startDate)).setHours(23, 59, 59) / 1000;
+        this.props.handler('' , '' , '', start , end);
     };
 }

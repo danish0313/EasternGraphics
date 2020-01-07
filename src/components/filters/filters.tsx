@@ -7,10 +7,12 @@ import { Values, Results } from '../../App';
 import DatePickerInput from './options/datePicker/datePicker';
 import _ from 'lodash';
 interface MyFiltersState {
-    option: string;
-    key: string | number;
+    options: object;
+
     searchValue: string | undefined;
+    dateStartValue: number | Date | undefined | null;
     dateEndValue: number | Date | undefined | null;
+
     filterOptions: Array<Option>;
 
     error: boolean;
@@ -40,9 +42,13 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         super(props);
         this.state = {
             filterOptions: [],
-            option: '',
-            key: '',
+            options: {
+                level: undefined,
+                facility: undefined,
+                host: undefined
+            },
             searchValue: undefined,
+            dateStartValue: undefined,
             dateEndValue: undefined,
             error: false,
             loading: false,
@@ -96,30 +102,34 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         );
     }
     public componentDidMount = async () => {
-         await this.FilterOptionApi();
+        await this.FilterOptionApi();
     };
 
     private resetDatePicker = (): void => {
-        this.setState({ dateEndValue: null}, this.filterHandler);
+        this.setState({ dateEndValue: null }, this.filterHandler);
     };
 
-    private optionFilterHandler = (option: string, key: string | number, value?: string, start?: number | Date ) => {
+    private optionFilterHandler = (option: string, key: string | number, value?: string, start?: number | Date, end?: number | Date) => {
 
-        if (option || key) {
+        if (option && key) {
             this.setState({
-                option: option,
-                key: key,
-                dateEndValue: start == null ? this.state.dateEndValue : start,
+                options: { ...this.state.options, [key]: option },
+                // copies the old options object and sets the property `key` to
+                // the value `option`
+                dateStartValue: start == null ? this.state.dateStartValue : start,
+                dateEndValue: end == null ? this.state.dateEndValue : end,
                 loading: true
             },
                 this.filterHandler
             ); // callback function
         }
 
-        if (!option || !key) {
+        if (option.length === 0) {
             this.setState({
+                options: { ...this.state.options, [key]: undefined },
                 searchValue: value,
-                dateEndValue: start == null ? this.state.dateEndValue : start,
+                dateStartValue: start == null ? this.state.dateStartValue : start,
+                dateEndValue: start == null ? this.state.dateEndValue : end,
                 loading: true
             },
                 this.filterHandler
@@ -127,12 +137,12 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         }
     };
     private filterHandler = async () => {
-
-        const body: string = JSON.stringify({
-            [this.state.key]: this.state.option.length > 0 ? this.state.option : undefined,
+        const body: object = {
+            ...this.state.options,
             message: this.state.searchValue,
+            start_date: this.state.dateStartValue,
             end_date: this.state.dateEndValue,
-        });
+        };
 
         const response: Response = await fetch(
             'http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/search',
@@ -141,8 +151,10 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
-                },
-                body: body
+            },
+                body: JSON.stringify(
+                    body
+                )
             });
         const data: Results = await response.json();
         this.setState(
