@@ -45,7 +45,7 @@ export default class DialogLargeHeader extends React.PureComponent<DialogLargeHe
         );
     }
     private handleChange = (ev?: React.FormEvent<HTMLElement>, isChecked?: boolean) => {
-          const value: boolean | undefined = isChecked;
+          console.log(isChecked);
     };
 
 }
