@@ -31,8 +31,8 @@ export interface DatePickerInputState {
 
 interface DatePickerInputProps {
 
-    handler: (option: string , key: string , value?: string , start?: number , end?: number) => void;
-     reset:  () => void;
+    handler: (option: string, key: string, value?: string, start?: number, end?: number) => void;
+    reset: () => void;
 
 }
 interface ProcessedStyleSet {
@@ -71,7 +71,7 @@ export default class DatePickerInput extends React.Component<DatePickerInputProp
                     value={startDate!}
                     onSelectDate={this.startDateSelection}
                 />
-                <DefaultButton style={{marginTop: '5px'}} onClick={this.props.reset} text="Clear" />
+                <DefaultButton style={{ marginTop: '5px' }} onClick={this.clearHandler} text="Clear" />
             </>
         );
     }
@@ -84,6 +84,10 @@ export default class DatePickerInput extends React.Component<DatePickerInputProp
         const start: Date | null | number = new Date(Number(startDate)).setHours(0, 0, 0) / 1000;
         const end: Date | null | number = new Date(Number(startDate)).setHours(23, 59, 59) / 1000;
 
-        this.props.handler('' , '' , '', start , end);
+        this.props.handler('', '', '', start, end);
+    };
+    private clearHandler = () => {
+        this.setState({ startDate: null });
+        this.props.reset();
     };
 }

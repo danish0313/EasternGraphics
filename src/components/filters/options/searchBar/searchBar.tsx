@@ -25,13 +25,13 @@ export default class SearchBar extends PureComponent<MySearchBarProps, MySearchB
                     styles={{ root: { width: '60vh', margin: '0 auto', height: 40 } }}
                     placeholder="Search Your Content!"
                     iconProps={{ iconName: 'Filter' }}
-                    onChange={this.handleClick}
-                    onClear={this.handleClick}
+                    onChange={this.handleChange}
+                    onClear={this.handleChange}
                 />
             </>
         );
     }
-    private handleClick = (e: React.ChangeEvent<HTMLInputElement> | undefined, newValue?: string | undefined): void => {
+    private handleChange = (e: React.ChangeEvent<HTMLInputElement> | undefined, newValue?: string | undefined): void => {
         if (e == null) {
             return;
         }
