@@ -39,10 +39,16 @@ export default class DialogLargeHeader extends React.PureComponent<DialogLargeHe
                                 text: 'Not Important',
                             }
                         ]}
-                        onChange={this.handleChange}
+                    //  onChange={this.handleChange}
                     />
 
-                    <TextField styles={{ root: { marginTop: '30px' } }} label="Comments TextArea..." onChange={this.handleClick} multiline={true} rows={3} />
+                    <TextField
+                        styles={{ root: { marginTop: '30px' } }}
+                        label="Comments TextArea..."
+                        //  onChange={this.handleClick}
+                        multiline={true}
+                        rows={3}
+                    />
                     <DialogFooter>
                         <PrimaryButton onClick={this.props.DialogHide} text="Save" />
                         <DefaultButton onClick={this.props.DialogHide} text="Cancel" />
@@ -51,13 +57,13 @@ export default class DialogLargeHeader extends React.PureComponent<DialogLargeHe
             </div>
         );
     }
-    private handleChange = (ev?: React.FormEvent<HTMLElement | HTMLInputElement> | undefined, option?: IChoiceGroupOption | undefined) => {
-        console.log(option);
-    };
-    private handleClick = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement> | undefined, newValue?: string | undefined): void => {
-        if (e == null) {
-            return;
-        }
-        console.log(newValue);
-    };
+    //  private handleChange = (ev?: React.FormEvent<HTMLElement | HTMLInputElement> | undefined, option?: IChoiceGroupOption | undefined) => {
+    //      console.log(option);
+    //   };
+    // private handleClick = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement> | undefined, newValue?: string | undefined): void => {
+    //      if (e == null) {
+    //         return;
+    //     }
+    //     console.log(newValue);
+    //  };
 }
