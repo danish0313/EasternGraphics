@@ -1,34 +1,24 @@
 import React, { Component } from 'react';
-import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
-import { IButtonProps } from 'office-ui-fabric-react/lib/Button';
-
-const overflowProps: IButtonProps = { ariaLabel: 'More commands' };
+import { Link } from 'react-router-dom';
+import { ActionButton, IIconProps } from 'office-ui-fabric-react';
 
 export default class NavBar extends Component {
-    private items: Array<ICommandBarItemProps> = [
-        {
-            key: 'Home',
-            text: 'Home',
-            iconProps: { iconName: 'Home' },
-            onClick: () => console.log('Share')
-        },
-        {
-            key: 'Graph Details',
-            text: 'Graph Details',
-            iconProps: { iconName: 'GitGraph' },
-        },
-
-    ];
     public render(): JSX.Element {
+        const home: IIconProps = { iconName: 'Home' };
+        const graph: IIconProps = { iconName: 'GitGraph' };
+
         return (
-            <div>
-                <CommandBar
-                    items={this.items}
-                    overflowButtonProps={overflowProps}
-                    ariaLabel="Use left and right arrow keys to navigate between commands"
-                />
-            </div>
+            <>
+                <Link to="/">
+                    <ActionButton iconProps={home}>
+                        home
+                </ActionButton>
+                </Link>
+                <Link to="/graph">
+                    <ActionButton iconProps={graph}>
+                        Graph Details
+                </ActionButton> </Link>
+            </>
         );
     }
-
 }
