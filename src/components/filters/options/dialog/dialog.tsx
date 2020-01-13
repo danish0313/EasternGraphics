@@ -1,18 +1,26 @@
 import * as React from 'react';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { ChoiceGroup} from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { Dropdown, IDropdownStyles, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
 export interface DialogLargeHeaderProps {
     dialog: boolean;
     dialogOpen: () => void;
     DialogHide: () => void;
 }
+const dropdownStyles: Partial<IDropdownStyles> = {
+    dropdown: { width: 200 }
+};
 
 export default class DialogLargeHeader extends React.PureComponent<DialogLargeHeaderProps> {
 
     public render(): JSX.Element {
+        const options: Array<IDropdownOption> = [
+            { key: '', text: '' },
+            { key: 'important', text: 'important' },
+            { key: 'not important', text: 'not important' },
+        ];
         return (
             <div>
                 <Dialog
@@ -20,7 +28,7 @@ export default class DialogLargeHeader extends React.PureComponent<DialogLargeHe
                     onDismiss={this.props.DialogHide}
                     dialogContentProps={{
                         type: DialogType.largeHeader,
-                        title: 'Add Comments to ErrosLog',
+                        title: 'Add Comments to Error Log',
                         subText: 'Please enter your Comments for Specific ErrorLogs :)'
                     }}
                     modalProps={{
@@ -28,26 +36,20 @@ export default class DialogLargeHeader extends React.PureComponent<DialogLargeHe
                         styles: { main: { maxWidth: 450 } }
                     }}
                 >
-                    <ChoiceGroup
-                        options={[
-                            {
-                                key: 'Important',
-                                text: 'Important'
-                            },
-                            {
-                                key: 'Not Important',
-                                text: 'Not Important',
-                            }
-                        ]}
-                    //  onChange={this.handleChange}
-                    />
-
                     <TextField
                         styles={{ root: { marginTop: '30px' } }}
                         label="Comments TextArea..."
                         //  onChange={this.handleClick}
                         multiline={true}
                         rows={3}
+                    />
+                    <Dropdown
+                        placeholder="Select an option"
+                        label="Select Importancy of Error !"
+                        defaultSelectedKey=""
+                        options={options}
+                        styles={dropdownStyles}
+                    //  onChange={this.handleChange}
                     />
                     <DialogFooter>
                         <PrimaryButton onClick={this.props.DialogHide} text="Save" />
