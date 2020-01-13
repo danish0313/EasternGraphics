@@ -36,7 +36,7 @@ export default class App extends Component<{}, MyAppState> {
         return (
             <div className="App">
                 <Navbar />
-                <Route exact={true} path="/http://cideploy-nossl.tmp.easterngraphics.com" component={() => <Filters arrayWithoutFilter={this.state.data} />} />
+                <Route exact={true} path="/" component={() => <Filters arrayWithoutFilter={this.state.data} />} />
                 <Route exact={true} path="/graph" component={graphData} />
             </div>
 
