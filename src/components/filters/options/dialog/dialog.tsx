@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { ChoiceGroup} from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 export interface DialogLargeHeaderProps {
