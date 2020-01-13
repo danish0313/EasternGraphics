@@ -31,6 +31,7 @@ export interface Data {
 
 interface MyFilterDataState {
     dialogOpen: boolean;
+    content: string;
 }
 
 export default class FilterData extends Component<MyFilterDataProps, MyFilterDataState> {
@@ -39,6 +40,7 @@ export default class FilterData extends Component<MyFilterDataProps, MyFilterDat
         super(props);
         this.state = {
             dialogOpen: true,
+            content: ''
 
         };
     }
@@ -48,6 +50,9 @@ export default class FilterData extends Component<MyFilterDataProps, MyFilterDat
         const results: Array<Values> = this.props.filteredArray.length > 0 ? this.props.filteredArray : this.props.arrayWithoutFilter;
         const data: Array<Data> = [];
         for (const i of results) {
+
+            const textCopy: () => void = () => this.handleClick(i.content);
+
             data.push({
                 Level: i.level,
                 Facility: i.facility,
@@ -63,7 +68,7 @@ export default class FilterData extends Component<MyFilterDataProps, MyFilterDat
                         iconProps={{ iconName: 'Copy' }}
                         title="Copy"
                         ariaLabel="Copy"
-                        onClick={() => this.handleClick(i.content)}
+                        onClick={textCopy}
                         style={{ marginRight: '30px' }}
                     />),
                 Dialog: (
@@ -76,7 +81,6 @@ export default class FilterData extends Component<MyFilterDataProps, MyFilterDat
                     />)
             });
         }
-
         const columns: Array<DetailsListBasicItem> = [
             { key: 'column1', name: '', fieldName: 'Copy', minWidth: 50, maxWidth: 50, isResizable: true },
             { key: 'column2', name: '', fieldName: 'Dialog', minWidth: 50, maxWidth: 50, isResizable: true },
