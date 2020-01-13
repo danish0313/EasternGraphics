@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
 import Filters from './components/filters/filters';
+import Navbar from './components/navbar/navbar';
 interface MyAppState {
     data: Array<Values>;
-    uniqueFacilities: Array<string>;
-    uniqueLevels: Array<string>;
     error: boolean;
 }
 export interface Values {
@@ -28,14 +27,13 @@ export default class App extends Component<{}, MyAppState> {
         super(props);
         this.state = {
             data: [],
-            uniqueFacilities: [],
-            uniqueLevels: [],
             error: false
         };
     }
     public render(): JSX.Element {
         return (
             <div className="App">
+                <Navbar/>
                 <Filters arrayWithoutFilter={this.state.data} />
             </div>
 
