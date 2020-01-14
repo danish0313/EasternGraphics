@@ -9,7 +9,7 @@ export default class NavBar extends Component {
 
         return (
             <>
-                <Link to="/">
+                <Link to="http://cideploy-nossl.tmp.easterngraphics.com/project-students/cloud-error-log/master/">
                     <ActionButton iconProps={home}>
                         home
                 </ActionButton>
