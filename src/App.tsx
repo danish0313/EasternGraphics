@@ -3,7 +3,7 @@ import './App.css';
 import Filters from './components/filters/filters';
 import Navbar from './components/navbar/navbar';
 import graphData from './components/graphData/graphData';
-import { Route , Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 interface MyAppState {
     data: Array<Values>;
     error: boolean;
@@ -33,12 +33,14 @@ export default class App extends Component<{}, MyAppState> {
         };
     }
     public render(): JSX.Element {
+
+        const filter: () => JSX.Element = () => (<Filters arrayWithoutFilter={this.state.data} />);
         return (
             <div className="App">
                 <Navbar />
                 <Switch>
-                <Route exact={true} path="/" component={() => <Filters arrayWithoutFilter={this.state.data} />} />
-                <Route exact={true} path="/graph" component={graphData} />
+                    <Route exact={true} path="/" component={filter} />
+                    <Route exact={true} path="/graph" component={graphData} />
                 </Switch>
             </div>
 

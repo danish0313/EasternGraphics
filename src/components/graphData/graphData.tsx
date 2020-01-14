@@ -1,9 +1,15 @@
 import * as React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
+interface Data {
+    name: string;
+    uv: number;
+    pv: number;
+    amt: number;
+}
 export default class GraphDetails extends React.PureComponent {
     public render(): JSX.Element {
-        const data = [
+        const data: Array<Data> = [
             {
                 name: 'Page A', uv: 4000, pv: 2400, amt: 2400,
             },
