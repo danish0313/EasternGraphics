@@ -41,7 +41,7 @@ export default class GraphDetails extends React.PureComponent {
                     <div className="ms-Grid-row">
                         <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg12">
                             <LineChart
-                                width={800}
+                                width={500}
                                 height={300}
                                 data={data}
                                 margin={{

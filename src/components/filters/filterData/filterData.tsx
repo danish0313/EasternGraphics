@@ -27,6 +27,7 @@ export interface Data {
     TimeStamp?: string | number;
     Copy?: React.ReactNode;
     Dialog?: React.ReactNode;
+    Count?: React.ReactNode;
 }
 
 interface MyFilterDataState {
@@ -54,6 +55,7 @@ export default class FilterData extends Component<MyFilterDataProps, MyFilterDat
             const textCopy: () => void = () => this.handleClick(i.content);
 
             data.push({
+                Count: (<div className="notification"><span className="countBadge">{i._count} </span> </div>),
                 Level: i.level,
                 Facility: i.facility,
                 Content: (
@@ -78,16 +80,18 @@ export default class FilterData extends Component<MyFilterDataProps, MyFilterDat
                         title="comments"
                         ariaLabel="Comments"
                         style={{ marginRight: '30px' }}
-                    />)
+                    />
+                )
             });
         }
         const columns: Array<DetailsListBasicItem> = [
             { key: 'column1', name: '', fieldName: 'Copy', minWidth: 50, maxWidth: 50, isResizable: true },
-            { key: 'column2', name: '', fieldName: 'Dialog', minWidth: 50, maxWidth: 50, isResizable: true },
+            { key: 'column2', name: '', fieldName: 'Dialog', minWidth: 50, maxWidth: 100, isResizable: true },
             { key: 'column3', name: 'Level', fieldName: 'Level', minWidth: 50, maxWidth: 100, isResizable: true },
             { key: 'column4', name: 'Facility', fieldName: 'Facility', minWidth: 50, maxWidth: 100, isResizable: true },
-            { key: 'column5', name: 'Content', fieldName: 'Content', minWidth: 50, maxWidth: 1300, isResizable: true },
-            { key: 'column6', name: 'TimeStamp', fieldName: 'TimeStamp', minWidth: 100, maxWidth: 100, isResizable: true }
+            { key: 'column5', name: 'Count', fieldName: 'Count', minWidth: 50, maxWidth: 50, isResizable: true },
+            { key: 'column6', name: 'Content', fieldName: 'Content', minWidth: 50, maxWidth: 1300, isResizable: true },
+            { key: 'column7', name: 'TimeStamp', fieldName: 'TimeStamp', minWidth: 100, maxWidth: 100, isResizable: true }
         ];
 
         return (

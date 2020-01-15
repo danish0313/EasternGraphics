@@ -9,6 +9,7 @@ interface MyAppState {
     error: boolean;
 }
 export interface Values {
+    _count: number;
     content: string;
     date: string;
     level?: string;
@@ -16,6 +17,7 @@ export interface Values {
 }
 export interface Results {
     results: [{
+        _count: number;
         content: string;
         date: string;
         level?: string;
