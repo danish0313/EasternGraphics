@@ -4,6 +4,7 @@ import Filters from './components/filters/filters';
 import Navbar from './components/navbar/navbar';
 import graphData from './components/graphData/graphData';
 import { Route, Switch } from 'react-router-dom';
+
 interface MyAppState {
     data: Array<Values>;
     error: boolean;
