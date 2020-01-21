@@ -38,6 +38,7 @@ interface Option {
 }
 
 export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
+    private _isMounted: boolean = false;
     constructor(props: MyFiltersProps) {
         super(props);
         this.state = {
@@ -104,9 +105,13 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         );
     }
     public componentDidMount = async () => {
+        this._isMounted = true;
         await this.FilterOptionApi();
     };
 
+    public componentWillUnmount = () => {
+        this._isMounted = false;
+    };
     private resetDatePicker = (): void => {
         this.setState({ dateStartValue: null, dateEndValue: null }, this.filterHandler);
     };
@@ -162,58 +167,64 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
             });
         const data: Results = await response.json();
 
-        this.setState(
-            {
-                filteredArray: data.results,
-                loading: false
-            },
-        );
+        if (this._isMounted === true) {
+            this.setState(
+                {
+                    filteredArray: data.results,
+                    loading: false
+                },
+            );
 
-        if (this.state.filteredArray.length === 0) {
-            this.setState(
-                {
-                    loading: true,
-                    filteredArray: [],
-                    spinLabel: 'no matching results found'
-                });
-        } else {
-            this.setState(
-                {
-                    spinLabel: ''
-                });
+            if (this.state.filteredArray.length === 0) {
+                this.setState(
+                    {
+                        loading: true,
+                        filteredArray: [],
+                        spinLabel: 'no matching results found'
+                    });
+            } else {
+                this.setState(
+                    {
+                        spinLabel: ''
+                    });
+            }
+
         }
 
     };
 
     // API call for fetching Options
     private FilterOptionApi = async () => {
-        try {
+        if (this._isMounted === true) {
+            try {
 
-            const repl: Response = await fetch('http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/filter');
-            const filterOptions: ApiFilters = await repl.json();
-            const arr: Array<Option> = [];
+                const repl: Response = await fetch('http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/filter');
+                const filterOptions: ApiFilters = await repl.json();
+                const arr: Array<Option> = [];
 
-            for (const [key, value] of Object.entries(filterOptions.filters)) {
-                value.unshift('');
-                arr.push({
-                    values: value,
-                    keys: key
-                });
+                for (const [key, value] of Object.entries(filterOptions.filters)) {
+                    value.unshift('');
+                    arr.push({
+                        values: value,
+                        keys: key
+                    });
+                }
+
+                this.setState(
+                    {
+                        filterOptions: arr
+
+                    },
+                );
+
+            } catch {
+
+                this.setState(
+                    {
+                        error: true
+                    });
             }
 
-            this.setState(
-                {
-                    filterOptions: arr
-
-                },
-            );
-
-        } catch {
-
-            this.setState(
-                {
-                    error: true
-                });
         }
     };
 

@@ -69,8 +69,8 @@ class GraphDetails extends React.PureComponent<RouteComponentProps> {
         if (e === null) {
             return;
         }
-        const text: string = [e].map((x) => (x.activePayload[0].payload.text)).toString();
-        const key: string = [e].map((x) => (x.activePayload[0].payload.key)).toString();
+        const text: string = e.activePayload[0].payload.text.toString();
+        const key: string = e.activePayload[0].payload.key.toString();
         this.props.history.push({
             pathname: '/', state: {
                 key: key,

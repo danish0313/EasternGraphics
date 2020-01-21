@@ -20,7 +20,6 @@ interface MyOptionsProps {
 
 type PropsType = MyOptionsProps & RouteComponentProps<{}>;
 class Options extends Component<PropsType> {
-    private _isMounted: boolean = false;
     public render(): JSX.Element {
         return (
             <>
@@ -40,16 +39,13 @@ class Options extends Component<PropsType> {
 
         );
     }
-    public componentDidMount = () => {
-        this._isMounted = true;
-        if (this.props.history.location.state && this._isMounted === true) {
+        public componentDidMount = () => {
+
+        if (this.props.history.location.state) {
             const text: string = this.props.history.location.state.text;
             const key: string = this.props.history.location.state.key;
             this.props.handler(text, key);
         }
-    };
-    public componentWillUnmount = () => {
-        this._isMounted = false;
     };
     private handleClick = (e?: React.FormEvent<HTMLDivElement> | undefined, option?: IDropdownOption | undefined, index?: number | undefined): void => {
         if (e == null || option == null) {
