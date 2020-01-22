@@ -5,6 +5,7 @@ import Options from './options/options';
 import SearchBar from './options/searchBar/searchBar';
 import { Values, Results } from '../../App';
 import DatePickerInput from './options/datePicker/datePicker';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import _ from 'lodash';
 interface MyFiltersState {
     options: object;
@@ -36,10 +37,10 @@ interface Option {
     values: Array<string>;
     keys: string;
 }
-
-export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
+type PropsType = MyFiltersProps & RouteComponentProps<{}>;
+class Filters extends Component<PropsType, MyFiltersState> {
     private _isMounted: boolean = false;
-    constructor(props: MyFiltersProps) {
+    constructor(props: PropsType) {
         super(props);
         this.state = {
             filterOptions: [],
@@ -59,6 +60,14 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         this.filterHandler = _.debounce(this.filterHandler, 700);
     }
     public render(): JSX.Element {
+        // key and text from react Router history props
+        let key: string = '';
+        let text: string = '';
+
+        if (this.props.history.location.state) {
+            key = this.props.history.location.state.key;
+            text = this.props.history.location.state.text;
+        }
 
         return (
             <>
@@ -71,6 +80,8 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
                                 options={options.values}
                                 handler={this.optionFilterHandler}
                                 label={options.keys}
+                                keys={key}
+                                text={text}
                             />
                         </div>)}
                     </div>
@@ -105,6 +116,7 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
         );
     }
     public componentDidMount = async () => {
+
         this._isMounted = true;
         await this.FilterOptionApi();
     };
@@ -229,3 +241,5 @@ export default class Filters extends Component<MyFiltersProps, MyFiltersState> {
     };
 
 }
+
+export default withRouter(Filters);

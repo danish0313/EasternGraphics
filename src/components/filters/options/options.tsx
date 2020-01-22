@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { IStackTokens, Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Dropdown, IDropdownStyles, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+
 initializeIcons(/* optional base url */);
 const dropdownStyles: Partial<IDropdownStyles> = {
     dropdown: {
@@ -16,17 +16,18 @@ interface MyOptionsProps {
     options: Array<string>;
     label: string;
     handler: (option: string, key: string, value?: string, start?: number, end?: number) => void;
+    keys: string;
+    text: string;
 }
 
-type PropsType = MyOptionsProps & RouteComponentProps<{}>;
-class Options extends Component<PropsType> {
+class Options extends Component<MyOptionsProps> {
     public render(): JSX.Element {
         return (
             <>
 
                 <Stack tokens={stackTokens} >
                     <Dropdown
-                        placeholder="Select an option"
+                        placeholder={this.props.options.includes(this.props.text) && this.props.text.length > 0 ? this.props.text : 'Select an option'}
                         label={`Search By ${this.props.label}`}
                         ariaLabel="Custom dropdown example"
                         options={this.props.options.map((item: string, index: number) => { return { key: `${this.props.label}${index}`, text: item }; })}
@@ -39,11 +40,10 @@ class Options extends Component<PropsType> {
 
         );
     }
-        public componentDidMount = () => {
-
-        if (this.props.history.location.state) {
-            const text: string = this.props.history.location.state.text;
-            const key: string = this.props.history.location.state.key;
+    public componentDidMount = () => {
+        if (this.props.text && this.props.keys) {
+            const text: string = this.props.text;
+            const key: string = this.props.keys;
             this.props.handler(text, key);
         }
     };
@@ -56,4 +56,4 @@ class Options extends Component<PropsType> {
 
     };
 }
-export default withRouter(Options);
+export default Options;
