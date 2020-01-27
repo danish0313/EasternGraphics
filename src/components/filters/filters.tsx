@@ -37,7 +37,7 @@ interface Option {
     values: Array<string>;
     keys: string;
 }
-type PropsType = MyFiltersProps & RouteComponentProps<{}>;
+type PropsType = MyFiltersProps & RouteComponentProps<{text:string,key: string}>;
 class Filters extends Component<PropsType, MyFiltersState> {
     private _isMounted: boolean = false;
     constructor(props: PropsType) {

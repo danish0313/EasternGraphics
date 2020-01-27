@@ -61,7 +61,7 @@ class GraphDetails extends React.PureComponent<RouteComponentProps> {
                                 margin={{
                                     top: 5, right: 30, left: 20, bottom: 5,
                                 }}
-                                onClick={this.handleClick}
+                               // onClick={this.handleClick}
                             >
                                 <CartesianGrid strokeDasharray="5 5" />
                                 <XAxis dataKey="name" />
@@ -69,13 +69,13 @@ class GraphDetails extends React.PureComponent<RouteComponentProps> {
                                 <Tooltip
                                 />
                                 <Legend />
-                                <Line type="monotone" name="Info" dataKey="info" stroke="#8884d8" activeDot={{ r: 4 }} />
-                                <Line type="monotone" name="Warning" dataKey="warning" stroke="#605E5C" activeDot={{ r: 4 }} />
-                                <Line type="monotone" name="Debug" dataKey="debug" stroke="grey" activeDot={{ r: 4 }} />
-                                <Line type="monotone" name="Error" dataKey="error" stroke="red" activeDot={{ r: 4 }} />
-                                <Line type="monotone" name="Notice" dataKey="notice" stroke="green" activeDot={{ r: 4 }} />
-                                <Line type="monotone" name="Config" dataKey="config" stroke="lightblue" activeDot={{ r: 4 }} />
-                                <Line type="monotone" name="Fatal" dataKey="fatal" stroke="pink" activeDot={{ r: 4 }} />
+                                <Line type="monotone" name="Info" dataKey="info" stroke="#8884d8" activeDot={{ r: 4 , onClick:(xvalue: any, yvalue: any) => console.log(xvalue , yvalue) }}  />
+                                <Line type="monotone" name="Warning" dataKey="warning" stroke="#605E5C" activeDot={{ r: 4 , onClick:(xvalue: any, yvalue: any) => console.log(xvalue , yvalue) }}   />
+                                <Line type="monotone" name="Debug" dataKey="debug" stroke="grey" activeDot={{ r: 4 , onClick:(xvalue: any, yvalue: any) => console.log(xvalue , yvalue) }}  />
+                                <Line type="monotone" name="Error" dataKey="error" stroke="red" activeDot={{ r: 4, onClick:(xvalue: any, yvalue: any) => console.log(xvalue , yvalue) }}  />
+                                <Line type="monotone" name="Notice" dataKey="notice" stroke="green" activeDot={{ r: 4 , onClick:(xvalue: any, yvalue: any) => console.log(xvalue , yvalue) }}  />
+                                <Line type="monotone" name="Config" dataKey="config" stroke="lightblue" activeDot={{ r: 4 , onClick:(xvalue: any, yvalue: any) => console.log(xvalue , yvalue) }} />
+                                <Line type="monotone" name="Fatal" dataKey="fatal" stroke="pink" activeDot={{ r: 4 , onClick:(xvalue: any, yvalue: any) => console.log(xvalue , yvalue) }}  />
                             </LineChart>
                         </div>
                     </div>
