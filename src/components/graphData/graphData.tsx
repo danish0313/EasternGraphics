@@ -61,7 +61,7 @@ class GraphDetails extends React.PureComponent<RouteComponentProps> {
                                 margin={{
                                     top: 5, right: 30, left: 20, bottom: 5,
                                 }}
-                            // onClick={this.handleClick}
+                            onClick={this.handleClick}
                             >
                                 <CartesianGrid strokeDasharray="5 5" />
                                 <XAxis dataKey="name" />
