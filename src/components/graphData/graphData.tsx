@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, RechartsFunction } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 interface Data {
     name: string;
@@ -158,7 +158,7 @@ class GraphDetails extends React.PureComponent<RouteComponentProps> {
         const text: string = y.dataKey.toLocaleUpperCase();
         const key: string = y.payload.key;
         const date: number = y.payload.date;
-       // console.log(text, key, date);
+        // console.log(text, key, date);
         this.props.history.push({
             pathname: '/', state: {
                 key: key,
