@@ -33,20 +33,20 @@ class GraphDetails extends React.PureComponent<RouteComponentProps> {
     public render(): JSX.Element {
         const data: Array<Data> = [
             {
-                name: 'Mon', date: '12-4-2019', info: 4000, debug: 2400, warning: 2400, error: 200, notice: 700,
-                config: 300, fatal: 100, key: 'level', text: 'info', stroke: '#0078D4'
+                name: 'Mon', date: '12-4-2019', info: 4000, debug: 2400, warning: 2400, error: 300, notice: 700,
+                config: 3500, fatal: 2000, key: 'level', text: 'info', stroke: '#0078D4'
             },
             {
-                name: 'Tue', date: '10-20-2019', info: 3000, debug: 1398, warning: 200, error: 500, notice: 400,
-                config: 500, fatal: 400, key: 'level', text: 'debug', stroke: 'green'
+                name: 'Tue', date: '10-20-2019', info: 3000, debug: 1398, warning: 250, error: 2000, notice: 900,
+                config: 5000, fatal: 4400, key: 'level', text: 'debug', stroke: 'green'
             },
             {
-                name: 'Wed', date: '10-21-2019', info: 2000, debug: 9800, warning: 7800, error: 400, notice: 100,
+                name: 'Wed', date: '10-21-2019', info: 2000, debug: 9800, warning: 7800, error: 400, notice: 250,
                 config: 900, fatal: 100, key: 'level', text: 'warning', stroke: 'brown'
             },
             {
-                name: 'Tur', date: '10-22-2019', info: 2780, debug: 3908, warning: 8450, error: 700, notice: 600,
-                config: 2000, fatal: 500, key: 'level', text: 'error', stroke: 'red'
+                name: 'Tur', date: '10-22-2019', info: 2780, debug: 3908, warning: 8450, error: 1200, notice: 200,
+                config: 2000, fatal: 800, key: 'level', text: 'error', stroke: 'red'
             },
             {
                 name: 'Fri', date: '10-26-2019', info: 1890, debug: 4800, warning: 7900, error: 400, notice: 1100,
@@ -57,8 +57,8 @@ class GraphDetails extends React.PureComponent<RouteComponentProps> {
                 config: 800, fatal: 1600, key: 'level', text: 'config', stroke: 'grey'
             },
             {
-                name: 'Sun', date: '10-28-2019', info: 3490, debug: 4300, warning: 400, error: 200, notice: 700,
-                config: 500, fatal: 400, key: 'level', text: 'fatal', stroke: 'black'
+                name: 'Sun', date: '10-28-2019', info: 3490, debug: 4300, warning: 800, error: 1100, notice: 1600,
+                config: 200, fatal: 550, key: 'level', text: 'fatal', stroke: 'black'
             },
         ];
 
@@ -110,8 +110,8 @@ class GraphDetails extends React.PureComponent<RouteComponentProps> {
                     <div className="ms-Grid-row">
                         <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg12">
                             <LineChart
-                                width={1000}
-                                height={800}
+                                width={1200}
+                                height={650}
                                 data={data}
                                 margin={{
                                     top: 5, right: 30, left: 20, bottom: 5,
