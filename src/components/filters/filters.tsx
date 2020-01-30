@@ -37,7 +37,7 @@ interface Option {
     values: Array<string>;
     keys: string;
 }
-type PropsType = MyFiltersProps & RouteComponentProps<{ text: string, key: string }>;
+type PropsType = MyFiltersProps & RouteComponentProps<{ text: string, key: string , date: string }>;
 class Filters extends Component<PropsType, MyFiltersState> {
     private _isMounted: boolean = false;
     constructor(props: PropsType) {
@@ -63,12 +63,13 @@ class Filters extends Component<PropsType, MyFiltersState> {
         // key and text from react Router history props
         let key: string = '';
         let text: string = '';
+        let date: Date | null  = null;
 
         if (this.props.history.location.state) {
             key = this.props.history.location.state.key;
             text = this.props.history.location.state.text;
+            date =  new Date(this.props.history.location.state.date);
         }
-
         return (
             <>
                 <div className={classes.box}>
@@ -88,7 +89,7 @@ class Filters extends Component<PropsType, MyFiltersState> {
                     <div className="ms-Grid" dir="1tr">
                         <div className="ms-Grid-row">
                             <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg4" >
-                                <DatePickerInput handler={this.optionFilterHandler} reset={this.resetDatePicker} />
+                                <DatePickerInput date={date} handler={this.optionFilterHandler} reset={this.resetDatePicker} />
                             </div>
                         </div>
                     </div> </div>
