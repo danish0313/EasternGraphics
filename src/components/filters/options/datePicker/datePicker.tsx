@@ -33,6 +33,7 @@ interface DatePickerInputProps {
 
     handler: (option: string, key: string, value?: string, start?: number, end?: number) => void;
     reset: () => void;
+    date: Date | null;
 
 }
 interface ProcessedStyleSet {
@@ -46,8 +47,8 @@ const controlClass: ProcessedStyleSet = mergeStyleSets({
 
     }
 });
-
 export default class DatePickerInput extends React.Component<DatePickerInputProps, DatePickerInputState> {
+    private date: Date | null =  this.props.date;
     constructor(props: DatePickerInputProps) {
         super(props);
 
@@ -57,6 +58,7 @@ export default class DatePickerInput extends React.Component<DatePickerInputProp
         };
     }
     public render(): JSX.Element {
+
         const { firstDayOfWeek, startDate } = this.state;
         return (
             <>
@@ -68,17 +70,26 @@ export default class DatePickerInput extends React.Component<DatePickerInputProp
                     allowTextInput={true}
                     firstDayOfWeek={firstDayOfWeek}
                     strings={DayPickerStrings}
-                    value={startDate!}
+                    value={this.date ? this.date : startDate!}
                     onSelectDate={this.startDateSelection}
                 />
                 <DefaultButton style={{ marginTop: '5px' }} onClick={this.clearHandler} text="Clear" />
             </>
         );
     }
+    public componentDidMount = () => {
+        if (this.date) {
+            const start: Date | null | number = new Date(Number(this.date)).setHours(0, 0, 0) / 1000;
+            const end: Date | null | number = new Date(Number(this.date)).setHours(23, 59, 59) / 1000;
+            this.props.handler('', '', '', start, end);
+        }
+    };
+
     private startDateSelection = (startDate: Date | null | undefined): void => {
         if (startDate == null) {
             return;
         }
+
         this.setState({ startDate: startDate });
 
         const start: Date | null | number = new Date(Number(startDate)).setHours(0, 0, 0) / 1000;
@@ -88,6 +99,7 @@ export default class DatePickerInput extends React.Component<DatePickerInputProp
     };
     private clearHandler = () => {
         this.setState({ startDate: null });
+        this.date = null;
         this.props.reset();
     };
 }
