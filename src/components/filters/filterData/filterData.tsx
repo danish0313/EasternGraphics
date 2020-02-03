@@ -94,12 +94,21 @@ export default class FilterData extends Component<MyFilterDataProps, MyFilterDat
             { key: 'column7', name: 'TimeStamp', fieldName: 'TimeStamp', minWidth: 100, maxWidth: 100, isResizable: true }
         ];
 
+        let dataNotFound: JSX.Element | string =  '';
+
+        if (this.props.label) {
+            dataNotFound = (<p style={{color: '#0078D4'}}>{this.props.label} </p>);
+
+        } else {
+            dataNotFound = (<Spinner ariaLive="assertive" labelPosition="bottom" size={SpinnerSize.large} />);
+        }
+
         return (
             <>
                 <DialogLargeHeader dialog={this.state.dialogOpen} dialogOpen={this.showDialog} DialogHide={this.closeDialog} />
 
-                <div>{this.props.loading ? (<Spinner label={this.props.label} ariaLive="assertive" labelPosition="bottom" size={SpinnerSize.large} />
-                ) :
+                <div>{this.props.loading ? dataNotFound
+                    :
                     (
                         <Fabric>
                             <DetailsList
