@@ -28,6 +28,7 @@ interface Label {
 
 // for  css underline
 let color: string = '';
+let name: string = '';
 class GraphDetails extends React.PureComponent<RouteComponentProps> {
 
     public render(): JSX.Element {
@@ -86,7 +87,7 @@ class GraphDetails extends React.PureComponent<RouteComponentProps> {
                             <div style={{ fontWeight: 'bold' }}>{payload[0].payload.date}</div>
                             <div style={{ fontWeight: 'bold' }}>{label} </div>
                             <hr />
-                            <div> {payload.map((x: Data) =>
+                            <div> {payload.filter((x: Data) => x.name === name).map((x: Data) =>
                                 <p
                                     key={x.name}
                                     style={{ color: `${x.color}`, fontWeight: 'bold', borderBottom: x.color === color ? '3px double' : 'none' }}
@@ -134,9 +135,8 @@ class GraphDetails extends React.PureComponent<RouteComponentProps> {
                                     stroke={lines.stroke}
                                     label={<CustomizedLabel />}
                                     strokeWidth={2}
-                                    activeDot={{ onClick: this.handleClick }}
+                                    activeDot={{ onClick: this.handleClick, onMouseOver: this.onMouseOver }}
                                     onMouseOver={this.onMouseOver}
-                                    dot={false}
                                 />))}
                             </LineChart>
                         </div>
@@ -146,9 +146,9 @@ class GraphDetails extends React.PureComponent<RouteComponentProps> {
         );
     }
 
-    private onMouseOver = (e: any) => {
-        color = e.stroke;
-
+    private onMouseOver = (e: any, y: any) => {
+        color = e.stroke || y.fill;
+        name = e.name || y.dataKey;
     };
     private handleClick = (x: string, y: any) => {
 
