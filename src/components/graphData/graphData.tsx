@@ -1,6 +1,11 @@
 import * as React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { Dropdown, IDropdownStyles, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+
+interface GraphState {
+    option: string;
+}
 interface Data {
     name: string;
     info: number;
@@ -26,10 +31,24 @@ interface Label {
     y?: string;
 }
 
+const dropdownStyles: Partial<IDropdownStyles> = {
+    dropdown: {
+        width: 250,
+        margin: '0 auto',
+        paddingBottom: '20px;'
+    }
+};
+
 // for  css underline
 let color: string = '';
 let name: string = '';
-class GraphDetails extends React.PureComponent<RouteComponentProps> {
+class GraphDetails extends React.PureComponent<RouteComponentProps, GraphState> {
+    constructor(props: RouteComponentProps) {
+        super(props);
+        this.state = {
+            option: ''
+        };
+    }
 
     public render(): JSX.Element {
         const data: Array<Data> = [
@@ -84,7 +103,6 @@ class GraphDetails extends React.PureComponent<RouteComponentProps> {
 
                     return (
                         <div style={{ background: 'linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)', width: '15vh', padding: '10px' }}>
-                            <div style={{ fontWeight: 'bold' }}>{payload[0].payload.date}</div>
                             <div style={{ fontWeight: 'bold' }}>{label} </div>
                             <hr />
                             <div> {payload.filter((x: Data) => x.name === name).map((x: Data) =>
@@ -102,14 +120,21 @@ class GraphDetails extends React.PureComponent<RouteComponentProps> {
                 return null;
             }
         }
-
         return (
             <div>
                 <h1 style={{ textAlign: 'center', color: '#605E5C' }}> Graph Details </h1>
 
                 <div className="ms-Grid" dir="ltr">
                     <div className="ms-Grid-row">
-                        <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg12">
+                        <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg8" style={{ textAlign: 'center' }}>
+                            <Dropdown
+                                label="Select Week , Month , Year for Graph"
+                                options={[{ key: 'week', text: 'week' },
+                                { key: 'month', text: 'month' },
+                                { key: 'year', text: 'year' }]}
+                                styles={dropdownStyles}
+                                onChange={this.GraphHandler}
+                            />
                             <LineChart
                                 width={1200}
                                 height={650}
@@ -119,7 +144,7 @@ class GraphDetails extends React.PureComponent<RouteComponentProps> {
                                 }}
                             >
                                 <CartesianGrid strokeDasharray="5 5" />
-                                <XAxis dataKey="name" height={60} />
+                                <XAxis tickFormatter={this.formatXAxis} dataKey="date" height={60} />
                                 <YAxis />
                                 <Tooltip
                                     content={<CustomTooltip
@@ -140,11 +165,44 @@ class GraphDetails extends React.PureComponent<RouteComponentProps> {
                                 />))}
                             </LineChart>
                         </div>
+
                     </div>
                 </div>
             </div>
         );
     }
+
+    private formatXAxis = (tickItem: string) => {
+
+        const d: Date = new Date(tickItem);
+        if (this.state.option === '') {
+            return tickItem;
+        }
+        if (this.state.option === 'week') {
+
+            return d.toLocaleString('default', { weekday: 'long' });
+        }
+        if (this.state.option === 'month') {
+
+            return d.toLocaleString('default', { month: 'long' });
+
+        }
+        if (this.state.option === 'year') {
+            return d.getUTCFullYear();
+        }
+
+    };
+
+    private GraphHandler = (e?: React.FormEvent<HTMLDivElement> | undefined, option?: IDropdownOption | undefined, index?: number | undefined): void => {
+        if (e == null || option == null) {
+            return;
+        }
+        const text: string = option.text;
+        this.setState({
+
+            option: text
+        });
+    };
 
     private onMouseOver = (e: any, y: any) => {
         color = e.stroke || y.fill;
