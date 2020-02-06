@@ -53,31 +53,31 @@ class GraphDetails extends React.PureComponent<RouteComponentProps, GraphState> 
     public render(): JSX.Element {
         const data: Array<Data> = [
             {
-                name: 'Mon', date: '12-4-2019', info: 4000, debug: 2400, warning: 2400, error: 300, notice: 700,
+                name: 'Mon', date: '10-21-2019', info: 4000, debug: 2400, warning: 2400, error: 300, notice: 700,
                 config: 3500, fatal: 2000, key: 'level', text: 'info', stroke: '#0078D4'
             },
             {
-                name: 'Tue', date: '10-20-2019', info: 3000, debug: 1398, warning: 250, error: 2000, notice: 900,
+                name: 'Tue', date: '10-22-2019', info: 3000, debug: 1398, warning: 250, error: 2000, notice: 900,
                 config: 5000, fatal: 4400, key: 'level', text: 'debug', stroke: 'green'
             },
             {
-                name: 'Wed', date: '10-21-2019', info: 2000, debug: 9800, warning: 7800, error: 400, notice: 250,
+                name: 'Wed', date: '10-23-2019', info: 2000, debug: 9800, warning: 7800, error: 400, notice: 250,
                 config: 900, fatal: 100, key: 'level', text: 'warning', stroke: 'brown'
             },
             {
-                name: 'Tur', date: '10-22-2019', info: 2780, debug: 3908, warning: 8450, error: 1200, notice: 200,
+                name: 'Tur', date: '10-24-2019', info: 2780, debug: 3908, warning: 8450, error: 1200, notice: 200,
                 config: 2000, fatal: 800, key: 'level', text: 'error', stroke: 'red'
             },
             {
-                name: 'Fri', date: '10-26-2019', info: 1890, debug: 4800, warning: 7900, error: 400, notice: 1100,
+                name: 'Fri', date: '10-25-2019', info: 1890, debug: 4800, warning: 7900, error: 400, notice: 1100,
                 config: 200, fatal: 600, key: 'level', text: 'notice', stroke: 'darkblue'
             },
             {
-                name: 'Sat', date: '10-27-2019', info: 2390, debug: 3800, warning: 9200, error: 800, notice: 300,
+                name: 'Sat', date: '10-26-2019', info: 2390, debug: 3800, warning: 9200, error: 800, notice: 300,
                 config: 800, fatal: 1600, key: 'level', text: 'config', stroke: 'grey'
             },
             {
-                name: 'Sun', date: '10-28-2019', info: 3490, debug: 4300, warning: 800, error: 1100, notice: 1600,
+                name: 'Sun', date: '10-27-2019', info: 3490, debug: 4300, warning: 800, error: 1100, notice: 1600,
                 config: 200, fatal: 550, key: 'level', text: 'fatal', stroke: 'black'
             },
         ];
@@ -127,14 +127,6 @@ class GraphDetails extends React.PureComponent<RouteComponentProps, GraphState> 
                 <div className="ms-Grid" dir="ltr">
                     <div className="ms-Grid-row">
                         <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg8" style={{ textAlign: 'center' }}>
-                            <Dropdown
-                                label="Select Week , Month , Year for Graph"
-                                options={[{ key: 'week', text: 'week' },
-                                { key: 'month', text: 'month' },
-                                { key: 'year', text: 'year' }]}
-                                styles={dropdownStyles}
-                                onChange={this.GraphHandler}
-                            />
                             <LineChart
                                 width={1200}
                                 height={650}
@@ -144,7 +136,7 @@ class GraphDetails extends React.PureComponent<RouteComponentProps, GraphState> 
                                 }}
                             >
                                 <CartesianGrid strokeDasharray="5 5" />
-                                <XAxis tickFormatter={this.formatXAxis} dataKey="date" height={60} />
+                                <XAxis tickFormatter={this.formatXAxis} tickSize={20} dataKey="date" height={60} />
                                 <YAxis />
                                 <Tooltip
                                     content={<CustomTooltip
@@ -164,6 +156,18 @@ class GraphDetails extends React.PureComponent<RouteComponentProps, GraphState> 
                                     onMouseOver={this.onMouseOver}
                                 />))}
                             </LineChart>
+
+                        </div>
+
+                        <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg4" style={{ textAlign: 'center' }}>
+                            <Dropdown
+                                label="Select Week , Month , Year for Graph"
+                                options={[{ key: 'week', text: 'week' },
+                                { key: 'month', text: 'month' },
+                                { key: 'year', text: 'year' }]}
+                                styles={dropdownStyles}
+                                onChange={this.GraphHandler}
+                            />
                         </div>
 
                     </div>
@@ -184,11 +188,11 @@ class GraphDetails extends React.PureComponent<RouteComponentProps, GraphState> 
         }
         if (this.state.option === 'month') {
 
-            return d.toLocaleString('default', { month: 'long' });
+            return ['Jan', 'Feb', 'Mar'];
 
         }
         if (this.state.option === 'year') {
-            return d.getUTCFullYear();
+            return d.toLocaleString('default', { year: 'numeric' });
         }
 
     };
