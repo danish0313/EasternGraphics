@@ -37,7 +37,7 @@ interface Option {
     values: Array<string>;
     keys: string;
 }
-type PropsType = MyFiltersProps & RouteComponentProps<{ text: string, key: string , date: string }>;
+type PropsType = MyFiltersProps & RouteComponentProps<{ text: string, key: string, date: string }>;
 class Filters extends Component<PropsType, MyFiltersState> {
     private _isMounted: boolean = false;
     constructor(props: PropsType) {
@@ -58,17 +58,18 @@ class Filters extends Component<PropsType, MyFiltersState> {
             filteredArray: []
         };
         this.filterHandler = _.debounce(this.filterHandler, 700);
+        this.FilterOptionApi = _.debounce(this.FilterOptionApi, 200);
     }
     public render(): JSX.Element {
         // key and text from react Router history props
         let key: string = '';
         let text: string = '';
-        let date: Date | null  = null;
+        let date: Date | null = null;
 
         if (this.props.history.location.state) {
             key = this.props.history.location.state.key;
             text = this.props.history.location.state.text;
-            date =  new Date(this.props.history.location.state.date);
+            date = new Date(this.props.history.location.state.date);
         }
         return (
             <>
