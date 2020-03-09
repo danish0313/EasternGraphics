@@ -53,31 +53,31 @@ class GraphDetails extends React.PureComponent<RouteComponentProps, GraphState> 
     public render(): JSX.Element {
         const data: Array<Data> = [
             {
-                name: 'Mon', date: '10-21-2019', info: 4000, debug: 2400, warning: 2400, error: 300, notice: 700,
+                name: 'Mon', date: '1-01-2020', info: 4000, debug: 2400, warning: 2400, error: 300, notice: 700,
                 config: 3500, fatal: 2000, key: 'level', text: 'info', stroke: '#0078D4'
             },
             {
-                name: 'Tue', date: '10-22-2019', info: 3000, debug: 1398, warning: 250, error: 2000, notice: 900,
+                name: 'Tue', date: '1-02-2020', info: 3000, debug: 1398, warning: 250, error: 2000, notice: 900,
                 config: 5000, fatal: 4400, key: 'level', text: 'debug', stroke: 'green'
             },
             {
-                name: 'Wed', date: '10-23-2019', info: 2000, debug: 9800, warning: 7800, error: 400, notice: 250,
+                name: 'Wed', date: '1-03-2020', info: 2000, debug: 9800, warning: 7800, error: 400, notice: 250,
                 config: 900, fatal: 100, key: 'level', text: 'warning', stroke: 'brown'
             },
             {
-                name: 'Tur', date: '10-24-2019', info: 2780, debug: 3908, warning: 8450, error: 1200, notice: 200,
+                name: 'Tur', date: '1-04-2020', info: 2780, debug: 3908, warning: 8450, error: 1200, notice: 200,
                 config: 2000, fatal: 800, key: 'level', text: 'error', stroke: 'red'
             },
             {
-                name: 'Fri', date: '10-25-2019', info: 1890, debug: 4800, warning: 7900, error: 400, notice: 1100,
+                name: 'Fri', date: '1-05-2020', info: 1890, debug: 4800, warning: 7900, error: 400, notice: 1100,
                 config: 200, fatal: 600, key: 'level', text: 'notice', stroke: 'darkblue'
             },
             {
-                name: 'Sat', date: '10-26-2019', info: 2390, debug: 3800, warning: 9200, error: 800, notice: 300,
+                name: 'Sat', date: '1-06-2020', info: 2390, debug: 3800, warning: 9200, error: 800, notice: 300,
                 config: 800, fatal: 1600, key: 'level', text: 'config', stroke: 'grey'
             },
             {
-                name: 'Sun', date: '10-27-2019', info: 3490, debug: 4300, warning: 800, error: 1100, notice: 1600,
+                name: 'Sun', date: '1-07-2020', info: 3490, debug: 4300, warning: 800, error: 1100, notice: 1600,
                 config: 200, fatal: 550, key: 'level', text: 'fatal', stroke: 'black'
             },
         ];

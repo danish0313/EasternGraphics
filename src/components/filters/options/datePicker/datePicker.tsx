@@ -79,8 +79,8 @@ export default class DatePickerInput extends React.Component<DatePickerInputProp
     }
     public componentDidMount = () => {
         if (this.date) {
-            const start: Date | null | number = new Date(Number(this.date)).setHours(0, 0, 0) / 1000;
-            const end: Date | null | number = new Date(Number(this.date)).setHours(23, 59, 59) / 1000;
+            const start: Date | null | number = new Date(Number(this.date)).setHours(0, 0, 0);
+            const end: Date | null | number = new Date(Number(this.date)).setHours(23, 59, 59);
             this.props.handler('', '', '', start, end);
         }
     };
@@ -92,8 +92,8 @@ export default class DatePickerInput extends React.Component<DatePickerInputProp
 
         this.setState({ startDate: startDate });
 
-        const start: Date | null | number = new Date(Number(startDate)).setHours(0, 0, 0) / 1000;
-        const end: Date | null | number = new Date(Number(startDate)).setHours(23, 59, 59) / 1000;
+        const start: Date | null | number = new Date(Number(startDate)).setHours(0, 0, 0) ;
+        const end: Date | null | number = new Date(Number(startDate)).setHours(23, 59, 59) ;
 
         this.props.handler('', '', '', start, end);
     };

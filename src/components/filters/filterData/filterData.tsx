@@ -63,7 +63,7 @@ export default class FilterData extends Component<MyFilterDataProps, MyFilterDat
                         {i.content}
                     </pre>
                 ),
-                TimeStamp: new Date(Number(i.date) * 1000).toLocaleString('en-US').split('/').join('-'),
+                TimeStamp: new Date(Number(i.date)).toLocaleString('en-US').split('/').join('-'),
                 Copy: (
                     <IconButton
                         key={i.content}
