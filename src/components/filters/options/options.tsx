@@ -7,6 +7,7 @@ initializeIcons(/* optional base url */);
 const dropdownStyles: Partial<IDropdownStyles> = {
     dropdown: {
         width: 290,
+        paddingBottom: '20px',
         margin: '0 auto'
     },
 
