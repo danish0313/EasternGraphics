@@ -5,6 +5,7 @@ import { Dropdown, IDropdownStyles, IDropdownOption } from 'office-ui-fabric-rea
 
 interface GraphState {
     option: string;
+    graphData: Array<string>;
 }
 interface Data {
     name: string;
@@ -46,7 +47,9 @@ class GraphDetails extends React.PureComponent<RouteComponentProps, GraphState> 
     constructor(props: RouteComponentProps) {
         super(props);
         this.state = {
-            option: ''
+            option: '',
+            graphData: []
+
         };
     }
 
@@ -175,6 +178,22 @@ class GraphDetails extends React.PureComponent<RouteComponentProps, GraphState> 
             </div>
         );
     }
+
+    public componentDidMount = async () => {
+        await this.graphDataApi();
+    };
+
+    private graphDataApi = async () => {
+
+        const response: Response = await fetch(
+            'http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/histogram/week');
+        const data: any = await response.json();
+        this.setState(
+            {
+                graphData: data.results
+            },
+        );
+    };
 
     private formatXAxis = (tickItem: string) => {
 
