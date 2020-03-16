@@ -9,12 +9,12 @@ export default class NavBar extends Component {
 
         return (
             <>
-                <Link to="http://cideploy-nossl.tmp.easterngraphics.com/project-students/cloud-error-log/master/">
+                <Link to="/">
                     <ActionButton iconProps={home}>
                         home
                 </ActionButton>
                 </Link>
-                <Link to="http://cideploy-nossl.tmp.easterngraphics.com/project-students/cloud-error-log/master/graph">
+                <Link to="/graph">
                     <ActionButton iconProps={graph}>
                         Graph Details
                 </ActionButton> </Link>
