@@ -58,7 +58,7 @@ class Filters extends Component<PropsType, MyFiltersState> {
             filteredArray: []
         };
         this.filterHandler = _.debounce(this.filterHandler, 700);
-        this.FilterOptionApi = _.debounce(this.FilterOptionApi, 300);
+        this.FilterOptionApi = _.debounce(this.FilterOptionApi, 500);
     }
     public render(): JSX.Element {
         // key and text from react Router history props
@@ -223,7 +223,6 @@ class Filters extends Component<PropsType, MyFiltersState> {
                         keys: key
                     });
                 }
-
                 this.setState(
                     {
                         filterOptions: arr

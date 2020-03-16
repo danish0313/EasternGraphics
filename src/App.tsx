@@ -15,14 +15,19 @@ export interface Values {
     date: string;
     level?: string;
     facility?: string;
+    state?: string;
 }
 export interface Results {
+    total: number;
     results: [{
+        _id: string;
+        hash: string;
         _count: number;
         content: string;
         date: string;
         level?: string;
         facility?: string;
+        state: string;
     }];
 }
 
