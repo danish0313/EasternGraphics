@@ -123,7 +123,6 @@ class Filters extends Component<PropsType, MyFiltersState> {
         await this.FilterOptionApi();
         await this.filterHandler();
     };
-
     public componentWillUnmount = () => {
         this._isMounted = false;
     };
