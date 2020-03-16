@@ -7,6 +7,7 @@ import { Values, Results } from '../../App';
 import DatePickerInput from './options/datePicker/datePicker';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import _ from 'lodash';
+
 interface MyFiltersState {
     options: object;
 
@@ -58,7 +59,6 @@ class Filters extends Component<PropsType, MyFiltersState> {
             filteredArray: []
         };
         this.filterHandler = _.debounce(this.filterHandler, 700);
-        this.FilterOptionApi = _.debounce(this.FilterOptionApi, 500);
     }
     public render(): JSX.Element {
         // key and text from react Router history props
