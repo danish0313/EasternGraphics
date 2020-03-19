@@ -3,7 +3,7 @@ import classes from './filters.module.css';
 import FilterData from './filterData/filterData';
 import Options from './options/options';
 import SearchBar from './options/searchBar/searchBar';
-import { Values, Results } from '../../App';
+import { Results } from '../../App';
 import DatePickerInput from './options/datePicker/datePicker';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import _ from 'lodash';
@@ -19,11 +19,7 @@ interface MyFiltersState {
 
     error: boolean;
     loading: boolean;
-    filteredArray: Array<Values>;
-}
-
-interface MyFiltersProps {
-    arrayWithoutFilter: Array<Values>;
+    filteredArray: Array<Results>;
 }
 
 interface ApiFilters {
@@ -38,7 +34,7 @@ interface Option {
     values: Array<string>;
     keys: string;
 }
-type PropsType = MyFiltersProps & RouteComponentProps<{ text: string, key: string, date: string }>;
+type PropsType = RouteComponentProps<{ text: string, key: string, date: string }>;
 class Filters extends Component<PropsType, MyFiltersState> {
     private _isMounted: boolean = false;
     constructor(props: PropsType) {
@@ -107,7 +103,6 @@ class Filters extends Component<PropsType, MyFiltersState> {
                         <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg12">
                             <div className={classes.results}>  <FilterData
                                 filteredArray={this.state.filteredArray}
-                                arrayWithoutFilter={this.props.arrayWithoutFilter}
                                 loading={this.state.loading}
                                 label={this.state.spinLabel}
                             /></div>

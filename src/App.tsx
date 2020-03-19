@@ -6,33 +6,21 @@ import graphData from './components/graphData/graphData';
 import { Route, Switch } from 'react-router-dom';
 
 interface MyAppState {
-    data: Array<Values>;
+    data: Array<Results>;
     error: boolean;
 }
-export interface Values {
+export interface Results {
+    results: [];
+    _id: string;
+    hash: string;
     _count: number;
     content: string;
     date: string;
     level?: string;
     facility?: string;
-    state?: string;
+    state: string;
 }
-export interface Results {
-    total: number;
-    results: [{
-        _id: string;
-        hash: string;
-        _count: number;
-        content: string;
-        date: string;
-        level?: string;
-        facility?: string;
-        state: string;
-    }];
-}
-
 export default class App extends Component<{}, MyAppState> {
-
     constructor(props: {}) {
         super(props);
         this.state = {
@@ -42,7 +30,7 @@ export default class App extends Component<{}, MyAppState> {
     }
     public render(): JSX.Element {
 
-        const filter: () => JSX.Element = () => (<Filters arrayWithoutFilter={this.state.data} />);
+        const filter: () => JSX.Element = () => (<Filters/>);
         return (
             <div className="App">
                 <Navbar />

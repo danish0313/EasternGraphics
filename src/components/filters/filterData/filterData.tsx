@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Values } from '../../../App';
+import { Results } from '../../../App';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
@@ -7,8 +7,8 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import DialogLargeHeader from '../options/dialog/dialog';
 
 interface MyFilterDataProps {
-    filteredArray: Array<Values>;
-    arrayWithoutFilter: Array<Values>;
+    filteredArray: Array<Results>;
+
     loading: boolean;
     label: string;
 }
@@ -45,10 +45,9 @@ export default class FilterData extends Component<MyFilterDataProps, MyFilterDat
 
         };
     }
-
     public render(): JSX.Element {
         // Populate with items for datalist.
-        const results: Array<Values> = this.props.filteredArray.length > 0 ? this.props.filteredArray : this.props.arrayWithoutFilter;
+        const results: Array<Results> = this.props.filteredArray;
         const data: Array<Data> = [];
         for (const i of results) {
 
