@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Dropdown, IDropdownStyles, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import _ from 'lodash';
 interface GraphState {
     option: string;
-    converted: Array<Result>;
+    converted: Array<Results>;
     labels: Array<number>;
 }
 interface Data {
@@ -13,17 +13,10 @@ interface Data {
     color?: string;
     value?: number;
 }
-
-interface Result {
+interface Results {
+    result: [];
+    entries: [];
     date: number;
-    entries: [{
-        key: string;
-        count: number;
-
-    }];
-}
-
-interface Entries {
     key: string;
     count: number;
 }
@@ -35,9 +28,9 @@ const dropdownStyles: Partial<IDropdownStyles> = {
         paddingBottom: '20px;'
     }
 };
-
 // for  css underline
 let color: string = '';
+let name: string = '';
 
 class GraphDetails extends React.PureComponent<RouteComponentProps, GraphState> {
     constructor(props: RouteComponentProps) {
@@ -49,11 +42,10 @@ class GraphDetails extends React.PureComponent<RouteComponentProps, GraphState> 
             option: ''
         };
     }
-
     public render(): JSX.Element {
 
-        const data: Array<Result> = this.state.converted;
-        const converted: Array<Result> = this.convertData(data);
+        const data: Array<Results> = this.state.converted;
+        const converted: Array<Results> = this.convertData(data);
         const labels: Array<string> = this.getLabels(data);
         const stroke: Array<string> = ['#0078D4', 'green', 'brown', 'red', 'darkblue', 'grey', 'black'];
 
@@ -77,7 +69,7 @@ class GraphDetails extends React.PureComponent<RouteComponentProps, GraphState> 
                         <div style={{ background: 'linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)', width: '15vh', padding: '10px' }}>
                             <div style={{ fontWeight: 'bold' }}>{label} </div>
                             <hr />
-                            <div> {payload.filter((x: Data) => x.color === color).map((x: Data) =>
+                            <div> {payload.filter((x: Data) => x.name === name || x.color === color).map((x: Data) =>
                                 <p
                                     key={x.name}
                                     style={{ color: `${x.color}`, fontWeight: 'bold', borderBottom: x.color === color ? '3px double' : 'none' }}
@@ -93,15 +85,28 @@ class GraphDetails extends React.PureComponent<RouteComponentProps, GraphState> 
             }
         }
         return (
-            <div>
+            <div style={{ textAlign: 'center' }}>
                 <h1 style={{ textAlign: 'center', color: '#605E5C' }}> Graph Details </h1>
-
-                <div className="ms-Grid" dir="ltr">
-                    <div className="ms-Grid-row">
-                        <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg8" style={{ textAlign: 'center' }}>
+                <Dropdown
+                    label="Select Week , Month , Year for Graph"
+                    options={[{ key: 'day', text: 'day' },
+                    { key: 'week', text: 'week' },
+                    { key: 'month', text: 'month' }]}
+                    styles={dropdownStyles}
+                    onChange={this.GraphHandler}
+                />
+                <div style={{ position: 'relative', width: '95%', paddingBottom: '750px' }}>
+                    <div
+                        style={{
+                            position: 'absolute',
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            top: 0,
+                        }}
+                    >
+                        <ResponsiveContainer>
                             <LineChart
-                                width={1000}
-                                height={700}
                                 data={converted}
                                 margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                             >
@@ -123,24 +128,11 @@ class GraphDetails extends React.PureComponent<RouteComponentProps, GraphState> 
                                         activeDot={{ onClick: this.handleClick, onMouseOver: this.onMouseOver }}
                                         onMouseOver={this.onMouseOver}
                                     />
-
                                 ))}
                             </LineChart>
-
-                        </div>
-
-                        <div className="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg4" style={{ textAlign: 'center' }}>
-                            <Dropdown
-                                label="Select Week , Month , Year for Graph"
-                                options={[{ key: 'day', text: 'day' },
-                                { key: 'week', text: 'week' },
-                                { key: 'month', text: 'month' }]}
-                                styles={dropdownStyles}
-                                onChange={this.GraphHandler}
-                            />
-                        </div>
-
+                        </ResponsiveContainer>
                     </div>
+
                 </div>
             </div>
         );
@@ -148,25 +140,25 @@ class GraphDetails extends React.PureComponent<RouteComponentProps, GraphState> 
     public componentDidMount = async () => {
         await this.graphDataApi();
     };
-    private convertData = (data: Array<Result>) => {
-        const arr: Array<Result> = [];
+    private convertData = (data: Array<Results>) => {
+        const arr: Array<Results> = [];
         for (let i: number = 0; i < data.length; i++) {
             const obj: any = { date: new Date(data[i].date).toLocaleString('en-US').split('/').join('-') };
             // loop through entries
             for (let j: number = 0; j < data[i].entries.length; j++) {
-                const entries: Entries = data[i].entries[j];
+                const entries: Results = data[i].entries[j];
                 obj[entries.key] = entries.count;
             }
             arr.push(obj);
         }
         return arr;
     };
-    private getLabels = (data: Array<Result>) => {
-        let arr: any = [];
+    private getLabels = (data: Array<Results>) => {
+        let arr: Array<Results> = [];
         _.each(data, obj => {
             arr = arr.concat(obj.entries);
         });
-        const grouped: _.Dictionary<Array<string>> = _.groupBy(arr, 'key');
+        const grouped: _.Dictionary<Array<Results>> = _.groupBy(arr, 'key');
 
         return Object.keys(grouped);
         // return Object.keys(_.groupBy(arr.name));
@@ -176,7 +168,7 @@ class GraphDetails extends React.PureComponent<RouteComponentProps, GraphState> 
 
         const response: Response = await fetch(
             'http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/histogram/week');
-        const data: any = await response.json();
+        const data: Results = await response.json();
 
         this.setState(
             {
@@ -210,7 +202,7 @@ class GraphDetails extends React.PureComponent<RouteComponentProps, GraphState> 
         if (text === 'day') {
             const response: Response = await fetch(
                 'http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/histogram/day');
-            const data: any = await response.json();
+            const data: Results = await response.json();
 
             this.setState(
                 {
@@ -222,7 +214,7 @@ class GraphDetails extends React.PureComponent<RouteComponentProps, GraphState> 
         if (text === 'month') {
             const response: Response = await fetch(
                 'http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/histogram/month');
-            const data: any = await response.json();
+            const data: Results = await response.json();
 
             this.setState(
                 {
@@ -234,7 +226,7 @@ class GraphDetails extends React.PureComponent<RouteComponentProps, GraphState> 
         if (text === 'week') {
             const response: Response = await fetch(
                 'http://egrde-tvm-aso1.de.egr.lan:3000/api/v1/histogram/week');
-            const data: any = await response.json();
+            const data: Results = await response.json();
 
             this.setState(
                 {
@@ -244,9 +236,10 @@ class GraphDetails extends React.PureComponent<RouteComponentProps, GraphState> 
             );
         }
     };
-    private onMouseOver = (e: any) => {
+    private onMouseOver = (e: any, y: any) => {
 
-        color = e.stroke;
+        color = e.stroke || y.fill;
+        name = y.dataKey;
     };
     private handleClick = (x: string, y: any) => {
 
