@@ -35,7 +35,7 @@ export default class App extends Component<{}, MyAppState> {
             <div className="App">
                 <Navbar />
                 <Switch>
-                    <Route exact={true} path="http://cideploy-nossl.tmp.easterngraphics.com/project-students/cloud-error-log/master/" component={filter} />
+                    <Route exact={true} path="/" component={filter} />
                     <Route exact={true} path="/graph" component={graphData} />
                 </Switch>
             </div>
