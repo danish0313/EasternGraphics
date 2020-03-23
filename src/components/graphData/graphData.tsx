@@ -88,7 +88,7 @@ class GraphDetails extends React.PureComponent<RouteComponentProps, GraphState> 
             <div style={{ textAlign: 'center' }}>
                 <h1 style={{ textAlign: 'center', color: '#605E5C' }}> Graph Details </h1>
                 <Dropdown
-                    label="Select Week , Month , Year for Graph"
+                    label="Select Day , Week , Month for the Graph"
                     options={[{ key: 'day', text: 'day' },
                     { key: 'week', text: 'week' },
                     { key: 'month', text: 'month' }]}
