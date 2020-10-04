@@ -218,6 +218,9 @@ class Filters extends Component<PropsType, MyFiltersState> {
                         keys: key
                     });
                 }
+
+
+
                 this.setState(
                     {
                         filterOptions: arr
